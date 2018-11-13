@@ -1,13 +1,3 @@
-\.idea/misc.xml
-\.idea/modules.xml
-\.idea/dictionaries/Mushy\.xml
-\.out
-
-\.idea/workspace\.xml
-
-out/*
-
-
-\.idea/vcs\.xml
-
-\.idea/compiler\.xml
+out
+.idea
+META-INF
