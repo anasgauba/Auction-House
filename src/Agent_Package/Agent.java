@@ -1,8 +1,70 @@
 package Agent_Package;
 
-public class Agent {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.Socket;
+
+public class Agent extends Thread {
     private String agentName;
     private int secretBiddingKey;
+
+    boolean run;
+    Thread thread;
+
+    private Socket clientSocket;
+    private BufferedReader input;
+    private PrintStream output;
+
+    public Agent (){
+        this.run = true;
+        this.thread = new Thread(this);
+
+        this.thread.start();
+
+    }
+
+    public void run(){
+        try {
+            clientSocket = new Socket ("localhost", 7777);
+            output = new PrintStream(clientSocket.getOutputStream());
+            output.println("Hello server!");
+
+
+            while (run && clientSocket.isConnected()) {
+                input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String message = input.readLine();
+                System.out.println(message);
+                Thread.sleep(1000);
+                output.println("second message!");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //sets bidding key returned by the bank to the ucrrent agent
     public void setBiddingKey(int bidKeyReturned){
