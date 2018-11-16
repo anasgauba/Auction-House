@@ -1,6 +1,8 @@
+package Agent_Package;
+
 public class Agent {
-    String agentName;
-    int secretBiddingKey;
+    private String agentName;
+    private int secretBiddingKey;
 
     //sets bidding key returned by the bank to the ucrrent agent
     public void setBiddingKey(int bidKeyReturned){

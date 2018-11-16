@@ -8,13 +8,6 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         System.out.println("Hello World!");
 
-
-
-
-
-
-
-
         Scanner inNouns = new Scanner(new File("resources/nouns"));
         LinkedList<String> nouns = new LinkedList();
         while (inNouns.hasNext()) {
@@ -29,5 +22,8 @@ public class Main {
 
         //testing purposes
         Auction_House_Server auctionHouse = new Auction_House_Server("1", nouns, adjectives);
+
+        //testing display of agent
+
     }
 }

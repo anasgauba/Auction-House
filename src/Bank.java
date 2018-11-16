@@ -1,5 +1,5 @@
 public class Bank {
-    //Opens Bank Account for Agent or AuctionHouse
+    //Opens Bank Account for Agent_Package.Agent or AuctionHouse
     private int createAccount(String name,int initialBalance ){
         //return the biddingKey that is created when an account is created
         return 0;
