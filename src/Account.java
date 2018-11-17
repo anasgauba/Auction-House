@@ -5,7 +5,7 @@ import java.util.Random;
  * @author Anas Farooq Gauba
  */
 public class Account {
-    private double balance;
+    protected double balance;
     private int biddingKey;
     private int accountId;
 
@@ -14,9 +14,9 @@ public class Account {
         balance = initialBalance;
     }
 
-    public double getBalance() {
-        return balance;
-    }
+//    public double getBalance() {
+//        return balance;
+//    }
 
     public int getAccountId() {
         return accountId;
