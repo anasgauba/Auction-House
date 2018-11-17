@@ -1,13 +1,18 @@
 import Agent_Package.Agent;
+import Agent_Package.Agent_Display;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class Main {
 
-    public static void main(String[] args) throws FileNotFoundException {
+public class Main extends Application {
+
+    public void start(Stage stage) throws FileNotFoundException {
+
         System.out.println("Hello World!");
 
         Scanner inNouns = new Scanner(new File("resources/nouns"));
@@ -23,13 +28,12 @@ public class Main {
         }
 
         //testing purposes
-        Auction_House_Server auctionHouse = new Auction_House_Server("1", nouns, adjectives);
+//        Auction_House_Server auctionHouse = new Auction_House_Server("1", nouns, adjectives);
         //Auction_House_Server auctionHouse2 = new Auction_House_Server("2", nouns, adjectives);
-        Agent agent = new Agent();
 
+        Agent_Display agent = new Agent_Display();
+        agent.drawGUI(stage);
 
-
-        //testing display of agent
 
     }
 }

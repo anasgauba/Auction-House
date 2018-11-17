@@ -1,5 +1,7 @@
 package Agent_Package;
 
+import javafx.stage.Stage;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,24 +15,25 @@ public class Agent extends Thread {
     boolean run;
     Thread thread;
 
+    private Agent_Display agentDisplay;
     private Socket clientSocket;
     private BufferedReader input;
     private PrintStream output;
+//    Stage agentStage = new Stage();
 
     public Agent (){
+        agentDisplay = new Agent_Display();
+        agentDisplay.drawGUI(new Stage());
         this.run = true;
         this.thread = new Thread(this);
-
         this.thread.start();
-
     }
 
     public void run(){
         try {
-            clientSocket = new Socket ("localhost", 7777);
+            clientSocket = new Socket ("73.98.11.232" , 7777);
             output = new PrintStream(clientSocket.getOutputStream());
             output.println("Hello server!");
-
 
             while (run && clientSocket.isConnected()) {
                 input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -39,8 +42,6 @@ public class Agent extends Thread {
                 Thread.sleep(1000);
                 output.println("second message!");
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
