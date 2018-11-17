@@ -31,7 +31,7 @@ public class Agent extends Thread {
 
     public void run(){
         try {
-            clientSocket = new Socket ("73.98.11.232" , 7777);
+            clientSocket = new Socket ("localhost" , 7777);
             output = new PrintStream(clientSocket.getOutputStream());
             output.println("Hello server!");
 
