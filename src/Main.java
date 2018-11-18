@@ -1,5 +1,3 @@
-import Agent_Package.Agent;
-import Agent_Package.Agent_Display;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

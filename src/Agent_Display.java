@@ -1,5 +1,5 @@
-package Agent_Package;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,11 +12,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javax.swing.*;
 
 public class Agent_Display extends JPanel {
-    private ObservableList<String> data = FXCollections.observableArrayList();
+    private ObservableList<tableItem> listofTableItems = FXCollections.observableArrayList();
     private ObservableList<String> listOfHouses = FXCollections.observableArrayList();
 
     private TableView table = new TableView();
@@ -98,20 +99,32 @@ public class Agent_Display extends JPanel {
         TableColumn itemPlaceBid = new TableColumn("Item Place Bid");
         itemPlaceBid.setMinWidth(100);
         itemID.setCellValueFactory(
-                new PropertyValueFactory<Agent, String>("agentCoordinate")
+                new PropertyValueFactory<tableItem, String>("itemID")
         );
         itemName.setCellValueFactory(
-                new PropertyValueFactory<Agent, String>("agentID")
+                new PropertyValueFactory<tableItem, String>("itemName")
         );
         itemStartingBid.setCellValueFactory(
-                new PropertyValueFactory<Agent, String>("agentID")
+                new PropertyValueFactory<tableItem, String>("itemStartingBid")
         );
         itemCurrentBid.setCellValueFactory(
-                new PropertyValueFactory<Agent, String>("agentID")
+                new PropertyValueFactory<tableItem, String>("itemCurrentBid")
         );
         itemPlaceBid.setCellValueFactory(
-                new PropertyValueFactory<Agent, String>("agentID")
+                new PropertyValueFactory<tableItem, String>("itemPlaceBid")
         );
+
+        //A list of items will be passed in. In final product, I will loop through the list and pass each item
+        //to the constructor of new tableItem, which sets all the correct info to the right places on table view. Then,
+        // the table data is set. To change list on board, you clear listofTableItems, add table items to it, then set the
+        //info in the table to that.
+        Item first = new Item("3333","22222","red table",400,330);
+        Item second = new Item("666","9999","orange mat",200,100);
+        Item third = new Item("4444","11111","green grass",20,10);
+        listofTableItems.add(new tableItem(first));
+        listofTableItems.add(new tableItem(second));
+        listofTableItems.add(new tableItem(third));
+        table.setItems(listofTableItems);
         table.getColumns().addAll(itemID, itemName, itemStartingBid, itemCurrentBid, itemPlaceBid);
 
         BorderPane borderpane = new BorderPane();
@@ -122,5 +135,76 @@ public class Agent_Display extends JPanel {
         stage.setScene(scene);
         stage.setTitle("Auction House Client");
         stage.show();
+    }
+
+    public static class tableItem {
+        private final SimpleStringProperty itemID;
+        private final SimpleStringProperty itemName;
+        private final SimpleStringProperty itemStartingBid;
+        private final SimpleStringProperty itemCurrentBid;
+        private Button itemPlaceBid;
+
+        public tableItem(Item itemPassedIn) {
+            this.itemID = new SimpleStringProperty(itemPassedIn.getItemID());
+            this.itemName = new SimpleStringProperty(itemPassedIn.getDescription());
+            this.itemStartingBid = new SimpleStringProperty(Double.toString(itemPassedIn.getMinimumBidAmount()));
+            this.itemCurrentBid = new SimpleStringProperty(Double.toString(itemPassedIn.getCurrentBidAmount()));
+            this.itemPlaceBid = new Button("Place a bet");
+            itemPlaceBid.setOnAction(e -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Make your Bet");
+                alert.setHeaderText("Please place your bet in the text field:");
+                GridPane biddingPane = new GridPane();
+                TextField enterBid = new TextField();
+                enterBid.setPromptText("Enter Your Bet");
+                enterBid.setPrefColumnCount(10);
+                enterBid.getText();
+                biddingPane.add(enterBid,0,0);
+                GridPane.setConstraints(enterBid, 0, 0);
+                alert.getDialogPane().setContent(biddingPane);
+                alert.showAndWait();
+            });
+
+        }
+
+        public String getItemID() {
+            return itemID.get();
+        }
+
+        public void setItemID(String itemIDString) {
+            itemID.set(itemIDString);
+        }
+
+        public String getItemName() {
+            return itemName.get();
+        }
+
+        public void setItemName(String itemNameString) {
+            itemName.set(itemNameString);
+        }
+
+        public String getItemStartingBid() {
+            return itemStartingBid.get();
+        }
+
+        public void setItemStartingBid(String itemStartingBidString) {
+            itemStartingBid.set(itemStartingBidString);
+        }
+
+        public String getItemCurrentBid() {
+            return itemCurrentBid.get();
+        }
+
+        public void setItemCurrentBid(String itemCurrentBidString) {
+            itemStartingBid.set(itemCurrentBidString);
+        }
+
+        public Button getItemPlaceBid() {
+            return itemPlaceBid;
+        }
+
+        public void setItemPlaceBid(Button itemPlaceBidString) {
+            this.itemPlaceBid=itemPlaceBidString;
+        }
     }
 }

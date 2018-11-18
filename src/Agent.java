@@ -1,5 +1,3 @@
-package Agent_Package;
-
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
