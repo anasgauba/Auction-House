@@ -209,24 +209,29 @@ public class Agent_Display extends JPanel {
         TableColumn itemID = new TableColumn("Item ID");
         itemID.setMinWidth(100);
         TableColumn itemName = new TableColumn("Item Name");
-        itemName.setMinWidth(100);
+        itemName.setMinWidth(200);
+        itemName.setStyle("-fx-alignment: CENTER;");
         TableColumn itemStartingBid = new TableColumn("Item Starting Bid");
         itemStartingBid.setMinWidth(150);
+        itemStartingBid.setStyle("-fx-alignment: CENTER-RIGHT;");
         TableColumn itemCurrentBid = new TableColumn("Item Current Bid");
         itemCurrentBid.setMinWidth(150);
+        itemCurrentBid.setStyle("-fx-alignment: CENTER-RIGHT;");
         itemID.setCellValueFactory(
                 new PropertyValueFactory<tableItem, String>("itemID")
         );
+
         itemName.setCellValueFactory(
                 new PropertyValueFactory<tableItem, String>("itemName")
-
         );
+
         itemStartingBid.setCellValueFactory(
                 new PropertyValueFactory<tableItem, String>("itemStartingBid")
         );
         itemCurrentBid.setCellValueFactory(
                 new PropertyValueFactory<tableItem, String>("itemCurrentBid")
         );
+
 
         //A list of items will be passed in. In final product, I will loop through the list and pass each item
         //to the constructor of new tableItem, which sets all the correct info to the right places on table view. Then,
