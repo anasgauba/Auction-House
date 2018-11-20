@@ -6,73 +6,24 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Auction_House_Server extends Thread {
+public class Auction_House extends Thread {
 
     String auctionHouseID;
     LinkedList<Item> itemList;
     LinkedList<String> nouns;
     LinkedList<String> adjectives;
 
-    boolean run;
-    Thread thread;
-
-    private ServerSocket serverSocket;
-    private Socket acceptSocket;
-    private PrintStream output;
-    private BufferedReader input;
 
     Boolean DEBUG = true;
 
 
-    public Auction_House_Server(String auctionHouseID, LinkedList nouns, LinkedList adjectives) {
+    public Auction_House(String auctionHouseID, LinkedList nouns, LinkedList adjectives) {
         this.auctionHouseID = auctionHouseID;
         this.itemList = new LinkedList<>();
         this.nouns = nouns;
         this.adjectives = adjectives;
         createItems(10);
-
-
-        this.run = true;
-        this.thread = new Thread(this);
-
-        this.thread.start();
-
-
     }
-
-    public void run() {
-
-        try {
-            if (serverSocket == null) {
-                serverSocket = new ServerSocket(7777);
-                acceptSocket = serverSocket.accept();
-                output = new PrintStream(acceptSocket.getOutputStream());
-                input = new BufferedReader(new InputStreamReader(acceptSocket.getInputStream()));
-            }
-
-            while (run && acceptSocket.isConnected()) {
-
-
-                String message = input.readLine();
-                System.out.println(message);
-                if (message != null) {
-                    output.println("test successful!");
-                }
-
-
-                //System.out.println("AH is alive: " + auctionHouseID);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     //upon creation, registers with bank by opening account with zero balance
     public void createAccount() {

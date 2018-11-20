@@ -25,9 +25,13 @@ public class Main extends Application {
             adjectives.add(inAdjectives.next());
         }
 
-        //testing purposes
-//        Auction_House_Server auctionHouse = new Auction_House_Server("1", nouns, adjectives);
-        //Auction_House_Server auctionHouse2 = new Auction_House_Server("2", nouns, adjectives);
+
+        Agent_Proxy agent_proxy = new Agent_Proxy();
+        //Auction_House_Proxy auction_house_proxy = new Auction_House_Proxy();
+        Bank_Proxy bank_proxy = new Bank_Proxy();
+
+        //Agent agent2 = new Agent();
+        Auction_House auction_house_server = new Auction_House("2", nouns, adjectives);
 
         Agent_Display agent = new Agent_Display();
         agent.drawGUI(stage);

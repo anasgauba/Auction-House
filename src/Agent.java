@@ -10,58 +10,19 @@ public class Agent extends Thread {
     private String agentName;
     private int secretBiddingKey;
 
-    boolean run;
-    Thread thread;
-
     private Agent_Display agentDisplay;
-    private Socket clientSocket;
-    private BufferedReader input;
-    private PrintStream output;
 //    Stage agentStage = new Stage();
 
+    Auction_House_Proxy auctionHouseProxy;
+
+
     public Agent (){
-        agentDisplay = new Agent_Display();
-        agentDisplay.drawGUI(new Stage());
-        this.run = true;
-        this.thread = new Thread(this);
-        this.thread.start();
+        //agentDisplay = new Agent_Display();
+        //agentDisplay.drawGUI(new Stage());
+
+
+        this.auctionHouseProxy = new Auction_House_Proxy();
     }
-
-    public void run(){
-        try {
-            clientSocket = new Socket ("localhost" , 7777);
-            output = new PrintStream(clientSocket.getOutputStream());
-            output.println("Hello server!");
-
-            while (run && clientSocket.isConnected()) {
-                input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String message = input.readLine();
-                System.out.println(message);
-                Thread.sleep(1000);
-                output.println("second message!");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -74,6 +35,8 @@ public class Agent extends Thread {
     }
     //Return a list of auction houses
     public void getListActiveAuctions(){
+
+        auctionHouseProxy.output.println("sending message!");
 
     }
     //retrieves auction items from auction house passed in

@@ -165,6 +165,8 @@ public class Agent_Display extends JPanel {
                                         //how I do it for the button and bit amount fields, hbox,etc
         bidAmount.setOnMouseClicked(event -> {
             bidAmount.setText("");
+            Agent agent = new Agent();
+            agent.getListActiveAuctions();
         });
 
         Button placeBid = new Button("Place Bid");
