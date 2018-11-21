@@ -1,15 +1,14 @@
-import java.util.concurrent.ConcurrentHashMap;
-
+import java.util.HashMap;
 /**
  * @version date: 11/16/2018
  * @author Anas Farooq Gauba
  */
 public class Bank {
-    private ConcurrentHashMap<Integer, Account> list;
+    private HashMap<Integer, Account> list;
     private int secretKey;
 
     public Bank() {
-        this.list = new ConcurrentHashMap<>();
+        this.list = new HashMap<>();
     }
     //Opens Bank Account for Agent or AuctionHouse
     //return the biddingKey that is created when an account is created
@@ -22,13 +21,15 @@ public class Bank {
             account.setAccountId(id);
             secretKey = account.generateSecretKey();
             list.put(secretKey, account);
-            System.out.println("Account created with secretKey " +secretKey);
+            System.out.println("Account " +account.getAccountId() +" created " +
+                    "with secretKey "
+                    +secretKey);
         }
         return secretKey;
     }
 
     //returns balance based on agent's string
-    public double getBalance(int agentSecretKey) {
+    public synchronized double getBalance(int agentSecretKey) {
         if (list.get(agentSecretKey) != null) {
             Account account = list.get(agentSecretKey);
             System.out.println("Current acc balance of "+ agentSecretKey +" " +
@@ -58,12 +59,31 @@ public class Bank {
     }
 
     //reduces the account that is looked up by the amount of money passed in
-    private void takeMoney(int amountOfMoneyToReduce){
+    public synchronized void withdraw(int secretKey,int moneyToReduce) throws Exception {
+        if (list.containsKey(secretKey)) {
+            Account account = list.get(secretKey);
+            if (moneyToReduce > account.balance) {
+                throw new Exception("Insufficient funds");
+            }
+            else {
+                account.balance -= moneyToReduce;
+                System.out.println("withdrawn for Account " + account
+                        .getAccountId() +" "+moneyToReduce);
+            }
+        }
     }
     //adds the account that is looked up by the amount of money passed in
 
-    private void giveMoney(int amountOfMoneyToGive){
-
+    public synchronized void deposit(int secretKey,int moneyToGive) throws Exception {
+        if (list.containsKey(secretKey)) {
+            Account account = list.get(secretKey);
+            account.balance += moneyToGive;
+            System.out.println("DEPOSITED for Account " + account.getAccountId()
+                    +" " +moneyToGive);
+        }
+        else {
+            throw new Exception("No such account");
+        }
     }
 
     //closes account that was given to the client
@@ -81,11 +101,29 @@ public class Bank {
     public static void main(String[] args) throws Exception {
         Bank b1 = new Bank();
         Bank b2 = new Bank();
-        int key;
+        int key, key2;
         key = b1.createAccount(1, 10);
-        b2.createAccount (2, 20);
+        key2 = b2.createAccount (2, 20);
 
-        System.out.println(b1.toString());
+        b1.getBalance(key);
+        b2.getBalance(key2);
+
+        b1.deposit(key, 100);
+        b2.deposit(key2, 50);
+
+        b1.getBalance(key);
+        b2.getBalance(key2);
+
+        b1.withdraw(key, 105);
+        b2.withdraw(key2, 20);
+
+        b1.getBalance(key);
+        b2.getBalance(key2);
+
+        System.out.println();
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println();
+
 
         b1.closeAccount(key);
         System.out.println(b1.toString());
