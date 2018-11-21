@@ -27,27 +27,39 @@ public class Auction_House extends Thread {
 
     //upon creation, registers with bank by opening account with zero balance
     public void createAccount() {
+        Enum_Commands.Command createAccount = Enum_Commands.Command.CreateBankAccount;
 
     }
 
     //closes account at termination
     public void closeAccount() {
+        Enum_Commands.Command closeAccount = Enum_Commands.Command.CloseBankAccount;
+
 
     }
 
     //recives bid and acknowledges with a reject or accept response
     public void validateBid() {
+        Enum_Commands.Command acceptResponse = Enum_Commands.Command.AcceptResponse;
+        Enum_Commands.Command rejectResponse = Enum_Commands.Command.RejectResponse;
+
+
+
 
     }
 
     //When bid is accepted, bank is requested to block the funds
     public void acceptedBid() {
+        Enum_Commands.Command blockFunds = Enum_Commands.Command.BlockFunds;
+
         //block the funds
 
     }
 
     //when a bid is overtaken, pass notification is sent to the agent and the funds are unblocked from the bank
     public void bidOvertaken() {
+        Enum_Commands.Command bidOvertaken = Enum_Commands.Command.BidOvertaken;
+
     }
 
     public void bidSuccessful() {
@@ -58,6 +70,9 @@ public class Auction_House extends Thread {
     //when winning a bid, agent receives "winner" notification and auction house waits for
     //the blocked funds to be transferred into its account
     public void wonAuction() {
+        Enum_Commands.Command wonAuction = Enum_Commands.Command.WinMessage;
+
+
 
     }
 

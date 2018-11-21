@@ -40,12 +40,12 @@ public class Auction_House_Proxy extends Thread {
             }
 
             while (run && acceptSocket.isConnected()) {
-
-
                 String message = input.readLine();
                 System.out.println(message);
                 if (message != null) {
-                    //output.println("test successful!");
+                    switch (message){
+
+                    }
                 }
 
 
