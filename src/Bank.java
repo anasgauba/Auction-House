@@ -7,8 +7,12 @@ public class Bank {
     private HashMap<Integer, Account> list;
     private int secretKey;
 
+    Bank_Proxy bank_proxy;
+
     public Bank() {
         this.list = new HashMap<>();
+
+        this.bank_proxy = new Bank_Proxy();
     }
     //Opens Bank Account for Agent or AuctionHouse
     //return the biddingKey that is created when an account is created
@@ -130,5 +134,10 @@ public class Bank {
 
         key = b1.createAccount(1, 100);
         System.out.println(b1.toString());
+    }
+
+
+    public void debug() {
+        bank_proxy.clientOutput.println("Test from Bank client to AH server");
     }
 }

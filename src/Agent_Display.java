@@ -24,6 +24,16 @@ public class Agent_Display extends JPanel {
     private ObservableList<String> listOfHouses = FXCollections.observableArrayList();
 
     private TableView<tableItem> table = new TableView();
+
+    private Agent agent;
+    private Auction_House auctionHouse;
+    private Bank bank;
+
+    public Agent_Display(Agent agent, Auction_House auctionHouse, Bank bank) {
+        this.agent = agent;
+        this.auctionHouse = auctionHouse;
+        this.bank = bank;
+    }
     
     public void drawGUI(Stage stage) {
         BorderPane agentInfo = new BorderPane();
@@ -165,12 +175,14 @@ public class Agent_Display extends JPanel {
                                         //how I do it for the button and bit amount fields, hbox,etc
         bidAmount.setOnMouseClicked(event -> {
             bidAmount.setText("");
-            Agent agent = new Agent();
-            agent.getListActiveAuctions();
         });
 
         Button placeBid = new Button("Place Bid");
         placeBid.setPrefWidth(75);
+
+        placeBid.setOnAction(event -> {
+            agent.getListActiveAuctions();
+        });
 
         HBox bidStackHBox = new HBox();
         bidStackHBox.getChildren().addAll(bidAmount, placeBid);
@@ -282,6 +294,26 @@ public class Agent_Display extends JPanel {
         agentIDTextField.setText("10034");
         agentAccountTextField.setText("00900");
         agentBalanceTextField.setText("3000.03");
+
+        Button test1 = new Button("test Agent");
+        Button test2 = new Button("test AH");
+        Button test3 = new Button("test Bank");
+        test1.setMinWidth(100);
+        test2.setMinWidth(100);
+        test3.setMinWidth(100);
+        HBox tempdebug = new HBox(test1, test2,  test3);
+        borderpane.getChildren().addAll(tempdebug);
+
+        test1.setOnAction(e -> {
+            agent.debug();
+        });
+        test2.setOnAction(e -> {
+            auctionHouse.debug();
+        });
+        test3.setOnAction(e -> {
+            bank.debug();
+        });
+
     }
 
     public static class tableItem {

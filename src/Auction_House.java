@@ -1,10 +1,5 @@
-import java.awt.*;
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Auction_House extends Thread {
 
@@ -16,13 +11,18 @@ public class Auction_House extends Thread {
 
     Boolean DEBUG = true;
 
+    Agent_Proxy agent_proxy;
+    Auction_House_Proxy auction_house_proxy;
+
 
     public Auction_House(String auctionHouseID, LinkedList nouns, LinkedList adjectives) {
         this.auctionHouseID = auctionHouseID;
         this.itemList = new LinkedList<>();
         this.nouns = nouns;
         this.adjectives = adjectives;
+        //this.agent_proxy = new Agent_Proxy();
         createItems(10);
+        this.auction_house_proxy = new Auction_House_Proxy();
     }
 
     //upon creation, registers with bank by opening account with zero balance
@@ -102,5 +102,8 @@ public class Auction_House extends Thread {
         }
     }
 
-
+    public void debug() {
+        auction_house_proxy.agentClientOutput.println("Test from ah client to agent server");
+        auction_house_proxy.bankClientOutput.println("Test from ah client to bank server");
+    }
 }
