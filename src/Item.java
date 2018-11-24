@@ -1,13 +1,13 @@
 public class Item {
 
-    private String auctionHouseID;
+    private int auctionHouseID;
     private String itemID;
     private String description;
     private double minimumBidAmount;
     private double currentBidAmount;
 
 
-    public Item(String auctionHouseID, String itemID, String description, double minimumBidAmount, double currentBidAmount) {
+    public Item(int auctionHouseID, String itemID, String description, double minimumBidAmount, double currentBidAmount) {
         this.auctionHouseID = auctionHouseID;
         this.itemID = itemID;
         this.description = description;
@@ -15,7 +15,7 @@ public class Item {
         this.currentBidAmount = currentBidAmount;
     }
 
-    public String getAuctionHouseID() {
+    public int getAuctionHouseID() {
 
         return auctionHouseID;
     }

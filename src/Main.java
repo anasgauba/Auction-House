@@ -26,29 +26,13 @@ public class Main extends Application {
         }
 
 
-        //Auction_House_Proxy agent_proxy = new Auction_House_Proxy();
-        //Agent_Proxy agent_proxy = new Agent_Proxy();
-        //Bank_Proxy bank_proxy = new Bank_Proxy();
         Bank bank = new Bank();
-        Auction_House auction_house = new Auction_House("1", nouns, adjectives);
-        Agent agent2 = new Agent();
+        Auction_House auction_house = new Auction_House(1, 6666, nouns, adjectives);
+        Agent agent = new Agent(8900);
 
-        //Agent agent3 = new Agent();
-        //Agent agent4 = new Agent();
-        //Auction_House auction = new Auction_House("2", nouns, adjectives);
-
-
-
-        Agent_Display agent = new Agent_Display(agent2, auction_house, bank);
-        //Agent_Display agent5 = new Agent_Display(agent3);
-        //Agent_Display agent6 = new Agent_Display(agent4);
-        agent.drawGUI(stage);
-
+        Agent_Display agentdisp = new Agent_Display(agent, auction_house, bank);
+        agentdisp.drawGUI(stage);
 
         System.out.println();
-        //agent5.drawGUI(stage);
-        //agent6.drawGUI(stage);
-
-
     }
 }

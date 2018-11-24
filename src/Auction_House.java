@@ -1,28 +1,30 @@
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Auction_House extends Thread {
 
-    String auctionHouseID;
     LinkedList<Item> itemList;
     LinkedList<String> nouns;
     LinkedList<String> adjectives;
-
-
     Boolean DEBUG = true;
 
-    Agent_Proxy agent_proxy;
-    Auction_House_Proxy auction_house_proxy;
+    int auctionHouseID;
+    int portNumber;
+    Auction_House_Server_Proxy auction_house_server_proxy;
+    Bank_Server_Proxy bank_server_proxy;
+    ConcurrentHashMap<Integer, Client_Proxy> clients;
+    Client_Proxy clientProxy;
 
-
-    public Auction_House(String auctionHouseID, LinkedList nouns, LinkedList adjectives) {
+    public Auction_House(int auctionHouseID, int portNumber, LinkedList nouns, LinkedList adjectives) {
         this.auctionHouseID = auctionHouseID;
         this.itemList = new LinkedList<>();
         this.nouns = nouns;
         this.adjectives = adjectives;
-        //this.agent_proxy = new Agent_Proxy();
         createItems(10);
-        this.auction_house_proxy = new Auction_House_Proxy();
+        this.auction_house_server_proxy = new Auction_House_Server_Proxy(this);
+        this.clients = new ConcurrentHashMap();
+        this.clientProxy = new Client_Proxy(auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
     }
 
     //upon creation, registers with bank by opening account with zero balance
@@ -42,40 +44,27 @@ public class Auction_House extends Thread {
     public void validateBid() {
         Enum_Commands.Command acceptResponse = Enum_Commands.Command.AcceptResponse;
         Enum_Commands.Command rejectResponse = Enum_Commands.Command.RejectResponse;
-
-
-
-
     }
 
     //When bid is accepted, bank is requested to block the funds
     public void acceptedBid() {
         Enum_Commands.Command blockFunds = Enum_Commands.Command.BlockFunds;
-
-        //block the funds
-
     }
 
     //when a bid is overtaken, pass notification is sent to the agent and the funds are unblocked from the bank
     public void bidOvertaken() {
         Enum_Commands.Command bidOvertaken = Enum_Commands.Command.BidOvertaken;
-
     }
 
     public void bidSuccessful() {
         //a bid is successful if not overtaken in 30 seconds
-        //
     }
 
     //when winning a bid, agent receives "winner" notification and auction house waits for
     //the blocked funds to be transferred into its account
     public void wonAuction() {
         Enum_Commands.Command wonAuction = Enum_Commands.Command.WinMessage;
-
-
-
     }
-
 
     private void createItems(int amountOfItems) {
         String itemID = "0000";
@@ -102,8 +91,15 @@ public class Auction_House extends Thread {
         }
     }
 
+    public void startAuctionHouseClient(String data) {
+        System.out.println("Starting AH client: " + data);
+        String[] clientInfoTokens = data.split("\\s");
+        Client_Proxy proxyClient = new Client_Proxy(12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
+        clients.put(12340, proxyClient);
+    }
+
     public void debug() {
-        auction_house_proxy.agentClientOutput.println("Test from ah client to agent server");
-        auction_house_proxy.bankClientOutput.println("Test from ah client to bank server");
+        clients.get(12340).clientOutput.println("AH to Agent Server");
+        clientProxy.clientOutput.println("AH to Bank server");
     }
 }

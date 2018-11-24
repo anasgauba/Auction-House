@@ -1,4 +1,6 @@
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @version date: 11/16/2018
  * @author Anas Farooq Gauba
@@ -7,13 +9,17 @@ public class Bank {
     private HashMap<Integer, Account> list;
     private int secretKey;
 
-    Bank_Proxy bank_proxy;
+    int bankID;
+    Bank_Server_Proxy bank_server_proxy;
+    ConcurrentHashMap<Integer, Client_Proxy> clients;
 
     public Bank() {
         this.list = new HashMap<>();
-
-        this.bank_proxy = new Bank_Proxy();
+        this.bankID = 1;
+        clients = new ConcurrentHashMap();
+        Bank_Server_Proxy bank_server_proxy = new Bank_Server_Proxy(this);
     }
+
     //Opens Bank Account for Agent or AuctionHouse
     //return the biddingKey that is created when an account is created
     public int createAccount(int id, int initialBalance) throws Exception {
@@ -136,8 +142,14 @@ public class Bank {
         System.out.println(b1.toString());
     }
 
+    public void startBankClient(String data) {
+        System.out.println("Starting Bank client: " + data);
+        String[] clientInfoTokens = data.split("\\s");
+        Client_Proxy proxyClient = new Client_Proxy(12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
+        clients.put(12340, proxyClient);
+    }
 
     public void debug() {
-        bank_proxy.clientOutput.println("Test from Bank client to AH server");
+        clients.get(12340).clientOutput.println("Bank to AH server message");
     }
 }

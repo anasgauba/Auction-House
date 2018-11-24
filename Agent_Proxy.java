@@ -6,82 +6,6 @@ import java.util.Scanner;
 
 public class Agent_Proxy {
 
-
-    private boolean run = true;
-
-    //server
-    private ServerSocket serverSocket;
-    private Socket acceptSocket;
-    //public PrintStream serverOutput;
-    //public BufferedReader serverInput;
-
-    //client AH
-    private Socket auctionHouseClientSocket;
-    public BufferedReader auctionHouseClientInput;
-    public PrintStream auctionHouseClientOutput;
-
-    //client Bank
-    private Socket bankClientSocket;
-    public BufferedReader bankClientInput;
-    public PrintStream bankClientOutput;
-
-    public Agent_Proxy() {
-
-        startAgentServer();
-        startAgentClient();
-    }
-
-    public void startAgentServer() {
-        new Thread(() -> {
-            try {
-                serverSocket = new ServerSocket(7677);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            while (true) {
-                try {
-                    acceptSocket = serverSocket.accept();
-                    startAgentThread(acceptSocket);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-
-    public void startAgentThread(Socket clientSocket) {
-        System.out.println("starting agent thread");
-        new Thread(() -> {
-            try {
-                PrintStream serverOutput;
-                BufferedReader serverInput;
-                serverOutput = new PrintStream(clientSocket.getOutputStream());
-                serverInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-                while (run && clientSocket.isConnected()) {
-
-                    String message = serverInput.readLine();
-                    //System.out.println(message);
-
-                    if (message != null){
-                        serverOutput.println("agent Server saw your message: " + message);
-                    }
-
-                    Thread.sleep(0);
-                }
-
-            } catch (InterruptedException | IOException e) {
-                e.printStackTrace();
-            }
-
-        }).start();
-    }
-
-
-
     public void startAgentClient() {
 
         //TO AH
@@ -95,9 +19,9 @@ public class Agent_Proxy {
 
             try {
 
-                auctionHouseClientSocket = new Socket(getServerIP(), 7577);
+                auctionHouseClientSocket = new Socket(getServerIP(), 6666);
                 auctionHouseClientOutput = new PrintStream(auctionHouseClientSocket.getOutputStream());
-                auctionHouseClientOutput.println("testing agent proxy client to AH");
+                auctionHouseClientOutput.println("12340 6666");
 
                 System.out.println(auctionHouseClientSocket.isConnected());
 
@@ -129,7 +53,7 @@ public class Agent_Proxy {
 
                 bankClientSocket = new Socket(getServerIP(), 7777);
                 bankClientOutput = new PrintStream(bankClientSocket.getOutputStream());
-                bankClientOutput.println("testing agent proxy client to bank");
+                //bankClientOutput.println("testing agent proxy client to bank");
                 System.out.println(bankClientSocket.isConnected());
 
                 while (run && bankClientSocket.isConnected()) {
@@ -161,5 +85,4 @@ public class Agent_Proxy {
 
         return null;
     }
-
 }

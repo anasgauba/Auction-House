@@ -251,9 +251,9 @@ public class Agent_Display extends JPanel {
         //to the constructor of new tableItem, which sets all the correct info to the right places on table view. Then,
         // the table data is set. To change list on board, you clear listofTableItems, add table items to it, then set the
         //info in the table to that.
-        Item first = new Item("3333","22222","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",400,330.75);
-        Item second = new Item("666","9999","orange mat",200,100.02);
-        Item third = new Item("4444","11111","green grass",20,10.20);
+        Item first = new Item(3333,"22222","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",400,330.75);
+        Item second = new Item(666,"9999","orange mat",200,100.02);
+        Item third = new Item(4444,"11111","green grass",20,10.20);
         listofTableItems.add(new tableItem(first));
         listofTableItems.add(new tableItem(second));
         listofTableItems.add(new tableItem(third));
