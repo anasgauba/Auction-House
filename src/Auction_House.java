@@ -13,8 +13,8 @@ public class Auction_House extends Thread {
     int portNumber;
     Auction_House_Server_Proxy auction_house_server_proxy;
     Bank_Server_Proxy bank_server_proxy;
-    ConcurrentHashMap<Integer, Client_Proxy> clients;
-    Client_Proxy clientProxy;
+    ConcurrentHashMap<Integer, Agent_Client_Proxy> clients;
+    Bank_Client_Proxy bankClient;
 
     public Auction_House(int auctionHouseID, int portNumber, LinkedList nouns, LinkedList adjectives) {
         this.auctionHouseID = auctionHouseID;
@@ -24,7 +24,7 @@ public class Auction_House extends Thread {
         createItems(10);
         this.auction_house_server_proxy = new Auction_House_Server_Proxy(this);
         this.clients = new ConcurrentHashMap();
-        this.clientProxy = new Client_Proxy(auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
+        this.bankClient = new Bank_Client_Proxy(auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
     }
 
     //upon creation, registers with bank by opening account with zero balance
@@ -94,12 +94,12 @@ public class Auction_House extends Thread {
     public void startAuctionHouseClient(String data) {
         System.out.println("Starting AH client: " + data);
         String[] clientInfoTokens = data.split("\\s");
-        Client_Proxy proxyClient = new Client_Proxy(12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
+        Agent_Client_Proxy proxyClient = new Agent_Client_Proxy(12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
         clients.put(12340, proxyClient);
     }
 
     public void debug() {
         clients.get(12340).clientOutput.println("AH to Agent Server");
-        clientProxy.clientOutput.println("AH to Bank server");
+        bankClient.clientOutput.println("AH to Bank server");
     }
 }

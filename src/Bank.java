@@ -11,7 +11,7 @@ public class Bank {
 
     int bankID;
     Bank_Server_Proxy bank_server_proxy;
-    ConcurrentHashMap<Integer, Client_Proxy> clients;
+    ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
 
     public Bank() {
         this.list = new HashMap<>();
@@ -145,7 +145,7 @@ public class Bank {
     public void startBankClient(String data) {
         System.out.println("Starting Bank client: " + data);
         String[] clientInfoTokens = data.split("\\s");
-        Client_Proxy proxyClient = new Client_Proxy(12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
+        Auction_House_Client_Proxy proxyClient = new Auction_House_Client_Proxy(12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
         clients.put(12340, proxyClient);
     }
 

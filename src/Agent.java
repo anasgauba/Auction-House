@@ -10,16 +10,16 @@ public class Agent {
     //Stage agentStage = new Stage();
 
     Agent_Server_Proxy agent_server_proxy;
-    Client_Proxy bankClient;
+    Bank_Client_Proxy bankClient;
     int portNumber;
-    ConcurrentHashMap<Integer, Client_Proxy> clients;
+    ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
 
 
     public Agent (int portNumber){
         this.portNumber = portNumber;
         this.clients = new ConcurrentHashMap();
         this.agent_server_proxy = new Agent_Server_Proxy(this, portNumber);
-        this.bankClient = new Client_Proxy(1, "Agent " + this.portNumber, 7277);
+        this.bankClient = new Bank_Client_Proxy(1, "Agent " + this.portNumber, 7277);
         secretBiddingKey = 12340; //do function call for client to get bank key
         createClientConnections();
         //agentDisplay = new Agent_Display();
@@ -72,7 +72,7 @@ public class Agent {
         //we also need a list of clients. Here is one example of one agent.
         //In order to do this, we would need to message the bank proxy command to get all AH ids + ports
 
-        Client_Proxy clientProxy = new Client_Proxy(12340, "Agent " + portNumber, 6666); //key would be auction house id, to do
+        Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(12340, "Agent " + portNumber, 6666); //key would be auction house id, to do
         clients.put(12340, clientProxy);
 
     }

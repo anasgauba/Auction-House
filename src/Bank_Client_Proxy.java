@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client_Proxy extends Thread {
+public class Bank_Client_Proxy extends Thread {
 
     private Socket clientSocket;
     public BufferedReader clientInput;
@@ -12,7 +12,7 @@ public class Client_Proxy extends Thread {
     int portNumber;
     boolean run;
 
-    public Client_Proxy(int key, String clientType, int portNumber) {
+    public Bank_Client_Proxy(int key, String clientType, int portNumber) {
         this.clientType = clientType;
         this.portNumber = portNumber;
         this.run = true;
@@ -20,23 +20,29 @@ public class Client_Proxy extends Thread {
     }
 
     public void run() {
+
         try {
             clientSocket = new Socket(getServerIP(), portNumber);
             clientOutput = new PrintStream(clientSocket.getOutputStream());
 
-            if (clientType.contains("Bank")) {
-                clientOutput.println(clientType);
-            }
+                /*
+                if (clientType.contains("Bank")) {
+                    clientOutput.println(clientType);
+                }
 
-            else if (clientType.contains("AuctionHouse")) {
-                sleep(2000);
-                clientOutput.println(clientType);
-            }
+                else if (clientType.contains("AuctionHouse")) {
+                    sleep(2000);
+                    clientOutput.println(clientType);
+                }
 
-            else if (clientType.contains("Agent")) {
-                sleep(3000);
-                clientOutput.println(clientType + " " + clientSocket.getPort()); //I dont remember why this is different from the rest. works though.. look into this later
-            }
+                else if (clientType.contains("Agent")) {
+                    sleep(3000);
+                    clientOutput.println(clientType + " " + clientSocket.getPort()); //I dont remember why this is different from the rest. works though.. look into this later
+                }
+                */
+
+
+            clientOutput.println(clientType + " " + clientSocket.getPort());
 
             while (run && clientSocket.isConnected()) {
                 clientInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -63,7 +69,4 @@ public class Client_Proxy extends Thread {
         }
         return null;
     }
-
-
-
 }
