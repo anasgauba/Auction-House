@@ -32,13 +32,13 @@ public class Agent {
     }
     //create bank account and receive unique account number
     public void getBankAccountNumber(){
-        Enum_Commands.Command createAccount = Enum_Commands.Command.CreateBankAccount;
+//        Enum_Commands.Command createAccount = Enum_Commands.Command.CreateBankAccount;
         //clientProxy.clientOutput.println("sending message: "+createAccount);
 
     }
     //Return a list of auction houses
     public void getListActiveAuctions(){
-        Enum_Commands.Command getListHouse = Enum_Commands.Command.GetListHouses;
+//        Enum_Commands.Command getListHouse = Enum_Commands.Command.GetListHouses;
         //clientProxy.clientOutput.println("sending message: "+getListHouse);
 
 
@@ -54,13 +54,13 @@ public class Agent {
 
     //notifies the bank to transfer the blocked funds to the auction house when winning a bid.
     public void transferWinningBidFunds(){
-        Enum_Commands.Command transferFunds = Enum_Commands.Command.TransferBlockedFunds;
+//        Enum_Commands.Command transferFunds = Enum_Commands.Command.TransferBlockedFunds;
         //clientProxy.clientOutput.println("sending message: "+transferFunds);
     }
 
     //terminates and closes the agent's bank account when no bidding action is in progress
     public void closeStagnantBankAccount(){
-        Enum_Commands.Command closeAccount = Enum_Commands.Command.CloseBankAccount;
+//        Enum_Commands.Command closeAccount = Enum_Commands.Command.CloseBankAccount;
         //clientProxy.clientOutput.println("sending message: "+closeAccount);
 
     }
