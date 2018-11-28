@@ -150,12 +150,8 @@ public class Bank {
         clients.put(12340, proxyClient);
     }
 
-    public void debug() {
-        try {
+    public void debug() throws IOException {
             Object[] message = {Command.BlockFunds, "test2"};
             clients.get(12340).clientOutput.writeObject(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
