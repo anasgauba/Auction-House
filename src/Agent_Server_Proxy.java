@@ -1,9 +1,7 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.StandardSocketOptions;
 
 public class Agent_Server_Proxy extends Thread {
     private ServerSocket serverSocket;
@@ -47,24 +45,34 @@ public class Agent_Server_Proxy extends Thread {
         System.out.println("starting agent thread for incoming connection");
         new Thread(() -> {
             try {
-                PrintStream serverOutput;
-                BufferedReader serverInput;
-                serverOutput = new PrintStream(clientSocket.getOutputStream());
-                serverInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                ObjectOutputStream serverOutput;
+                ObjectInputStream serverInput;
+                serverOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+                serverInput = new ObjectInputStream(clientSocket.getInputStream());
+                String temp = (String) serverInput.readObject();
+                System.out.println("received: " + temp);
 
                 while (run && clientSocket.isConnected()) {
 
-                    String message = serverInput.readLine();
-                    System.out.println(message);
+                    Object[] message = (Object[]) serverInput.readObject();
+                    Command command = (Command) message[0];
 
-                    if (message != null){
-                        serverOutput.println("AH Server received your message " + message);
+                    //this switch handles incoming messages.  NOT from client, but from what ever
+                    //button the user on the gui will press or from the agent thread
+                    //Clients switch will be for INCOMING messages from Server or the ser
+                    switch (command) {
+                        case BlockFunds:
+                            System.out.println("test in agent serv! " + message[1] + command);
+                            serverOutput.writeObject(message);
+                            break;
                     }
 
                     Thread.sleep(0);
                 }
 
             } catch (InterruptedException | IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }).start();

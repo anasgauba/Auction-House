@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -98,8 +99,9 @@ public class Auction_House extends Thread {
         clients.put(12340, proxyClient);
     }
 
-    public void debug() {
-        clients.get(12340).clientOutput.println("AH to Agent Server");
-        bankClient.clientOutput.println("AH to Bank server");
+    public void debug() throws IOException {
+        Object[] message = {Command.BlockFunds, "test2"};
+        clients.get(12340).clientOutput.writeObject(message);
+        bankClient.clientOutput.writeObject(message);
     }
 }

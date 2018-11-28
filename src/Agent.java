@@ -1,5 +1,6 @@
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Agent {
@@ -77,9 +78,10 @@ public class Agent {
 
     }
 
-    public void debug() {
-        clients.get(12340).clientOutput.println("Agent to AH message");
-        bankClient.clientOutput.println("Agent to Bank message");
+    public void debug() throws IOException {
+        Object[] message = {Command.BlockFunds, "test2"};
+        clients.get(12340).clientOutput.writeObject(message);
+        bankClient.clientOutput.writeObject(message);
     }
 
 }

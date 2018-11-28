@@ -4,9 +4,9 @@ import java.util.Scanner;
 
 public class Bank_Client_Proxy extends Thread {
 
-    private Socket clientSocket;
-    public BufferedReader clientInput;
-    public PrintStream clientOutput;
+    private Socket clientSocket = null;
+    public ObjectInputStream clientInput = null;
+    public ObjectOutputStream clientOutput = null;
 
     String clientType;
     int portNumber;
@@ -23,35 +23,33 @@ public class Bank_Client_Proxy extends Thread {
 
         try {
             clientSocket = new Socket(getServerIP(), portNumber);
-            clientOutput = new PrintStream(clientSocket.getOutputStream());
-
-                /*
-                if (clientType.contains("Bank")) {
-                    clientOutput.println(clientType);
-                }
-
-                else if (clientType.contains("AuctionHouse")) {
-                    sleep(2000);
-                    clientOutput.println(clientType);
-                }
-
-                else if (clientType.contains("Agent")) {
-                    sleep(3000);
-                    clientOutput.println(clientType + " " + clientSocket.getPort()); //I dont remember why this is different from the rest. works though.. look into this later
-                }
-                */
-
-
-            clientOutput.println(clientType + " " + clientSocket.getPort());
+            clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+            clientOutput.writeObject(clientType + " " + clientSocket.getPort());
 
             while (run && clientSocket.isConnected()) {
-                clientInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String message = clientInput.readLine();
-                System.out.println("message received: " + message);
+
+                if (clientInput == null) {
+                    clientInput = new ObjectInputStream(clientSocket.getInputStream());
+                }
+
+                Object[] message = (Object[]) clientInput.readObject();
+                Command command = (Command) message[0];
+
+                switch (command) {
+                    case BlockFunds:
+                        System.out.println("test! in bank client! " + message[1]);
+                        break;
+                }
+                //System.out.println("message received: " + message);
                 Thread.sleep(0);
             }
 
-        } catch (InterruptedException | IOException e) {
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

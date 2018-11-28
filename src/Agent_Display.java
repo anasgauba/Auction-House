@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Stack;
 
@@ -305,10 +306,18 @@ public class Agent_Display extends JPanel {
         borderpane.getChildren().addAll(tempdebug);
 
         test1.setOnAction(e -> {
-            agent.debug();
+            try {
+                agent.debug();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         });
         test2.setOnAction(e -> {
-            auctionHouse.debug();
+            try {
+                auctionHouse.debug();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         });
         test3.setOnAction(e -> {
             bank.debug();

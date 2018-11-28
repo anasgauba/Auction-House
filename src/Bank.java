@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -150,6 +151,11 @@ public class Bank {
     }
 
     public void debug() {
-        clients.get(12340).clientOutput.println("Bank to AH server message");
+        try {
+            Object[] message = {Command.BlockFunds, "test2"};
+            clients.get(12340).clientOutput.writeObject(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

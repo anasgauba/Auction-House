@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -48,12 +45,12 @@ public class Bank_Server_Proxy {
     public void startBankThread(Socket clientSocket) {
         new Thread(() -> {
             try {
-                PrintStream serverOutput;
-                BufferedReader serverInput;
-                serverOutput = new PrintStream(clientSocket.getOutputStream());
-                serverInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                ObjectOutputStream serverOutput;
+                ObjectInputStream serverInput;
+                serverOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+                serverInput = new ObjectInputStream(clientSocket.getInputStream());
 
-                String temp = serverInput.readLine();
+                String temp = (String) serverInput.readObject();
                 if (temp.contains("AuctionHouse")) {
                     bank.startBankClient(temp);
                 }
@@ -61,16 +58,25 @@ public class Bank_Server_Proxy {
 
                 while (run && clientSocket.isConnected()) {
 
-                    String message = serverInput.readLine();
+                    Object[] message = (Object[]) serverInput.readObject();
+                    Command command = (Command) message[0];
 
-                    if (message != null){
-                        serverOutput.println("bank Server received your message " + message);
+                    //this switch handles incoming messages.  NOT from client, but from what ever
+                    //button the user on the gui will press or from the agent thread
+                    //Clients switch will be for INCOMING messages from Server or the ser
+                    switch (command) {
+                        case BlockFunds:
+                            System.out.println("test in bank serv! " + message[1] + command);
+                            serverOutput.writeObject(message);
+                            break;
                     }
 
                     Thread.sleep(0);
                 }
 
             } catch (InterruptedException | IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }).start();
