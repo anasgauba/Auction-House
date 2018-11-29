@@ -1,4 +1,5 @@
 
+import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +9,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -15,6 +19,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -219,7 +224,19 @@ public class Agent_Display extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        comboBox.getSelectionModel().selectFirst(); //no idea why this doesn work
+
+        comboBox.getSelectionModel().selectFirst();
+// no idea why this doesn work
+        comboBox.getSelectionModel().select(0);
+        comboBox.getSelectionModel().selectLast();
+        comboBox.getSelectionModel().selectFirst();
+        comboBox.getSelectionModel().selectNext();
+        comboBox.getSelectionModel().selectPrevious();
+
+
+
+
+
         // agent.clients.get(12340).clientOutput.writeObject(message);
 
 
@@ -269,6 +286,9 @@ public class Agent_Display extends JPanel {
         TableColumn itemCurrentBid = new TableColumn("Item Current Bid");
         itemCurrentBid.setMinWidth(150);
         itemCurrentBid.setStyle("-fx-alignment: CENTER-RIGHT;");
+        TableColumn itemTime = new TableColumn("Item Time Remaining");
+        itemTime.setMinWidth(150);
+
         itemID.setCellValueFactory(
                 new PropertyValueFactory<tableItem, String>("itemID")
         );
@@ -283,6 +303,9 @@ public class Agent_Display extends JPanel {
         itemCurrentBid.setCellValueFactory(
                 new PropertyValueFactory<tableItem, String>("itemCurrentBid")
         );
+        itemTime.setCellValueFactory(
+                new PropertyValueFactory<tableItem, String>("itemTime")
+        );
 
 
         //A list of items will be passed in. In final product, I will loop through the list and pass each item
@@ -296,7 +319,7 @@ public class Agent_Display extends JPanel {
 //        listofTableItems.add(new tableItem(second));
 //        listofTableItems.add(new tableItem(third));
 //        table.setItems(listofTableItems);
-        table.getColumns().addAll(itemID, itemName, itemStartingBid, itemCurrentBid);
+        table.getColumns().addAll(itemID, itemName, itemStartingBid, itemCurrentBid, itemTime);
 
 
         table.setRowFactory(tv -> {
@@ -365,7 +388,29 @@ public class Agent_Display extends JPanel {
             }
         });
        */
+        //THIS IS THE ANIMATION TIMER I TRIED TO DO.
 
+//        AnimationTimer animationTimer = new AnimationTimer () {
+//            @Override
+//            public void handle (long now) {
+//                System.out.println("Animation timer is running. Attempt to display time");
+//                listofTableItems.clear();
+//                message[0] = Command.GetListItems;
+//                String tempAuctionID = (String) comboBox.getValue();
+//                System.out.println("***********************************");
+//                System.out.println("COMBO BOX VALUE IN STRING "+tempAuctionID);
+//                agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
+//                System.out.println("AUCTION HOUSE IN INTEGER" + tempAuctionID);
+//                try {
+//                    agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+
+//        };
+
+//        animationTimer.start();
 
     }
 
@@ -374,6 +419,7 @@ public class Agent_Display extends JPanel {
         private final SimpleStringProperty itemName;
         private final SimpleStringProperty itemStartingBid;
         private final SimpleStringProperty itemCurrentBid;
+        private final SimpleStringProperty itemTime;
         DecimalFormat tempFormat = new DecimalFormat("#.00");
 
         public tableItem(Item itemPassedIn) {
@@ -382,7 +428,12 @@ public class Agent_Display extends JPanel {
             this.itemName = new SimpleStringProperty(itemPassedIn.getDescription());
             this.itemStartingBid = new SimpleStringProperty(tempFormat.format(itemPassedIn.getMinimumBidAmount()));
             this.itemCurrentBid = new SimpleStringProperty(tempFormat.format(itemPassedIn.getCurrentBidAmount()));
+            this.itemTime =  new SimpleStringProperty(Long.toString(itemPassedIn.getBidTimeRemaining()));
+
+
         }
+        public String getItemTime(){return itemTime.get();}
+        public void setItemTime(String itemTimeRemaining){itemTime.set(itemTimeRemaining);}
 
         public String getItemID() {
             return itemID.get();

@@ -82,15 +82,11 @@ public class Agent {
     }
 
     public void sendBid(String itemID, double bidAmount) throws IOException {
-
-
-
         System.out.println("Bid amount " + bidAmount);
         clients.get(currentAuctionHouse).clientOutput.writeObject(new Object[] {Command.SendBid, itemID, bidAmount});
     }
 
     public void setCurrentAuctionHouse(int auctionHouseID) {
-
         System.out.println("current AH id " + auctionHouseID);
         currentAuctionHouse = auctionHouseID;
     }
