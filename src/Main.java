@@ -24,11 +24,16 @@ public class Main extends Application {
         while (inAdjectives.hasNext()) {
             adjectives.add(inAdjectives.next());
         }
+        Scanner inNames = new Scanner(new File("resources/names"));
+        LinkedList<String> names = new LinkedList();
+        while (inNames.hasNext()) {
+            names.add(inNames.next());
+        }
 
 
         Bank bank = new Bank();
         Auction_House auction_house = new Auction_House(6666, nouns, adjectives);
-        Agent agent = new Agent(8900);
+        Agent agent = new Agent(8900,names);
 
         //Agent_Display agentdisp = new Agent_Display();
         //agentdisp.drawGUI(stage);

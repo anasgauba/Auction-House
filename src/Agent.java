@@ -2,9 +2,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Agent {
+    LinkedList<String> names;
     private String agentName;
     private int secretBiddingKey;
 
@@ -17,15 +19,24 @@ public class Agent {
     ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
 
 
-    public Agent (int portNumber){
+    public Agent (int portNumber, LinkedList nameList){
         this.portNumber = portNumber;
         this.clients = new ConcurrentHashMap();
         this.agent_server_proxy = new Agent_Server_Proxy(this, portNumber);
         this.bankClient = new Bank_Client_Proxy(1, "Agent " + this.portNumber, 7277);
         secretBiddingKey = 12340; //do function call for client to get bank key
+        this.names = nameList;
+        createName();
         createClientConnections();
         agentDisplay = new Agent_Display(this);
         agentDisplay.drawGUI(new Stage());
+    }
+
+    public void createName(){
+        Random random = new Random();
+        String createdName =names.get(random.nextInt(names.size() - 1)) + " " + names.get(random.nextInt(names.size() - 1));
+        this.agentName=createdName;
+        System.out.println(this.agentName);
     }
 
     //sets bidding key returned by the bank to the current agent
@@ -33,17 +44,17 @@ public class Agent {
         secretBiddingKey=bidKeyReturned;
     }
     //create bank account and receive unique account number
-    public void getBankAccountNumber(){
-//        Enum_Commands.Command createAccount = Enum_Commands.Command.CreateBankAccount;
-        //clientProxy.clientOutput.println("sending message: "+createAccount);
-
+    public void getBankAccountNumber() throws IOException {
+        Object[] message = {Command.CreateBankAccount};
+        clients.get(12340).clientOutput.writeObject(message);
+        bankClient.clientOutput.writeObject(message);
+        //how is the information being received back to agent?
     }
     //Return a list of auction houses
-    public void getListActiveAuctions(){
-//        Enum_Commands.Command getListHouse = Enum_Commands.Command.GetListHouses;
-        //clientProxy.clientOutput.println("sending message: "+getListHouse);
-
-
+    public void getListActiveAuctions() throws IOException {
+        Object[] message = {Command.GetListHouses};
+        clients.get(12340).clientOutput.writeObject(message);
+        bankClient.clientOutput.writeObject(message);
     }
     //retrieves auction items from auction house passed in
     public void getAuctionHouseItems(){
@@ -61,14 +72,13 @@ public class Agent {
     }
 
     //terminates and closes the agent's bank account when no bidding action is in progress
-    public void closeStagnantBankAccount(){
-//        Enum_Commands.Command closeAccount = Enum_Commands.Command.CloseBankAccount;
-        //clientProxy.clientOutput.println("sending message: "+closeAccount);
-
+    public void closeStagnantBankAccount() throws IOException {
+        Object[] message = {Command.CloseBankAccount};
+        clients.get(12340).clientOutput.writeObject(message);
+        bankClient.clientOutput.writeObject(message);
     }
 
     public void createItemList(LinkedList<Item> itemList) {
-
         for (int i = 0; i < itemList.size(); i++) {
             Item tempItem = itemList.get(i);
             agentDisplay.listofTableItems.add(new Agent_Display.tableItem(new Item(tempItem.getAuctionHouseID(), tempItem.getItemID(),
