@@ -1,9 +1,12 @@
+package Agent;
 
+import Auction_House.Auction_House;
+import Auction_House.Item;
+import Bank.Bank;
+import Misc.Command;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,13 +15,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.Stack;
 
 public class Agent_Display extends JPanel {
     public ObservableList<tableItem> listofTableItems = FXCollections.observableArrayList();
@@ -41,7 +42,7 @@ public class Agent_Display extends JPanel {
         BorderPane agentInfo = new BorderPane();
         agentInfo.setPadding(new Insets(27, 20, 20, 20));
 
-        Label agentID = new Label("Agent ID:");
+        Label agentID = new Label("Agent.Agent ID:");
         agentID.setFont(new Font("Calibri", 20));
         agentID.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         agentID.setPadding(new Insets(0, 10, 0, 0));
@@ -55,7 +56,7 @@ public class Agent_Display extends JPanel {
         HBox agentIDHBox = new HBox();
         agentIDHBox.getChildren().addAll(agentID, agentIDTextField);
 
-        Label agentAccount = new Label("Agent Account:");
+        Label agentAccount = new Label("Agent.Agent Bank.Account:");
         agentAccount.setFont(new Font("Calibri", 20));
         agentAccount.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         agentAccount.setPadding(new Insets(0, 10, 0, 0));
@@ -70,7 +71,7 @@ public class Agent_Display extends JPanel {
         agentAccountHBox.getChildren().addAll(agentAccount, agentAccountTextField);
 
 
-        Label agentBalance = new Label("Agent Balance:");
+        Label agentBalance = new Label("Agent.Agent Balance:");
         agentBalance.setFont(new Font("Calibri", 20));
         agentBalance.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         agentBalance.setPadding(new Insets(0, 10, 0, 0));
@@ -97,7 +98,7 @@ public class Agent_Display extends JPanel {
         BorderPane itemInfo = new BorderPane();
         itemInfo.setPadding(new Insets(20, 20, 5, 20));
 
-        Label itemIDLabel = new Label("Item ID:");
+        Label itemIDLabel = new Label("Auction_House.Item ID:");
         itemIDLabel.setFont(new Font("Calibri", 20));
         itemIDLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         itemIDLabel.setPadding(new Insets(0, 10, 0, 0));
@@ -112,7 +113,7 @@ public class Agent_Display extends JPanel {
         itemIDTextFieldHBox.getChildren().addAll(itemIDLabel, itemIDTextField);
 
 
-        Label itemDescriptionLabel = new Label("Item Name:");
+        Label itemDescriptionLabel = new Label("Auction_House.Item Name:");
         itemDescriptionLabel.setFont(new Font("Calibri", 20));
         itemDescriptionLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         itemDescriptionLabel.setPadding(new Insets(0, 10, 0, 0));
@@ -258,15 +259,15 @@ public class Agent_Display extends JPanel {
         table.setPrefHeight(700);
         table.setPadding(new Insets(0, 0, 20, 0));
         table.setBackground(new Background(new BackgroundFill(Color.rgb(171, 171, 171), CornerRadii.EMPTY, Insets.EMPTY)));
-        TableColumn itemID = new TableColumn("Item ID");
+        TableColumn itemID = new TableColumn("Auction_House.Item ID");
         itemID.setMinWidth(100);
-        TableColumn itemName = new TableColumn("Item Name");
+        TableColumn itemName = new TableColumn("Auction_House.Item Name");
         itemName.setMinWidth(200);
         itemName.setStyle("-fx-alignment: CENTER;");
-        TableColumn itemStartingBid = new TableColumn("Item Starting Bid");
+        TableColumn itemStartingBid = new TableColumn("Auction_House.Item Starting Bid");
         itemStartingBid.setMinWidth(150);
         itemStartingBid.setStyle("-fx-alignment: CENTER-RIGHT;");
-        TableColumn itemCurrentBid = new TableColumn("Item Current Bid");
+        TableColumn itemCurrentBid = new TableColumn("Auction_House.Item Current Bid");
         itemCurrentBid.setMinWidth(150);
         itemCurrentBid.setStyle("-fx-alignment: CENTER-RIGHT;");
         itemID.setCellValueFactory(
@@ -289,9 +290,9 @@ public class Agent_Display extends JPanel {
         //to the constructor of new tableItem, which sets all the correct info to the right places on table view. Then,
         // the table data is set. To change list on board, you clear listofTableItems, add table items to it, then set the
         //info in the table to that.
-//        Item first = new Item(3333,"22222","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",400,330.75);
-//        Item second = new Item(666,"9999","orange mat",200,100.02);
-//        Item third = new Item(4444,"11111","green grass",20,10.20);
+//        Auction_House.Item first = new Auction_House.Item(3333,"22222","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",400,330.75);
+//        Auction_House.Item second = new Auction_House.Item(666,"9999","orange mat",200,100.02);
+//        Auction_House.Item third = new Auction_House.Item(4444,"11111","green grass",20,10.20);
 //        listofTableItems.add(new tableItem(first));
 //        listofTableItems.add(new tableItem(second));
 //        listofTableItems.add(new tableItem(third));
@@ -333,9 +334,9 @@ public class Agent_Display extends JPanel {
         agentAccountTextField.setText("00900");
         agentBalanceTextField.setText("3000.03");
 
-        Button test1 = new Button("test Agent");
+        Button test1 = new Button("test Agent.Agent");
         Button test2 = new Button("test AH");
-        Button test3 = new Button("test Bank");
+        Button test3 = new Button("test Bank.Bank");
         test1.setMinWidth(100);
         test2.setMinWidth(100);
         test3.setMinWidth(100);

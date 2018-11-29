@@ -1,3 +1,10 @@
+package Auction_House;
+
+import Agent.Agent_Client_Proxy;
+import Bank.Bank_Client_Proxy;
+import Bank.Bank_Server_Proxy;
+import Misc.Command;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
@@ -11,8 +18,8 @@ public class Auction_House extends Thread {
     LinkedList<String> adjectives;
     Boolean DEBUG = true;
 
-    int auctionHouseID;
-    int portNumber;
+    public int auctionHouseID;
+    public int portNumber;
     int secretKey;
     boolean run;
     Auction_House_Server_Proxy auction_house_server_proxy;
@@ -49,31 +56,31 @@ public class Auction_House extends Thread {
 
     //upon creation, registers with bank by opening account with zero balance
     public void createAccount() {
-//        Enum_Commands.Command createAccount = Enum_Commands.Command.CreateBankAccount;
+//        Enum_Commands.Misc.Command createAccount = Enum_Commands.Misc.Command.CreateBankAccount;
 
     }
 
     //closes account at termination
     public void closeAccount() {
-//        Enum_Commands.Command closeAccount = Enum_Commands.Command.CloseBankAccount;
+//        Enum_Commands.Misc.Command closeAccount = Enum_Commands.Misc.Command.CloseBankAccount;
 
 
     }
 
     //recives bid and acknowledges with a reject or accept response
     public void validateBid() {
-//        Enum_Commands.Command acceptResponse = Enum_Commands.Command.AcceptResponse;
-//        Enum_Commands.Command rejectResponse = Enum_Commands.Command.RejectResponse;
+//        Enum_Commands.Misc.Command acceptResponse = Enum_Commands.Misc.Command.AcceptResponse;
+//        Enum_Commands.Misc.Command rejectResponse = Enum_Commands.Misc.Command.RejectResponse;
     }
 
     //When bid is accepted, bank is requested to block the funds
     public void acceptedBid() {
-//        Enum_Commands.Command blockFunds = Enum_Commands.Command.BlockFunds;
+//        Enum_Commands.Misc.Command blockFunds = Enum_Commands.Misc.Command.BlockFunds;
     }
 
     //when a bid is overtaken, pass notification is sent to the agent and the funds are unblocked from the bank
     public void bidOvertaken() {
-//        Enum_Commands.Command bidOvertaken = Enum_Commands.Command.BidOvertaken;
+//        Enum_Commands.Misc.Command bidOvertaken = Enum_Commands.Misc.Command.BidOvertaken;
     }
 
     public void bidSuccessfulCheck() {
@@ -98,7 +105,7 @@ public class Auction_House extends Thread {
     //when winning a bid, agent receives "winner" notification and auction house waits for
     //the blocked funds to be transferred into its account
     public void wonAuction() {
-//        Enum_Commands.Command wonAuction = Enum_Commands.Command.WinMessage;
+//        Enum_Commands.Misc.Command wonAuction = Enum_Commands.Misc.Command.WinMessage;
     }
 
     public void sendBid(String itemID, double bidAmount) {

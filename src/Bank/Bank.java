@@ -1,3 +1,8 @@
+package Bank;
+
+import Auction_House.Auction_House_Client_Proxy;
+import Misc.Command;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,7 +32,7 @@ public class Bank {
         Bank_Server_Proxy bank_server_proxy = new Bank_Server_Proxy(this);
     }
 
-    //Opens Bank Account for Agent or AuctionHouse
+    //Opens Bank.Bank Bank.Account for Agent.Agent or AuctionHouse
     //return the biddingKey that is created when an account is created
     public Object[] createAccount(String name, Double initialBalance) throws
             Exception {
@@ -37,10 +42,10 @@ public class Bank {
 
         if (list.containsKey(account.getSecretKey())) {
             System.out.println(account.getSecretKey());
-            throw new Exception("Account already exists");
+            throw new Exception("Bank.Account already exists");
         }
         else {
-//            account = new Account(name, initialBalance);
+//            account = new Bank.Account(name, initialBalance);
             secretKey = account.generateSecretKey() + accountID;
             key = Integer.parseInt(secretKey);
             account.setSecretKey(key);
@@ -48,7 +53,7 @@ public class Bank {
 //            secretKey = account.generateSecretKey();
             list.put(account.getSecretKey(), account);
             accountID++;
-            System.out.println("Account " +account.getAccountId() +" created " +
+            System.out.println("Bank.Account " +account.getAccountId() +" created " +
                     "with secretKey "+account.getSecretKey());
         }
         return new Object[]{account.getAccountId(), initialBalance, account.getSecretKey()};
@@ -98,7 +103,7 @@ public class Bank {
             }
             else {
                 account.balance -= moneyToReduce;
-                System.out.println("withdrawn for Account " + account
+                System.out.println("withdrawn for Bank.Account " + account
                         .getAccountId() +" "+moneyToReduce);
             }
         }
@@ -109,7 +114,7 @@ public class Bank {
         if (list.containsKey(secretKey)) {
             Account account = list.get(secretKey);
             account.balance += moneyToGive;
-            System.out.println("DEPOSITED for Account " + account.getAccountId()
+            System.out.println("DEPOSITED for Bank.Account " + account.getAccountId()
                     +" " +moneyToGive);
         }
         else {
@@ -124,13 +129,13 @@ public class Bank {
         account.setSecretKey(0);
 //        secretKey = 0;
         account.balance = 0;
-        System.out.println("Account closed of " +idOfClient);
+        System.out.println("Bank.Account closed of " +idOfClient);
     }
 
     //for testing purposes.
     public static void main(String[] args) throws Exception {
         Bank b1 = new Bank();
-//        Bank b2 = new Bank();
+//        Bank.Bank b2 = new Bank.Bank();
         Object[] key, key2, key6;
         for (int i=0; i < 1000; i++) {
             key6 = b1.createAccount("Agent "+ i, i+10.0);
@@ -193,7 +198,7 @@ public class Bank {
     */
 
     public void startBankClient(String data) {
-        System.out.println("Starting Bank client: " + data);
+        System.out.println("Starting Bank.Bank client: " + data);
         String[] clientInfoTokens = data.split("\\s");
         Auction_House_Client_Proxy proxyClient = new Auction_House_Client_Proxy(
                 12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));

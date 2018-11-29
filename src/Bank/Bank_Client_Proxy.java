@@ -1,8 +1,12 @@
+package Bank;
+
+import Agent.Agent;
+import Auction_House.Auction_House;
+import Misc.Command;
+
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -57,7 +61,7 @@ public class Bank_Client_Proxy extends Thread {
             }
 
             else if (clientType.contains("AuctionHouse")) {
-                System.out.println("Bank client for AH key: " + key);
+                System.out.println("Bank.Bank client for AH key: " + key);
                 clientOutput.writeObject(new Object[] {Command.AddAuctionHouseID, auctionHouse.auctionHouseID, auctionHouse.portNumber});
                 System.out.println("ah debug " + Command.AddAuctionHouseID + " " + auctionHouse.auctionHouseID + " " + auctionHouse.portNumber);
                 clientOutput.writeObject(new Object[] {Command.CreateBankAccount, String.valueOf(key), 0.0, "AuctionHouse"});
@@ -88,7 +92,7 @@ public class Bank_Client_Proxy extends Thread {
 
                     case SetAgentKey:
                         agent.setBiddingKey((int)message[1]);
-                        System.out.println("Agent key" +message[1]);
+                        System.out.println("Agent.Agent key" +message[1]);
                         break;
 
                     case SetAuctionHouseKey:
