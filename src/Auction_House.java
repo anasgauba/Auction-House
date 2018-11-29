@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class Auction_House extends Thread {
 
@@ -12,13 +13,14 @@ public class Auction_House extends Thread {
 
     int auctionHouseID;
     int portNumber;
+    boolean run;
     Auction_House_Server_Proxy auction_house_server_proxy;
     Bank_Server_Proxy bank_server_proxy;
     ConcurrentHashMap<Integer, Agent_Client_Proxy> clients;
     Bank_Client_Proxy bankClient;
 
-    public Auction_House(int auctionHouseID, int portNumber, LinkedList nouns, LinkedList adjectives) {
-        this.auctionHouseID = auctionHouseID;
+    public Auction_House(int portNumber, LinkedList nouns, LinkedList adjectives) {
+        this.auctionHouseID = new Random().nextInt(1000000000);
         this.itemList = new LinkedList<>();
         this.nouns = nouns;
         this.adjectives = adjectives;
@@ -26,6 +28,16 @@ public class Auction_House extends Thread {
         this.auction_house_server_proxy = new Auction_House_Server_Proxy(this);
         this.clients = new ConcurrentHashMap();
         this.bankClient = new Bank_Client_Proxy(auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
+        this.run = true;
+        start();
+    }
+
+    public void run () {
+        //itemList.get(0).startBidTime();
+        //itemList.get(0).setCurrentBidder(12340);
+        while (run) {
+            bidSuccessfulCheck();
+        }
     }
 
     //upon creation, registers with bank by opening account with zero balance
@@ -57,8 +69,23 @@ public class Auction_House extends Thread {
 //        Enum_Commands.Command bidOvertaken = Enum_Commands.Command.BidOvertaken;
     }
 
-    public void bidSuccessful() {
-        //a bid is successful if not overtaken in 30 seconds
+    public void bidSuccessfulCheck() {
+        for (int i = 0; i < itemList.size(); i++) {
+            long secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(itemList.get(i).getBidTimeRemaining() - System.currentTimeMillis());
+            if (secondsRemaining < 1 && secondsRemaining >= 0) {
+                //System.out.println("Times up!");
+                Object[] message = {Command.WinMessage};
+                try {
+                    clients.get(itemList.get(i).getSecretBidderKey()).clientOutput.writeObject(message); //send msg to agent that won
+                    //System.out.println("12340 won!");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (secondsRemaining > 0) {
+                System.out.println(secondsRemaining);
+            }
+        }
     }
 
     //when winning a bid, agent receives "winner" notification and auction house waits for
@@ -90,6 +117,11 @@ public class Auction_House extends Thread {
                 System.out.println(itemList.get(i));
             }
         }
+    }
+
+    public LinkedList<Item> getItemList() {
+
+        return itemList;
     }
 
     public void startAuctionHouseClient(String data) {

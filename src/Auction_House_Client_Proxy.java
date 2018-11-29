@@ -1,8 +1,12 @@
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Auction_House_Client_Proxy extends Thread {
+
+    Agent agent;
 
     private Socket clientSocket;
     public ObjectInputStream clientInput;
@@ -12,7 +16,16 @@ public class Auction_House_Client_Proxy extends Thread {
     int portNumber;
     boolean run;
 
+    public Auction_House_Client_Proxy(Agent agent, int key, String clientType, int portNumber) {
+        this.agent = agent;
+        this.clientType = clientType;
+        this.portNumber = portNumber;
+        this.run = true;
+        start();
+    }
+
     public Auction_House_Client_Proxy(int key, String clientType, int portNumber) {
+        this.agent = agent;
         this.clientType = clientType;
         this.portNumber = portNumber;
         this.run = true;
@@ -37,15 +50,20 @@ public class Auction_House_Client_Proxy extends Thread {
                 Command command = (Command) message[0];
 
                 switch (command) {
+
                     case BlockFunds:
                         System.out.println("test! in ah client! " + message[1]);
-                    break;
+                        break;
+                    case SetListItems:
+                        agent.createItemList((LinkedList<Item>) message[1]);
+                        break;
                 }
-                //System.out.println("message received: " + message);
-                Thread.sleep(0);
-            }
 
-        } catch (InterruptedException | IOException | ClassNotFoundException e) {
+            }
+            Thread.sleep(0);
+
+
+    } catch (InterruptedException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

@@ -64,7 +64,7 @@ public class Agent_Server_Proxy extends Thread {
                         case BlockFunds:
                             System.out.println("test in agent serv! " + message[1] + command);
                             serverOutput.writeObject(message);
-                            break;
+                        break;
                     }
 
                     Thread.sleep(0);

@@ -146,7 +146,7 @@ public class Bank {
     public void startBankClient(String data) {
         System.out.println("Starting Bank client: " + data);
         String[] clientInfoTokens = data.split("\\s");
-        Auction_House_Client_Proxy proxyClient = new Auction_House_Client_Proxy(12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
+        Auction_House_Client_Proxy proxyClient = new Auction_House_Client_Proxy( 12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
         clients.put(12340, proxyClient);
     }
 

@@ -27,11 +27,11 @@ public class Main extends Application {
 
 
         Bank bank = new Bank();
-        Auction_House auction_house = new Auction_House(1, 6666, nouns, adjectives);
+        Auction_House auction_house = new Auction_House(6666, nouns, adjectives);
         Agent agent = new Agent(8900);
 
-        Agent_Display agentdisp = new Agent_Display(agent, auction_house, bank);
-        agentdisp.drawGUI(stage);
+        //Agent_Display agentdisp = new Agent_Display();
+        //agentdisp.drawGUI(stage);
 
         System.out.println();
     }

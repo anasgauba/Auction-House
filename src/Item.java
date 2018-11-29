@@ -1,11 +1,14 @@
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
 
     private int auctionHouseID;
+    private int secretBidderKey;
     private String itemID;
     private String description;
     private double minimumBidAmount;
     private double currentBidAmount;
-
+    private long bidTimeRemaining;
 
     public Item(int auctionHouseID, String itemID, String description, double minimumBidAmount, double currentBidAmount) {
         this.auctionHouseID = auctionHouseID;
@@ -38,6 +41,26 @@ public class Item {
     public double getCurrentBidAmount() {
 
         return currentBidAmount;
+    }
+
+    public long getBidTimeRemaining(){
+
+        return bidTimeRemaining;
+    }
+
+    public int getSecretBidderKey() {
+
+        return secretBidderKey;
+    }
+
+    public void startBidTime() {
+
+        bidTimeRemaining = System.currentTimeMillis() + 30000;
+    }
+
+    public void setCurrentBidder(int secretBidderKey) {
+
+        this.secretBidderKey = secretBidderKey;
     }
 
     @Override

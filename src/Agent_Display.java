@@ -21,19 +21,19 @@ import java.text.DecimalFormat;
 import java.util.Stack;
 
 public class Agent_Display extends JPanel {
-    private ObservableList<tableItem> listofTableItems = FXCollections.observableArrayList();
+    public ObservableList<tableItem> listofTableItems = FXCollections.observableArrayList();
     private ObservableList<String> listOfHouses = FXCollections.observableArrayList();
 
-    private TableView<tableItem> table = new TableView();
+    public TableView<tableItem> table = new TableView();
 
     private Agent agent;
     private Auction_House auctionHouse;
     private Bank bank;
 
-    public Agent_Display(Agent agent, Auction_House auctionHouse, Bank bank) {
+    public Agent_Display(Agent agent) {
         this.agent = agent;
-        this.auctionHouse = auctionHouse;
-        this.bank = bank;
+//        this.auctionHouse = auctionHouse;
+//        this.bank = bank;
     }
     
     public void drawGUI(Stage stage) {
@@ -208,6 +208,15 @@ public class Agent_Display extends JPanel {
         comboBox.setMinWidth(100);
         comboBox.getStyleClass().add("center-aligned");
         comboBox.getSelectionModel().selectFirst();
+        Object[] message = {Command.GetListItems};
+        try {
+            agent.clients.get(12340).clientOutput.writeObject(message);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+
+
 
 
         //HBox topBar = new HBox(auctionHouseChoice, auctionHouseList);
@@ -252,13 +261,13 @@ public class Agent_Display extends JPanel {
         //to the constructor of new tableItem, which sets all the correct info to the right places on table view. Then,
         // the table data is set. To change list on board, you clear listofTableItems, add table items to it, then set the
         //info in the table to that.
-        Item first = new Item(3333,"22222","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",400,330.75);
-        Item second = new Item(666,"9999","orange mat",200,100.02);
-        Item third = new Item(4444,"11111","green grass",20,10.20);
-        listofTableItems.add(new tableItem(first));
-        listofTableItems.add(new tableItem(second));
-        listofTableItems.add(new tableItem(third));
-        table.setItems(listofTableItems);
+//        Item first = new Item(3333,"22222","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",400,330.75);
+//        Item second = new Item(666,"9999","orange mat",200,100.02);
+//        Item third = new Item(4444,"11111","green grass",20,10.20);
+//        listofTableItems.add(new tableItem(first));
+//        listofTableItems.add(new tableItem(second));
+//        listofTableItems.add(new tableItem(third));
+//        table.setItems(listofTableItems);
         table.getColumns().addAll(itemID, itemName, itemStartingBid, itemCurrentBid);
 
 
@@ -312,6 +321,7 @@ public class Agent_Display extends JPanel {
                 e1.printStackTrace();
             }
         });
+        /*
         test2.setOnAction(e -> {
             try {
                 auctionHouse.debug();
@@ -320,7 +330,22 @@ public class Agent_Display extends JPanel {
             }
         });
         test3.setOnAction(e -> {
-            bank.debug();
+            try {
+                bank.debug();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+       */
+
+        comboBox.setOnAction(e -> {
+            listofTableItems.clear();
+            message[0] = Command.GetListItems;
+            try {
+                agent.clients.get(12340).clientOutput.writeObject(message);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         });
 
     }

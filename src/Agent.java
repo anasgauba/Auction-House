@@ -1,6 +1,7 @@
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Agent {
@@ -23,8 +24,8 @@ public class Agent {
         this.bankClient = new Bank_Client_Proxy(1, "Agent " + this.portNumber, 7277);
         secretBiddingKey = 12340; //do function call for client to get bank key
         createClientConnections();
-        //agentDisplay = new Agent_Display();
-        //agentDisplay.drawGUI(new Stage());
+        agentDisplay = new Agent_Display(this);
+        agentDisplay.drawGUI(new Stage());
     }
 
     //sets bidding key returned by the bank to the current agent
@@ -66,6 +67,16 @@ public class Agent {
 
     }
 
+    public void createItemList(LinkedList<Item> itemList) {
+
+        for (int i = 0; i < itemList.size(); i++) {
+            Item tempItem = itemList.get(i);
+            agentDisplay.listofTableItems.add(new Agent_Display.tableItem(new Item(tempItem.getAuctionHouseID(), tempItem.getItemID(),
+                    tempItem.getDescription(), tempItem.getMinimumBidAmount(), tempItem.getCurrentBidAmount())));
+        }
+        agentDisplay.table.setItems(agentDisplay.listofTableItems);
+    }
+
     //need method that gets ah servers from bank, and then creates multiple clients to each one.
     //loop each client creation here.
     private void createClientConnections() {
@@ -73,7 +84,7 @@ public class Agent {
         //we also need a list of clients. Here is one example of one agent.
         //In order to do this, we would need to message the bank proxy command to get all AH ids + ports
 
-        Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(12340, "Agent " + portNumber, 6666); //key would be auction house id, to do
+        Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this,12340, "Agent " + portNumber, 6666); //key would be auction house id, to do
         clients.put(12340, clientProxy);
 
     }
@@ -82,6 +93,10 @@ public class Agent {
         Object[] message = {Command.BlockFunds, "test2"};
         clients.get(12340).clientOutput.writeObject(message);
         bankClient.clientOutput.writeObject(message);
+
+        Object[] message2 = {Command.GetListItems};
+        clients.get(12340).clientOutput.writeObject(message2);
+
     }
 
 }
