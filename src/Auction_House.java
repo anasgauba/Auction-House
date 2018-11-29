@@ -13,6 +13,7 @@ public class Auction_House extends Thread {
 
     int auctionHouseID;
     int portNumber;
+    int secretKey;
     boolean run;
     Auction_House_Server_Proxy auction_house_server_proxy;
     Bank_Server_Proxy bank_server_proxy;
@@ -20,6 +21,7 @@ public class Auction_House extends Thread {
     Bank_Client_Proxy bankClient;
 
     public Auction_House(int portNumber, LinkedList nouns, LinkedList adjectives) throws IOException {
+        this.portNumber = portNumber;
         this.auctionHouseID = new Random().nextInt(1000000000);
         this.itemList = new LinkedList<>();
         this.nouns = nouns;
@@ -27,16 +29,9 @@ public class Auction_House extends Thread {
         createItems(10);
         this.auction_house_server_proxy = new Auction_House_Server_Proxy(this, portNumber);
         this.clients = new ConcurrentHashMap();
-        this.bankClient = new Bank_Client_Proxy(auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
+        this.bankClient = new Bank_Client_Proxy(this, auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
         this.run = true;
         start();
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        this.bankClient.clientOutput.writeObject(new Object[] {Command.AddAuctionHouseID, this.auctionHouseID, portNumber});
     }
 
     public void run () {
@@ -45,6 +40,11 @@ public class Auction_House extends Thread {
         while (run) {
             bidSuccessfulCheck();
         }
+    }
+
+    //sets bidding key returned by the bank to the current agent
+    public void setKey(int secretKey){
+        this.secretKey = secretKey;
     }
 
     //upon creation, registers with bank by opening account with zero balance

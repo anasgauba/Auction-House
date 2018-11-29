@@ -13,12 +13,17 @@ public class Bank_Client_Proxy extends Thread {
     public ObjectOutputStream clientOutput = null;
 
     Agent agent;
+    Auction_House auctionHouse;
     String clientType;
+    int key;
+
     int portNumber;
     boolean run;
 
-    public Bank_Client_Proxy(int key, String clientType, int portNumber) {
+    public Bank_Client_Proxy(Auction_House auctionHouse, int key, String clientType, int portNumber) {
+        this.auctionHouse = auctionHouse;
         this.clientType = clientType;
+        this.key = key;
         this.portNumber = portNumber;
         this.run = true;
         start();
@@ -26,6 +31,7 @@ public class Bank_Client_Proxy extends Thread {
 
     public Bank_Client_Proxy(Agent agent, int key, String clientType, int portNumber) {
         this.agent = agent;
+        this.key = key;
         this.clientType = clientType;
         this.portNumber = portNumber;
         this.run = true;
@@ -46,9 +52,19 @@ public class Bank_Client_Proxy extends Thread {
                 System.out.println("FLAG");
 //                int randomBalance = new Random().nextInt(10000)+1000;
 //                System.out.println("Random balance: "+randomBalance);
-                clientOutput.writeObject(new Object[]{Command.CreateBankAccount, this.agent.agentName,2000});
+                clientOutput.writeObject(new Object[] {Command.CreateBankAccount, agent.agentName, 2000.0, "Agent"});
 
             }
+
+            else if (clientType.contains("AuctionHouse")) {
+                System.out.println("Bank client for AH key: " + key);
+                clientOutput.writeObject(new Object[] {Command.AddAuctionHouseID, auctionHouse.auctionHouseID, auctionHouse.portNumber});
+                System.out.println("ah debug " + Command.AddAuctionHouseID + " " + auctionHouse.auctionHouseID + " " + auctionHouse.portNumber);
+                clientOutput.writeObject(new Object[] {Command.CreateBankAccount, String.valueOf(key), 0.0, "AuctionHouse"});
+
+            }
+
+
 
 
             while (run && clientSocket.isConnected()) {
@@ -69,9 +85,16 @@ public class Bank_Client_Proxy extends Thread {
                     case SetListHouses:
                         agent.createHouseList((LinkedList<Integer>) message[1], (ConcurrentHashMap<Integer, Integer>) message[2]);
                         break;
-                    case SetKey:
+
+                    case SetAgentKey:
                         agent.setBiddingKey((int)message[1]);
                         System.out.println("Agent key" +message[1]);
+                        break;
+
+                    case SetAuctionHouseKey:
+                        auctionHouse.setKey((Integer) message[1]);
+                        System.out.println("AH key: " + message[1]);
+                        break;
                 }
                 //System.out.println("message received: " + message);
                 Thread.sleep(0);

@@ -80,9 +80,16 @@ public class Bank_Server_Proxy {
                         case GetListHouses:
                             serverOutput.writeObject(new Object[] {Command.SetListHouses, bank.auctionHouseIDList, bank.auctionHousePorts});
                             break;
+
                         case CreateBankAccount:
-                        Object[] tempArray = bank.createAccount((String)message[1],(Double)message[2]);
-                        serverOutput.writeObject(new Object[]{Command.SetKey,tempArray[2]});
+                            Object[] tempArray = bank.createAccount((String) message[1],(Double) message[2]);
+                            if (message[3].equals("Agent")) {
+                                serverOutput.writeObject(new Object[]{Command.SetAgentKey, tempArray[2]});
+                            }
+                            else {
+                                serverOutput.writeObject(new Object[]{Command.SetAuctionHouseKey, tempArray[2]});
+                            }
+                        break;
                     }
 
                     Thread.sleep(0);
