@@ -23,6 +23,7 @@ import java.util.Stack;
 public class Agent_Display extends JPanel {
     public ObservableList<tableItem> listofTableItems = FXCollections.observableArrayList();
     private ObservableList<String> listOfHouses = FXCollections.observableArrayList();
+    public ObservableList<String> options;
 
     public TableView<tableItem> table = new TableView();
 
@@ -205,19 +206,40 @@ public class Agent_Display extends JPanel {
         auctionHouseChoice.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
 
 
-        ObservableList<String> options =
-                FXCollections.observableArrayList(
-                        "House 1", "House 2");
+        options = FXCollections.observableArrayList();
         ComboBox comboBox = new ComboBox(options);
         comboBox.setMinWidth(100);
         comboBox.getStyleClass().add("center-aligned");
-        comboBox.getSelectionModel().selectFirst();
+        //comboBox.getSelectionModel().selectFirst();
         Object[] message = {Command.GetListItems};
         try {
-            agent.clients.get(12340).clientOutput.writeObject(message);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+            agent.getHouseList();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        comboBox.getSelectionModel().selectFirst(); //no idea why this doesn work
+        // agent.clients.get(12340).clientOutput.writeObject(message);
+
+
+        comboBox.setOnAction(e -> {
+            listofTableItems.clear();
+            message[0] = Command.GetListItems;
+            try {
+                //System.out.println("work ree " + comboBox.getSelectionModel().getSelectedItem().getClass());
+                String tempAuctionID = (String) comboBox.getValue();
+                System.out.println("string " + tempAuctionID);
+                agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
+                //agent.getHouseList();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        comboBox.setOnMouseClicked(e -> {
+            //agent.getHouseList();
+        });
+
 
 
 
@@ -342,15 +364,6 @@ public class Agent_Display extends JPanel {
         });
        */
 
-        comboBox.setOnAction(e -> {
-            listofTableItems.clear();
-            message[0] = Command.GetListItems;
-            try {
-                agent.clients.get(12340).clientOutput.writeObject(message);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        });
 
     }
 

@@ -1,5 +1,5 @@
 public enum Command {
     GetListHouses, GetListItems, SetListItems, CloseBankAccount,TransferBlockedFunds,
     CreateBankAccount, BlockFunds, WinMessage, BidOvertaken, AcceptResponse,
-    RejectResponse
+    RejectResponse, AddAuctionHouseID, SetListHouses
 }

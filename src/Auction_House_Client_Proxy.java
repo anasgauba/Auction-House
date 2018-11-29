@@ -16,14 +16,6 @@ public class Auction_House_Client_Proxy extends Thread {
     int portNumber;
     boolean run;
 
-    public Auction_House_Client_Proxy(Agent agent, int key, String clientType, int portNumber) {
-        this.agent = agent;
-        this.clientType = clientType;
-        this.portNumber = portNumber;
-        this.run = true;
-        start();
-    }
-
     public Auction_House_Client_Proxy(int key, String clientType, int portNumber) {
         this.agent = agent;
         this.clientType = clientType;
@@ -32,9 +24,19 @@ public class Auction_House_Client_Proxy extends Thread {
         start();
     }
 
+    public Auction_House_Client_Proxy(Agent agent, int key, String clientType, int portNumber) {
+        this.agent = agent;
+        this.clientType = clientType;
+        this.portNumber = portNumber;
+        this.run = true;
+        start();
+    }
+
+
     public void run() {
 
         try {
+            System.out.println("here " + portNumber);
             clientSocket = new Socket(getServerIP(), portNumber);
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
 
@@ -54,6 +56,7 @@ public class Auction_House_Client_Proxy extends Thread {
                     case BlockFunds:
                         System.out.println("test! in ah client! " + message[1]);
                         break;
+
                     case SetListItems:
                         agent.createItemList((LinkedList<Item>) message[1]);
                         break;

@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -8,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Bank {
     private HashMap<Integer, Account> list;
+    protected LinkedList<Integer> auctionHouseIDList;
+    protected ConcurrentHashMap auctionHousePorts;
     private int secretKey;
 
     int bankID;
@@ -16,6 +19,8 @@ public class Bank {
 
     public Bank() {
         this.list = new HashMap<>();
+        this.auctionHouseIDList = new LinkedList<>();
+        this.auctionHousePorts = new ConcurrentHashMap();
         this.bankID = 1;
         clients = new ConcurrentHashMap();
         Bank_Server_Proxy bank_server_proxy = new Bank_Server_Proxy(this);
@@ -142,6 +147,15 @@ public class Bank {
         key = b1.createAccount(1, 100);
         System.out.println(b1.toString());
     }
+
+    /*
+    public void addAuctionHouseID(int auctionHouseID, int portNumber) {
+
+        System.out.println("Adding AH to the list " + auctionHouseID);
+        auctionHouseIDList.add(auctionHouseID);
+        auctionHousePorts.put(auctionHouseID, )
+    }
+    */
 
     public void startBankClient(String data) {
         System.out.println("Starting Bank client: " + data);

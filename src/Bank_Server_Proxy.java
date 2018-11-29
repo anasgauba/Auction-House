@@ -65,9 +65,20 @@ public class Bank_Server_Proxy {
                     //button the user on the gui will press or from the agent thread
                     //Clients switch will be for INCOMING messages from Server or the ser
                     switch (command) {
+
                         case BlockFunds:
                             System.out.println("test in bank serv! " + message[1] + command);
                             serverOutput.writeObject(message);
+                            break;
+
+                        case AddAuctionHouseID:
+                            System.out.println("adding to list! " + message[1]);
+                            bank.auctionHouseIDList.add((Integer) message[1]);
+                            bank.auctionHousePorts.put(message[1], message[2]);
+                            break;
+
+                        case GetListHouses:
+                            serverOutput.writeObject(new Object[] {Command.SetListHouses, bank.auctionHouseIDList, bank.auctionHousePorts});
                             break;
                     }
 

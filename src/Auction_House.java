@@ -19,17 +19,24 @@ public class Auction_House extends Thread {
     ConcurrentHashMap<Integer, Agent_Client_Proxy> clients;
     Bank_Client_Proxy bankClient;
 
-    public Auction_House(int portNumber, LinkedList nouns, LinkedList adjectives) {
+    public Auction_House(int portNumber, LinkedList nouns, LinkedList adjectives) throws IOException {
         this.auctionHouseID = new Random().nextInt(1000000000);
         this.itemList = new LinkedList<>();
         this.nouns = nouns;
         this.adjectives = adjectives;
         createItems(10);
-        this.auction_house_server_proxy = new Auction_House_Server_Proxy(this);
+        this.auction_house_server_proxy = new Auction_House_Server_Proxy(this, portNumber);
         this.clients = new ConcurrentHashMap();
         this.bankClient = new Bank_Client_Proxy(auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
         this.run = true;
         start();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        this.bankClient.clientOutput.writeObject(new Object[] {Command.AddAuctionHouseID, this.auctionHouseID, portNumber});
     }
 
     public void run () {

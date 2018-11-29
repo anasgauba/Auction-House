@@ -8,22 +8,23 @@ public class Auction_House_Server_Proxy extends Thread{
     private Socket acceptSocket;
 
     private Auction_House auctionHouse;
-
+    private int portNumber;
     boolean run;
 
-    public Auction_House_Server_Proxy(Auction_House auctionHouse) {
+    public Auction_House_Server_Proxy(Auction_House auctionHouse, int portNumber) {
         this.run = true;
         this.auctionHouse = auctionHouse;
+        this.portNumber = portNumber;
         start();
         startAuctionHouseServer();
     }
 
 
     public void startAuctionHouseServer() {
-        System.out.println("Starting AH thread");
+        System.out.println("Starting AH thread " + portNumber);
         new Thread(() -> {
             try {
-                serverSocket = new ServerSocket(6666);
+                serverSocket = new ServerSocket(portNumber);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -70,7 +71,6 @@ public class Auction_House_Server_Proxy extends Thread{
                             break;
 
                         case GetListItems:
-                            System.out.println("ta");
                             Object[] tempArray = {Command.SetListItems, auctionHouse.getItemList()};
                             serverOutput.writeObject(tempArray);
                             break;

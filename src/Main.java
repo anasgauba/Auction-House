@@ -3,13 +3,14 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 
 public class Main extends Application {
 
-    public void start(Stage stage) throws FileNotFoundException {
+    public void start(Stage stage) throws IOException {
 
         System.out.println("Hello World!");
 
@@ -33,6 +34,8 @@ public class Main extends Application {
 
         Bank bank = new Bank();
         Auction_House auction_house = new Auction_House(6666, nouns, adjectives);
+        Auction_House auction_house2 = new Auction_House(6667, nouns, adjectives);
+        Auction_House auction_house3 = new Auction_House(6668, nouns, adjectives);
         Agent agent = new Agent(8900,names);
 
         //Agent_Display agentdisp = new Agent_Display();

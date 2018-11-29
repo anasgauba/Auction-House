@@ -1,6 +1,7 @@
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +24,7 @@ public class Agent {
         this.portNumber = portNumber;
         this.clients = new ConcurrentHashMap();
         this.agent_server_proxy = new Agent_Server_Proxy(this, portNumber);
-        this.bankClient = new Bank_Client_Proxy(1, "Agent " + this.portNumber, 7277);
+        this.bankClient = new Bank_Client_Proxy(this, 1, "Agent " + this.portNumber, 7277);
         secretBiddingKey = 12340; //do function call for client to get bank key
         this.names = nameList;
         createName();
@@ -94,9 +95,29 @@ public class Agent {
         //we also need a list of clients. Here is one example of one agent.
         //In order to do this, we would need to message the bank proxy command to get all AH ids + ports
 
-        Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this,12340, "Agent " + portNumber, 6666); //key would be auction house id, to do
-        clients.put(12340, clientProxy);
+        //Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this,12340, "Agent " + portNumber, 6667); //key would be auction house id, to do
+        //clients.put(12340, clientProxy);
 
+    }
+
+    public void createHouseList(LinkedList<Integer> auctionHouseList, ConcurrentHashMap<Integer, Integer> auctionHousePorts) {
+        System.out.println("in auction house list creator " + auctionHouseList);
+        for (int i = 0; i < auctionHouseList.size(); i++) {
+            String tempID =  Integer.toString(auctionHouseList.get(i));
+            agentDisplay.options.add(tempID);
+
+            if (clients.get(auctionHouseList.get(i)) == null) {
+                System.out.println("starting new client! " + auctionHouseList.get(i) + auctionHousePorts.get(auctionHouseList.get(i)));
+                System.out.println("starting new client! " + auctionHouseList.get(i) + auctionHousePorts);
+                Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this, auctionHouseList.get(i), "Agent " + portNumber, auctionHousePorts.get(auctionHouseList.get(i))); //key would be auction house id, to do
+
+                clients.put(auctionHouseList.get(i), clientProxy);
+            }
+        }
+    }
+
+    public void getHouseList() throws IOException {
+        bankClient.clientOutput.writeObject(new Object[] {Command.GetListHouses});
     }
 
     public void debug() throws IOException {
@@ -106,6 +127,8 @@ public class Agent {
 
         Object[] message2 = {Command.GetListItems};
         clients.get(12340).clientOutput.writeObject(message2);
+
+        getHouseList();
 
     }
 
