@@ -11,7 +11,8 @@ public class Bank {
     private HashMap<Integer, Account> list;
     protected LinkedList<Integer> auctionHouseIDList;
     protected ConcurrentHashMap auctionHousePorts;
-    private int secretKey;
+    //    private int secretKey;
+    private int accountID = 1;
 
     int bankID;
     Bank_Server_Proxy bank_server_proxy;
@@ -22,26 +23,35 @@ public class Bank {
         this.auctionHouseIDList = new LinkedList<>();
         this.auctionHousePorts = new ConcurrentHashMap();
         this.bankID = 1;
-        clients = new ConcurrentHashMap();
+        clients = new ConcurrentHashMap<>();
         Bank_Server_Proxy bank_server_proxy = new Bank_Server_Proxy(this);
     }
 
     //Opens Bank Account for Agent or AuctionHouse
     //return the biddingKey that is created when an account is created
-    public int createAccount(int id, int initialBalance) throws Exception {
-        if (list.containsKey(secretKey)) {
+    public int[] createAccount(String name, int initialBalance) throws
+            Exception {
+        Account account = new Account(name, initialBalance);
+        String secretKey;
+        int key;
+
+        if (list.containsKey(account.getSecretKey())) {
+            System.out.println(account.getSecretKey());
             throw new Exception("Account already exists");
         }
         else {
-            Account account = new Account(initialBalance);
-            account.setAccountId(id);
-            secretKey = account.generateSecretKey();
-            list.put(secretKey, account);
+//            account = new Account(name, initialBalance);
+            secretKey = account.generateSecretKey() + accountID;
+            key = Integer.parseInt(secretKey);
+            account.setSecretKey(key);
+            account.setAccountId(accountID);
+//            secretKey = account.generateSecretKey();
+            list.put(account.getSecretKey(), account);
+            accountID++;
             System.out.println("Account " +account.getAccountId() +" created " +
-                    "with secretKey "
-                    +secretKey);
+                    "with secretKey "+account.getSecretKey());
         }
-        return secretKey;
+        return new int[]{account.getAccountId(), initialBalance, account.getSecretKey()};
     }
 
     //returns balance based on agent's string
@@ -66,12 +76,17 @@ public class Bank {
         return false;
     }
     //locks balance to prevent proper funding
-    private void lockBalance(){
-
+    public void lockBalance(int key, int amount){
+        Account account = list.get(key);
+        account.balance -= amount;
+        account.lock(amount);
     }
     //unlocks balance to release proper funding
-    private void unlockBalance(){
-
+    public void unlockBalance(int key){
+        double unlock;
+        Account account = list.get(key);
+        unlock = account.getLock();
+        account.balance += unlock;
     }
 
     //reduces the account that is looked up by the amount of money passed in
@@ -106,46 +121,66 @@ public class Bank {
     public synchronized void closeAccount(int idOfClient){
         Account account = list.get(idOfClient);
         list.remove(idOfClient);
-        secretKey = 0;
+        account.setSecretKey(0);
+//        secretKey = 0;
         account.balance = 0;
         System.out.println("Account closed of " +idOfClient);
     }
-    public String toString() {
-        return secretKey +" >>>>> " + getBalance(secretKey);
-    }
+
     //for testing purposes.
     public static void main(String[] args) throws Exception {
         Bank b1 = new Bank();
-        Bank b2 = new Bank();
-        int key, key2;
-        key = b1.createAccount(1, 10);
-        key2 = b2.createAccount (2, 20);
+//        Bank b2 = new Bank();
+        int[] key, key2, key6;
+        for (int i=0; i < 1000; i++) {
+            key6 = b1.createAccount("Agent "+ i, i+10);
+        }
+        System.out.println();
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println();
 
-        b1.getBalance(key);
-        b2.getBalance(key2);
+        key = b1.createAccount("xyz", 10);
+        key2 = b1.createAccount("BOBB", 20);
+//        key2 = b2.createAccount ("Bob", 20);
 
-        b1.deposit(key, 100);
-        b2.deposit(key2, 50);
+        b1.getBalance(key[2]);
+        b1.getBalance(key2[2]);
 
-        b1.getBalance(key);
-        b2.getBalance(key2);
+        b1.deposit(key[2], 100);
+        b1.deposit(key2[2], 50);
 
-        b1.withdraw(key, 105);
-        b2.withdraw(key2, 20);
+        b1.getBalance(key[2]);
+        b1.getBalance(key2[2]);
 
-        b1.getBalance(key);
-        b2.getBalance(key2);
+        b1.withdraw(key[2], 90);
+        b1.withdraw(key2[2], 20);
+
+        b1.getBalance(key[2]);
+        b1.getBalance(key2[2]);
 
         System.out.println();
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println();
 
 
-        b1.closeAccount(key);
-        System.out.println(b1.toString());
+        b1.closeAccount(key[2]);
 
-        key = b1.createAccount(1, 100);
-        System.out.println(b1.toString());
+        key = b1.createAccount("xyz", 20);
+        b1.getBalance(key[2]);
+        b1.lockBalance(key[2], 10);
+        b1.getBalance(key[2]);
+        //here it will unlock the balance, since the amount was locked before
+        // for this account.
+        b1.unlockBalance(key[2]);
+        b1.getBalance(key[2]);
+
+        b1.getBalance(key2[2]);
+        // here it will not unlock since for this account, there was no money
+        // locked and hence, it will not change the balance for this account.
+        b1.unlockBalance(key2[2]);
+        b1.getBalance(key2[2]);
+
+        System.out.println("list of accounts "+b1.list.size());
     }
 
     /*
@@ -160,12 +195,13 @@ public class Bank {
     public void startBankClient(String data) {
         System.out.println("Starting Bank client: " + data);
         String[] clientInfoTokens = data.split("\\s");
-        Auction_House_Client_Proxy proxyClient = new Auction_House_Client_Proxy( 12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
+        Auction_House_Client_Proxy proxyClient = new Auction_House_Client_Proxy(
+                12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
         clients.put(12340, proxyClient);
     }
 
     public void debug() throws IOException {
-            Object[] message = {Command.BlockFunds, "test2"};
-            clients.get(12340).clientOutput.writeObject(message);
+        Object[] message = {Command.BlockFunds, "test2"};
+        clients.get(12340).clientOutput.writeObject(message);
     }
 }

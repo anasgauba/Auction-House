@@ -6,18 +6,22 @@ import java.util.Random;
  */
 public class Account {
     protected double balance;
-    private int biddingKey;
+    private int secretKey;
     private int accountId;
+    private String accountName;
+    private double lock;
 
     //upon creation of account return unique ID for the client
-    public Account(int initialBalance){
-        balance = initialBalance;
+    public Account(String name, int initialBalance){
+        this.balance = initialBalance;
+        this.accountName = name;
     }
-
-//    public double getBalance() {
-//        return balance;
-//    }
-
+    public double getLock() {
+        return lock;
+    }
+    public void lock(int moneyToLock) {
+        lock = moneyToLock;
+    }
     public int getAccountId() {
         return accountId;
     }
@@ -26,24 +30,27 @@ public class Account {
         accountId = id;
     }
 
-    public int getBiddingKey() {
-        return biddingKey;
+    public int getSecretKey() {
+        return secretKey;
+    }
+    public void setSecretKey(int key) {
+        secretKey = key;
     }
 
-    public int generateSecretKey() {
-        String secretKey = "";
+    public String generateSecretKey() {
+        String key = "";
         Random random = new Random();
-        int max = 9000;
+        int max = 10000;
         int min = 1000;
-        secretKey = Integer.toString(random.nextInt(max-min) + min) + accountId;
-        return biddingKey = Integer.parseInt(secretKey);
+        key = Integer.toString(random.nextInt(max-min) + min);
+        return key;
     }
 
     //for testing purposes.
     public static void main(String[]args) {
         int i = 0;
         while (i < 10) {
-            Account acc = new Account(10);
+            Account acc = new Account("Robert", 10);
             acc.setAccountId(i);
             i++;
             System.out.println("Acc id is "+acc.getAccountId());
