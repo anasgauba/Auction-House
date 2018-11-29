@@ -1,7 +1,12 @@
-import java.io.*;
+package Agent;
+
+import Misc.Command;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.StandardSocketOptions;
 
 public class Agent_Server_Proxy extends Thread {
     private ServerSocket serverSocket;
@@ -21,7 +26,7 @@ public class Agent_Server_Proxy extends Thread {
 
 
     public void startAgentServer() {
-        System.out.println("Starting Agent thread");
+        System.out.println("Starting Agent.Agent thread");
         new Thread(() -> {
             try {
                 serverSocket = new ServerSocket(portNumber);

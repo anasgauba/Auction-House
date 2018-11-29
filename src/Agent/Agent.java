@@ -1,7 +1,12 @@
+package Agent;
+
+import Auction_House.Auction_House_Client_Proxy;
+import Auction_House.Item;
+import Bank.Bank_Client_Proxy;
+import Misc.Command;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,7 +58,7 @@ public class Agent {
     }
 //    //Return a list of auction houses
 //    public void getListActiveAuctions() throws IOException {
-//        Object[] message = {Command.GetListHouses};
+//        Object[] message = {Misc.Command.GetListHouses};
 //        clients.get(12340).clientOutput.writeObject(message);
 //        bankClient.clientOutput.writeObject(message);
 //    }

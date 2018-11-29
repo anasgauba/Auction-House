@@ -1,6 +1,10 @@
+package Auction_House;
+
+import Agent.Agent;
+import Misc.Command;
+
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Scanner;
 

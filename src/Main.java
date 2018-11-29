@@ -1,8 +1,10 @@
+import Agent.Agent;
+import Auction_House.Auction_House;
+import Bank.Bank;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -25,6 +27,7 @@ public class Main extends Application {
         while (inAdjectives.hasNext()) {
             adjectives.add(inAdjectives.next());
         }
+
         Scanner inNames = new Scanner(new File("resources/names"));
         LinkedList<String> names = new LinkedList();
         while (inNames.hasNext()) {
@@ -36,9 +39,9 @@ public class Main extends Application {
         Auction_House auction_house = new Auction_House(6666, nouns, adjectives);
         Auction_House auction_house2 = new Auction_House(6667, nouns, adjectives);
         Auction_House auction_house3 = new Auction_House(6668, nouns, adjectives);
-        Agent agent = new Agent(8900,names);
+        Agent agent = new Agent(8900, names);
 
-        //Agent_Display agentdisp = new Agent_Display();
+        //Agent.Agent_Display agentdisp = new Agent.Agent_Display();
         //agentdisp.drawGUI(stage);
 
         System.out.println();

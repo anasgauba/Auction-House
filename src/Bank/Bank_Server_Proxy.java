@@ -1,5 +1,10 @@
-import java.awt.*;
-import java.io.*;
+package Bank;
+
+import Misc.Command;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -80,9 +85,21 @@ public class Bank_Server_Proxy {
                         case GetListHouses:
                             serverOutput.writeObject(new Object[] {Command.SetListHouses, bank.auctionHouseIDList, bank.auctionHousePorts});
                             break;
+
                         case CreateBankAccount:
+<<<<<<< HEAD:src/Bank_Server_Proxy.java
 //                        Object[] tempArray = bank.createAccount((String)message[1],(Double)message[2]);
 //                        serverOutput.writeObject(new Object[]{Command.SetKey,tempArray[2]});
+=======
+                            Object[] tempArray = bank.createAccount((String) message[1],(Double) message[2]);
+                            if (message[3].equals("Agent")) {
+                                serverOutput.writeObject(new Object[]{Command.SetAgentKey, tempArray[2]});
+                            }
+                            else {
+                                serverOutput.writeObject(new Object[]{Command.SetAuctionHouseKey, tempArray[2]});
+                            }
+                        break;
+>>>>>>> master:src/Bank/Bank_Server_Proxy.java
                     }
 
                     Thread.sleep(0);

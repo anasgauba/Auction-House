@@ -1,3 +1,7 @@
+package Agent;
+
+import Misc.Command;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
