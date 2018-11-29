@@ -87,10 +87,10 @@ public class Bank_Server_Proxy {
                             break;
 
                         case CreateBankAccount:
-<<<<<<< HEAD:src/Bank_Server_Proxy.java
+//<<<<<<< HEAD:src/Bank_Server_Proxy.java
 //                        Object[] tempArray = bank.createAccount((String)message[1],(Double)message[2]);
 //                        serverOutput.writeObject(new Object[]{Command.SetKey,tempArray[2]});
-=======
+//=======
                             Object[] tempArray = bank.createAccount((String) message[1],(Double) message[2]);
                             if (message[3].equals("Agent")) {
                                 serverOutput.writeObject(new Object[]{Command.SetAgentKey, tempArray[2]});
@@ -99,7 +99,7 @@ public class Bank_Server_Proxy {
                                 serverOutput.writeObject(new Object[]{Command.SetAuctionHouseKey, tempArray[2]});
                             }
                         break;
->>>>>>> master:src/Bank/Bank_Server_Proxy.java
+//>>>>>>> master:src/Bank/Bank_Server_Proxy.java
                     }
 
                     Thread.sleep(0);

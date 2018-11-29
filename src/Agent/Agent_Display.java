@@ -1,13 +1,10 @@
 package Agent;
 
-<<<<<<< HEAD:src/Agent_Display.java
 import javafx.animation.AnimationTimer;
-=======
 import Auction_House.Auction_House;
 import Auction_House.Item;
 import Bank.Bank;
 import Misc.Command;
->>>>>>> master:src/Agent/Agent_Display.java
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,11 +22,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import javax.swing.*;
-<<<<<<< HEAD:src/Agent_Display.java
 import java.awt.*;
 import java.awt.event.MouseAdapter;
-=======
->>>>>>> master:src/Agent/Agent_Display.java
 import java.io.IOException;
 import java.text.DecimalFormat;
 
@@ -398,27 +392,27 @@ public class Agent_Display extends JPanel {
        */
         //THIS IS THE ANIMATION TIMER I TRIED TO DO.
 
-//        AnimationTimer animationTimer = new AnimationTimer () {
-//            @Override
-//            public void handle (long now) {
+        AnimationTimer animationTimer = new AnimationTimer () {
+            @Override
+            public void handle (long now) {
 //                System.out.println("Animation timer is running. Attempt to display time");
-//                listofTableItems.clear();
-//                message[0] = Command.GetListItems;
-//                String tempAuctionID = (String) comboBox.getValue();
+                listofTableItems.clear();
+                message[0] = Command.GetListItems;
+                String tempAuctionID = (String) comboBox.getValue();
 //                System.out.println("***********************************");
 //                System.out.println("COMBO BOX VALUE IN STRING "+tempAuctionID);
-//                agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
+                agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
 //                System.out.println("AUCTION HOUSE IN INTEGER" + tempAuctionID);
-//                try {
-//                    agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
+                try {
+                    agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-//        };
+        };
 
-//        animationTimer.start();
+        animationTimer.start();
 
     }
 
