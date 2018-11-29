@@ -74,6 +74,11 @@ public class Auction_House_Server_Proxy extends Thread{
                             Object[] tempArray = {Command.SetListItems, auctionHouse.getItemList()};
                             serverOutput.writeObject(tempArray);
                             break;
+
+                        case SendBid:
+                            //call auction house method
+                            auctionHouse.sendBid((String)message[1], (Double) message[2]);
+                            break;
                     }
 
                     Thread.sleep(0);

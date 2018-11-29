@@ -101,6 +101,19 @@ public class Auction_House extends Thread {
 //        Enum_Commands.Command wonAuction = Enum_Commands.Command.WinMessage;
     }
 
+    public void sendBid(String itemID, double bidAmount) {
+
+
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemID.equals(itemList.get(i).getItemID())) {
+                //do item logic here, initialize time if hasnt been intitialized yet,
+                //update current bid time if going,
+                //check if they have .01 over the current bid, if so lock in bidder secret key,
+                //add secret key to parameters
+            }
+        }
+    }
+
     private void createItems(int amountOfItems) {
         String itemID = "0000";
         Random random = new Random();

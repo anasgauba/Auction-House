@@ -10,6 +10,7 @@ public class Agent {
     LinkedList<String> names;
     private String agentName;
     private int secretBiddingKey;
+    private int currentAuctionHouse;
 
     private Agent_Display agentDisplay;
     //Stage agentStage = new Stage();
@@ -77,6 +78,22 @@ public class Agent {
         clients.get(12340).clientOutput.writeObject(message);
         bankClient.clientOutput.writeObject(message);
     }
+
+    public void sendBid(String itemID, double bidAmount) throws IOException {
+
+
+
+        System.out.println("Bid amount " + bidAmount);
+        clients.get(currentAuctionHouse).clientOutput.writeObject(new Object[] {Command.SendBid, itemID, bidAmount});
+    }
+
+    public void setCurrentAuctionHouse(int auctionHouseID) {
+
+        System.out.println("current AH id " + auctionHouseID);
+        currentAuctionHouse = auctionHouseID;
+    }
+
+
 
     public void createItemList(LinkedList<Item> itemList) {
         for (int i = 0; i < itemList.size(); i++) {

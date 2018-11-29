@@ -183,6 +183,11 @@ public class Agent_Display extends JPanel {
         placeBid.setPrefWidth(75);
 
         placeBid.setOnAction(event -> {
+            try {
+                agent.sendBid(itemIDTextField.getText(), Double.parseDouble(bidAmount.getText()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //agent.getListActiveAuctions();
         });
 
@@ -224,6 +229,7 @@ public class Agent_Display extends JPanel {
             try {
                 //System.out.println("work ree " + comboBox.getSelectionModel().getSelectedItem().getClass());
                 String tempAuctionID = (String) comboBox.getValue();
+                agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
                 System.out.println("string " + tempAuctionID);
                 agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
                 //agent.getHouseList();
