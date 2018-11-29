@@ -28,7 +28,6 @@ public class Agent {
         secretBiddingKey = 12340; //do function call for client to get bank key
         this.names = nameList;
         createName();
-        createClientConnections();
         agentDisplay = new Agent_Display(this);
         agentDisplay.drawGUI(new Stage());
     }
@@ -86,18 +85,6 @@ public class Agent {
                     tempItem.getDescription(), tempItem.getMinimumBidAmount(), tempItem.getCurrentBidAmount())));
         }
         agentDisplay.table.setItems(agentDisplay.listofTableItems);
-    }
-
-    //need method that gets ah servers from bank, and then creates multiple clients to each one.
-    //loop each client creation here.
-    private void createClientConnections() {
-        //for all lists in the server hash map create a new client
-        //we also need a list of clients. Here is one example of one agent.
-        //In order to do this, we would need to message the bank proxy command to get all AH ids + ports
-
-        //Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this,12340, "Agent " + portNumber, 6667); //key would be auction house id, to do
-        //clients.put(12340, clientProxy);
-
     }
 
     public void createHouseList(LinkedList<Integer> auctionHouseList, ConcurrentHashMap<Integer, Integer> auctionHousePorts) {
