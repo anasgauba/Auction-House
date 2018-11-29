@@ -51,12 +51,12 @@ public class Agent {
         bankClient.clientOutput.writeObject(message);
         //how is the information being received back to agent?
     }
-    //Return a list of auction houses
-    public void getListActiveAuctions() throws IOException {
-        Object[] message = {Command.GetListHouses};
-        clients.get(12340).clientOutput.writeObject(message);
-        bankClient.clientOutput.writeObject(message);
-    }
+//    //Return a list of auction houses
+//    public void getListActiveAuctions() throws IOException {
+//        Object[] message = {Command.GetListHouses};
+//        clients.get(12340).clientOutput.writeObject(message);
+//        bankClient.clientOutput.writeObject(message);
+//    }
     //retrieves auction items from auction house passed in
     public void getAuctionHouseItems(){
     }

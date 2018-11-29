@@ -183,11 +183,7 @@ public class Agent_Display extends JPanel {
         placeBid.setPrefWidth(75);
 
         placeBid.setOnAction(event -> {
-            try {
-                agent.getListActiveAuctions();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            //agent.getListActiveAuctions();
         });
 
         HBox bidStackHBox = new HBox();
