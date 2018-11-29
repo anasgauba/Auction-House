@@ -80,6 +80,9 @@ public class Bank_Server_Proxy {
                         case GetListHouses:
                             serverOutput.writeObject(new Object[] {Command.SetListHouses, bank.auctionHouseIDList, bank.auctionHousePorts});
                             break;
+                        case CreateBankAccount:
+                        Object[] tempArray = bank.createAccount((String)message[1],(Double)message[2]);
+                        serverOutput.writeObject(new Object[]{Command.SetKey,tempArray[2]});
                     }
 
                     Thread.sleep(0);
@@ -88,6 +91,8 @@ public class Bank_Server_Proxy {
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();

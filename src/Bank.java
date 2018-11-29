@@ -29,7 +29,7 @@ public class Bank {
 
     //Opens Bank Account for Agent or AuctionHouse
     //return the biddingKey that is created when an account is created
-    public int[] createAccount(String name, int initialBalance) throws
+    public Object[] createAccount(String name, Double initialBalance) throws
             Exception {
         Account account = new Account(name, initialBalance);
         String secretKey;
@@ -51,7 +51,7 @@ public class Bank {
             System.out.println("Account " +account.getAccountId() +" created " +
                     "with secretKey "+account.getSecretKey());
         }
-        return new int[]{account.getAccountId(), initialBalance, account.getSecretKey()};
+        return new Object[]{account.getAccountId(), initialBalance, account.getSecretKey()};
     }
 
     //returns balance based on agent's string
@@ -131,54 +131,54 @@ public class Bank {
     public static void main(String[] args) throws Exception {
         Bank b1 = new Bank();
 //        Bank b2 = new Bank();
-        int[] key, key2, key6;
+        Object[] key, key2, key6;
         for (int i=0; i < 1000; i++) {
-            key6 = b1.createAccount("Agent "+ i, i+10);
+            key6 = b1.createAccount("Agent "+ i, i+10.0);
         }
         System.out.println();
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println();
 
-        key = b1.createAccount("xyz", 10);
-        key2 = b1.createAccount("BOBB", 20);
+        key = b1.createAccount("xyz", 10.0);
+        key2 = b1.createAccount("BOBB", 20.0);
 //        key2 = b2.createAccount ("Bob", 20);
 
-        b1.getBalance(key[2]);
-        b1.getBalance(key2[2]);
-
-        b1.deposit(key[2], 100);
-        b1.deposit(key2[2], 50);
-
-        b1.getBalance(key[2]);
-        b1.getBalance(key2[2]);
-
-        b1.withdraw(key[2], 90);
-        b1.withdraw(key2[2], 20);
-
-        b1.getBalance(key[2]);
-        b1.getBalance(key2[2]);
+//        b1.getBalance((int)key[2]);
+//        b1.getBalance((int)key2[2]);
+//
+//        b1.deposit((int)key[2], 100);
+//        b1.deposit((int)key2[2], 50);
+//
+//        b1.getBalance((int)key[2]);
+//        b1.getBalance((int)key2[2]);
+//
+//        b1.withdraw((int)key[2], 90);
+//        b1.withdraw((int)key2[2], 20);
+//
+//        b1.getBalance((int)key[2]);
+//        b1.getBalance((int)key2[2]);
 
         System.out.println();
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         System.out.println();
 
 
-        b1.closeAccount(key[2]);
+//        b1.closeAccount(key[2]);
 
-        key = b1.createAccount("xyz", 20);
-        b1.getBalance(key[2]);
-        b1.lockBalance(key[2], 10);
-        b1.getBalance(key[2]);
+//        key = b1.createAccount("xyz", 20);
+//        b1.getBalance(key[2]);
+//        b1.lockBalance(key[2], 10);
+//        b1.getBalance(key[2]);
         //here it will unlock the balance, since the amount was locked before
         // for this account.
-        b1.unlockBalance(key[2]);
-        b1.getBalance(key[2]);
+//        b1.unlockBalance(key[2]);
+//        b1.getBalance(key[2]);
 
-        b1.getBalance(key2[2]);
+//        b1.getBalance(key2[2]);
         // here it will not unlock since for this account, there was no money
         // locked and hence, it will not change the balance for this account.
-        b1.unlockBalance(key2[2]);
-        b1.getBalance(key2[2]);
+//        b1.unlockBalance(key2[2]);
+//        b1.getBalance(key2[2]);
 
         System.out.println("list of accounts "+b1.list.size());
     }

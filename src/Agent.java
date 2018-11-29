@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Agent {
     LinkedList<String> names;
-    private String agentName;
+    public String agentName;
     private int secretBiddingKey;
     private int currentAuctionHouse;
 
@@ -22,13 +22,13 @@ public class Agent {
 
 
     public Agent (int portNumber, LinkedList nameList){
+        this.names = nameList;
+        createName();
         this.portNumber = portNumber;
         this.clients = new ConcurrentHashMap();
         this.agent_server_proxy = new Agent_Server_Proxy(this, portNumber);
         this.bankClient = new Bank_Client_Proxy(this, 1, "Agent " + this.portNumber, 7277);
         secretBiddingKey = 12340; //do function call for client to get bank key
-        this.names = nameList;
-        createName();
         agentDisplay = new Agent_Display(this);
         agentDisplay.drawGUI(new Stage());
     }
@@ -64,17 +64,19 @@ public class Agent {
     //uses the secret key to make a bid and received back acceptance, rejection, pass (higher bid in place)
     //and winner.
     public void placeBid(){
+
     }
 
     //notifies the bank to transfer the blocked funds to the auction house when winning a bid.
-    public void transferWinningBidFunds(){
-//        Enum_Commands.Command transferFunds = Enum_Commands.Command.TransferBlockedFunds;
-        //clientProxy.clientOutput.println("sending message: "+transferFunds);
+    public void transferWinningBidFunds() throws IOException {
+        Object[] message = {Command.TransferBlockedFunds};
+        clients.get(12340).clientOutput.writeObject(message);
+        bankClient.clientOutput.writeObject(message);
     }
 
     //terminates and closes the agent's bank account when no bidding action is in progress
     public void closeStagnantBankAccount() throws IOException {
-        Object[] message = {Command.CloseBankAccount};
+        Object[] message = {Command.CloseBankAccount, this.secretBiddingKey};
         clients.get(12340).clientOutput.writeObject(message);
         bankClient.clientOutput.writeObject(message);
     }

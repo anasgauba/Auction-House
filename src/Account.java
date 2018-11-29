@@ -12,7 +12,7 @@ public class Account {
     private double lock;
 
     //upon creation of account return unique ID for the client
-    public Account(String name, int initialBalance){
+    public Account(String name, Double initialBalance){
         this.balance = initialBalance;
         this.accountName = name;
     }
@@ -50,7 +50,7 @@ public class Account {
     public static void main(String[]args) {
         int i = 0;
         while (i < 10) {
-            Account acc = new Account("Robert", 10);
+            Account acc = new Account("Robert", 10.0);
             acc.setAccountId(i);
             i++;
             System.out.println("Acc id is "+acc.getAccountId());

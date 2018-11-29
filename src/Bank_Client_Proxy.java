@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,6 +39,18 @@ public class Bank_Client_Proxy extends Thread {
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
             clientOutput.writeObject(clientType + " " + clientSocket.getPort());
 
+             //This puts a command from bank's client to bank server to make bank call the method
+//          s  System.out.println(this.agent.agentName);
+//            System.out.println("HHHHHHHHHHHHH"+clientType);
+            if (clientType.contains("Agent")){
+                System.out.println("FLAG");
+//                int randomBalance = new Random().nextInt(10000)+1000;
+//                System.out.println("Random balance: "+randomBalance);
+                clientOutput.writeObject(new Object[]{Command.CreateBankAccount, this.agent.agentName,2000});
+
+            }
+
+
             while (run && clientSocket.isConnected()) {
 
                 if (clientInput == null) {
@@ -56,8 +69,9 @@ public class Bank_Client_Proxy extends Thread {
                     case SetListHouses:
                         agent.createHouseList((LinkedList<Integer>) message[1], (ConcurrentHashMap<Integer, Integer>) message[2]);
                         break;
-
-
+                    case SetKey:
+                        agent.setBiddingKey((int)message[1]);
+                        System.out.println("Agent key" +message[1]);
                 }
                 //System.out.println("message received: " + message);
                 Thread.sleep(0);
