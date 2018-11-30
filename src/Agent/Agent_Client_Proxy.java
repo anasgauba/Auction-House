@@ -38,10 +38,14 @@ public class Agent_Client_Proxy extends Thread {
 
                 Object[] message = (Object[]) clientInput.readObject();
                 Command command = (Command) message[0];
+                System.out.println("THE COMMAND THAT AGENT CLIENT HAS RECEIVED IS:  "+command);
 
                 switch (command) {
                     case BlockFunds:
                         System.out.println("test! in agent client! " + message[1]);
+                        break;
+                    case WinMessage:
+
                         break;
                 }
                 //System.out.println("message received: " + message);

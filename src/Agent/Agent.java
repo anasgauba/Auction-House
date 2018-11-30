@@ -97,6 +97,24 @@ public class Agent {
         currentAuctionHouse = auctionHouseID;
     }
 
+    public void printDetermination(Command theDetermination){
+        switch (theDetermination) {
+            case WinMessage:
+                agentDisplay.newNotificationMessage.append(" You won the bid!\n");
+                agentDisplay.setNewNotificationMessage();
+                break;
+            case BidOvertaken:
+                agentDisplay.newNotificationMessage.append(" Your bid has been overtaken\n");
+                agentDisplay.setNewNotificationMessage();
+                break;
+            case RejectResponse:
+                agentDisplay.newNotificationMessage.append(" You have lost the bid. Sorry!\n");
+                agentDisplay.setNewNotificationMessage();
+                break;
+        }
+
+    }
+
 
     LinkedList<Agent_Display.tableItem> timeList = new LinkedList();
     LinkedList<Item> itemList = new LinkedList<>();

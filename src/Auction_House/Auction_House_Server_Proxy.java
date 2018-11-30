@@ -83,7 +83,10 @@ public class Auction_House_Server_Proxy extends Thread{
 
                         case SendBid:
                             //call auction house method
-                            auctionHouse.sendBid((String)message[1], (Double) message[2]);
+                            Command bidDetermination = auctionHouse.sendBid((String)message[1], (Double) message[2]);
+                            System.out.println("bid determination is "+bidDetermination);
+                            Object[] tempArray2 = {Command.SendBid,bidDetermination};
+                            serverOutput.writeObject(tempArray2);
                             break;
                     }
 

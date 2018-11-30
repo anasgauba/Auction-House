@@ -68,6 +68,8 @@ public class Auction_House_Client_Proxy extends Thread {
                     case SetListItems:
                         agent.createItemList((LinkedList<Item>) message[1]);
                         break;
+                    case SendBid:
+                        agent.printDetermination((Command)message[1]);
                 }
 
             }

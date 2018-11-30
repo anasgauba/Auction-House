@@ -16,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -27,6 +29,8 @@ public class Agent_Display extends JPanel {
     public ObservableList<tableItem> listofTableItems = FXCollections.observableArrayList();
     private ObservableList<String> listOfHouses = FXCollections.observableArrayList();
     public ObservableList<String> options;
+    public StringBuilder newNotificationMessage;
+    private Text displayText;
 
     public TableView<tableItem> table = new TableView();
 
@@ -34,12 +38,15 @@ public class Agent_Display extends JPanel {
     private Auction_House auctionHouse;
     private Bank bank;
 
+
     public Agent_Display(Agent agent) {
         this.agent = agent;
+        displayText = new Text("");
+        newNotificationMessage = new StringBuilder("");
 //        this.auctionHouse = auctionHouse;
 //        this.bank = bank;
     }
-    
+
     public void drawGUI(Stage stage) {
         BorderPane agentInfo = new BorderPane();
         agentInfo.setPadding(new Insets(27, 20, 20, 20));
@@ -177,7 +184,7 @@ public class Agent_Display extends JPanel {
         bidAmount.setFocusTraversable(false);
         //bidAmount.setEditable(false);
         //bidAmount.setDisable(true);  //tomorrow maybe add these for the entries similar to
-                                        //how I do it for the button and bit amount fields, hbox,etc
+        //how I do it for the button and bit amount fields, hbox,etc
         bidAmount.setOnMouseClicked(event -> {
             bidAmount.setText("");
         });
@@ -185,21 +192,11 @@ public class Agent_Display extends JPanel {
         Button placeBid = new Button("Place Bid");
         placeBid.setPrefWidth(75);
 
-        placeBid.setOnAction(event -> {
-            try {
-                agent.sendBid(itemIDTextField.getText(), Double.parseDouble(bidAmount.getText()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //agent.getListActiveAuctions();
-        });
 
         HBox bidStackHBox = new HBox();
         bidStackHBox.getChildren().addAll(bidAmount, placeBid);
         bidStackHBox.setPadding(new Insets(0, 0, 20, 20));
         bidStackHBox.setSpacing(10);
-
-
 
 
         VBox auctionHouseBox = new VBox();
@@ -233,6 +230,27 @@ public class Agent_Display extends JPanel {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+        ScrollPane messagesPane = new ScrollPane();
+        displayText.setWrappingWidth(500);
+        displayText.setTextAlignment(TextAlignment.LEFT);
+        messagesPane.setPrefSize(200, 200);
+        messagesPane.setContent(displayText);
+        String notifications = "This is a test";
+        displayText.setText(notifications);
+        placeBid.setOnAction(event -> {
+            try {
+                agent.sendBid(itemIDTextField.getText(), Double.parseDouble(bidAmount.getText()));
+                newNotificationMessage.append("Auction House " + comboBox.getSelectionModel().getSelectedItem().toString()
+                        + " Item: " + itemDescriptionTextField.getText());
+                System.out.println("Placebid clicked message is "+newNotificationMessage);
+                setNewNotificationMessage();
+//                displayText.setText(newNotificationMessage);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //agent.getListActiveAuctions();
+        });
 
         comboBox.setOnAction(e -> {
             listofTableItems.clear();
@@ -251,10 +269,6 @@ public class Agent_Display extends JPanel {
         comboBox.setOnMouseClicked(e -> {
             //agent.getHouseList();
         });
-
-
-
-
 
 
         //HBox topBar = new HBox(auctionHouseChoice, auctionHouseList);
@@ -333,8 +347,10 @@ public class Agent_Display extends JPanel {
             return row;
         });
 
+
         VBox leftVBox = new VBox();
-        leftVBox.getChildren().addAll(agentInfo, itemInfo, bidStackHBox);
+        //You are going to add your scrollpane in the below line
+        leftVBox.getChildren().addAll(agentInfo, itemInfo, bidStackHBox, messagesPane);
         BorderPane borderpane = new BorderPane();
         borderpane.setLeft(leftVBox);
         borderpane.setCenter(auctionHouseBox);
@@ -356,7 +372,7 @@ public class Agent_Display extends JPanel {
         test1.setMinWidth(100);
         test2.setMinWidth(100);
         test3.setMinWidth(100);
-        HBox tempdebug = new HBox(test1, test2,  test3);
+        HBox tempdebug = new HBox(test1, test2, test3);
         borderpane.getChildren().addAll(tempdebug);
 
         test1.setOnAction(e -> {
@@ -367,10 +383,11 @@ public class Agent_Display extends JPanel {
             }
         });
 
-        AnimationTimer animationTimer = new AnimationTimer () {
+        AnimationTimer animationTimer = new AnimationTimer() {
             private long nextTime = 0;
+
             @Override
-            public void handle (long now) {
+            public void handle(long now) {
 
                 if (now > nextTime) {
 
@@ -399,6 +416,11 @@ public class Agent_Display extends JPanel {
         animationTimer.start();
     }
 
+public void setNewNotificationMessage(){
+    displayText.setText(this.newNotificationMessage.toString());
+    System.out.println("String builder is "+this.newNotificationMessage);
+    System.out.println("String builder to string is "+this.newNotificationMessage.toString());
+}
     public static class tableItem {
         private final SimpleStringProperty itemID;
         private final SimpleStringProperty itemName;
@@ -417,19 +439,21 @@ public class Agent_Display extends JPanel {
             if (itemPassedIn.getBidTimeRemaining() > 0) {
                 long secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(itemPassedIn.getBidTimeRemaining() - System.currentTimeMillis());
                 this.itemTime = new SimpleStringProperty(Long.toString(secondsRemaining));
-            }
-
-            else {
+            } else {
                 this.itemTime = new SimpleStringProperty("0");
             }
 
 
         }
-        public String getItemTime(){
+
+        public String getItemTime() {
 
             return itemTime.get();
         }
-        public void setItemTime(String itemTimeRemaining){itemTime.set(itemTimeRemaining);}
+
+        public void setItemTime(String itemTimeRemaining) {
+            itemTime.set(itemTimeRemaining);
+        }
 
         public String getItemID() {
             return itemID.get();

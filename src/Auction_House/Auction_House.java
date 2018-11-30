@@ -111,7 +111,7 @@ public class Auction_House extends Thread {
 //        Enum_Commands.Misc.Command wonAuction = Enum_Commands.Misc.Command.WinMessage;
     }
 
-    public void sendBid(String itemID, double bidAmount) {
+    public Command sendBid(String itemID, double bidAmount) {
 
 
         for (int i = 0; i < itemList.size(); i++) {
@@ -124,6 +124,7 @@ public class Auction_House extends Thread {
 
             }
         }
+        return Command.WinMessage;
     }
 
     private void createItems(int amountOfItems) {
