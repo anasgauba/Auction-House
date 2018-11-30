@@ -217,7 +217,7 @@ public class Agent_Display extends JPanel {
         Object[] message = {Command.GetListItems};
         try {
             agent.getHouseList();
-            Thread.sleep(50);
+            Thread.sleep(250);
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -233,7 +233,6 @@ public class Agent_Display extends JPanel {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-
 
         comboBox.setOnAction(e -> {
             listofTableItems.clear();
@@ -367,23 +366,6 @@ public class Agent_Display extends JPanel {
                 e1.printStackTrace();
             }
         });
-        /*
-        test2.setOnAction(e -> {
-            try {
-                auctionHouse.debug();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        });
-        test3.setOnAction(e -> {
-            try {
-                bank.debug();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        });
-       */
-        //THIS IS THE ANIMATION TIMER I TRIED TO DO.
 
         AnimationTimer animationTimer = new AnimationTimer () {
             private long nextTime = 0;
@@ -391,27 +373,30 @@ public class Agent_Display extends JPanel {
             public void handle (long now) {
 
                 if (now > nextTime) {
+
                     nextTime = now + 1000000000;
-//                System.out.println("Animation timer is running. Attempt to display time");
+                    /*
                     listofTableItems.clear();
                     message[0] = Command.GetListItems;
                     String tempAuctionID = (String) comboBox.getValue();
-//                System.out.println("***********************************");
-//                System.out.println("COMBO BOX VALUE IN STRING "+tempAuctionID);
                     agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
-//                System.out.println("AUCTION HOUSE IN INTEGER" + tempAuctionID);
                     try {
                         agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    */
+                    agent.refreshTimes();
+                    table.refresh();
+
+                    //table.getColumns().get(0).setVisible(false);
+                    //table.getColumns().get(0).setVisible(true);
+
                 }
             }
 
         };
-
         animationTimer.start();
-
     }
 
     public static class tableItem {
@@ -440,7 +425,10 @@ public class Agent_Display extends JPanel {
 
 
         }
-        public String getItemTime(){return itemTime.get();}
+        public String getItemTime(){
+
+            return itemTime.get();
+        }
         public void setItemTime(String itemTimeRemaining){itemTime.set(itemTimeRemaining);}
 
         public String getItemID() {

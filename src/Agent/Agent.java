@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class Agent {
     LinkedList<String> names;
@@ -97,13 +98,37 @@ public class Agent {
     }
 
 
-
+    LinkedList<Agent_Display.tableItem> timeList = new LinkedList();
+    LinkedList<Item> itemList = new LinkedList<>();
     public void createItemList(LinkedList<Item> itemList) {
+        if (timeList != null) {
+            System.out.println("Clearing time list");
+            timeList.clear();
+        }
+        if (!this.itemList.isEmpty()) {
+            System.out.println("Clearing item list");
+            this.timeList.clear();
+        }
         for (int i = 0; i < itemList.size(); i++) {
             Item tempItem = itemList.get(i);
-            agentDisplay.listofTableItems.add(new Agent_Display.tableItem(tempItem));
+            Agent_Display.tableItem temp = new Agent_Display.tableItem(tempItem);
+            agentDisplay.listofTableItems.add(temp);
+            timeList.add(temp);
+            //System.out.println("adding: " + itemList.get(i));
+            this.itemList.add(itemList.get(i));
+
         }
         agentDisplay.table.setItems(agentDisplay.listofTableItems);
+    }
+
+    public void refreshTimes() {
+        for (int i = 0; i < timeList.size(); i++) {
+            long secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(itemList.get(i).getBidTimeRemaining() - System.currentTimeMillis());
+            //System.out.println("? " + secondsRemaining);
+            if (Long.valueOf(timeList.get(i).getItemTime()) > 0) {
+                timeList.get(i).setItemTime(Long.toString(secondsRemaining));
+            }
+        }
     }
 
     public void createHouseList(LinkedList<Integer> auctionHouseList, ConcurrentHashMap<Integer, Integer> auctionHousePorts) {
