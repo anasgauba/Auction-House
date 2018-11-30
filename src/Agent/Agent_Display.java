@@ -31,7 +31,7 @@ public class Agent_Display extends JPanel {
     private ObservableList<String> listOfHouses = FXCollections.observableArrayList();
     public ObservableList<String> options;
     public StringBuilder newNotificationMessage;
-    private Label displayLabel;
+    public Label displayLabel;
     private String agentNameInfo;
     public TextField agentAccountTextField;
     public TextField agentBalanceTextField;
@@ -238,7 +238,7 @@ public class Agent_Display extends JPanel {
             try {
                 agent.sendBid(itemIDTextField.getText(), Double.parseDouble(bidAmount.getText()));
                 newNotificationMessage.append("Auction House " + comboBox.getSelectionModel().getSelectedItem().toString()
-                        + " Item: " + itemDescriptionTextField.getText());
+                        + " Item: " + itemDescriptionTextField.getText()+" ");
                 System.out.println("Placebid clicked message is "+newNotificationMessage);
                 setNewNotificationMessage();
 //                displayLabel.setText(newNotificationMessage);

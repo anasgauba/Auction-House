@@ -4,6 +4,7 @@ import Auction_House.Auction_House_Client_Proxy;
 import Auction_House.Item;
 import Bank.Bank_Client_Proxy;
 import Misc.Command;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -127,15 +128,15 @@ public class Agent extends Thread{
         switch (theDetermination) {
             case WinMessage:
                 agentDisplay.newNotificationMessage.append(" You won the bid!\n");
-                agentDisplay.setNewNotificationMessage();
+                Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
             case BidOvertaken:
                 agentDisplay.newNotificationMessage.append(" Your bid has been overtaken\n");
-                agentDisplay.setNewNotificationMessage();
+                Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
             case RejectResponse:
                 agentDisplay.newNotificationMessage.append(" You have lost the bid. Sorry!\n");
-                agentDisplay.setNewNotificationMessage();
+                Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
         }
 
