@@ -127,15 +127,15 @@ public class Agent extends Thread{
     public void printDetermination(Command theDetermination){
         switch (theDetermination) {
             case WinMessage:
-                agentDisplay.newNotificationMessage.append(" You won the bid!\n");
+                agentDisplay.newLine+=" You won the bid!\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
             case BidOvertaken:
-                agentDisplay.newNotificationMessage.append(" Your bid has been overtaken\n");
+                agentDisplay.newLine+=" Your bid has been overtaken\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
             case RejectResponse:
-                agentDisplay.newNotificationMessage.append(" You have lost the bid. Sorry!\n");
+                agentDisplay.newLine+=" You have lost the bid. Sorry!\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
         }

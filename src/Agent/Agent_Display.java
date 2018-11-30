@@ -16,14 +16,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
 public class Agent_Display extends JPanel {
@@ -31,6 +29,7 @@ public class Agent_Display extends JPanel {
     private ObservableList<String> listOfHouses = FXCollections.observableArrayList();
     public ObservableList<String> options;
     public StringBuilder newNotificationMessage;
+    public String newLine;
     public Label displayLabel;
     private String agentNameInfo;
     public TextField agentAccountTextField;
@@ -50,6 +49,7 @@ public class Agent_Display extends JPanel {
         displayLabel = new Label("");
         newNotificationMessage = new StringBuilder();
         this.agentNameInfo=agent.agentName;
+        newLine = "";
         //agentAccountTextField = new Label();
         //agentBalanceTextField = new Label();
 
@@ -237,10 +237,11 @@ public class Agent_Display extends JPanel {
         placeBid.setOnAction(event -> {
             try {
                 agent.sendBid(itemIDTextField.getText(), Double.parseDouble(bidAmount.getText()));
-                newNotificationMessage.append("Auction House " + comboBox.getSelectionModel().getSelectedItem().toString()
+                newLine=("Auction House " + comboBox.getSelectionModel().getSelectedItem().toString()
                         + " Item: " + itemDescriptionTextField.getText()+" ");
                 System.out.println("Placebid clicked message is "+newNotificationMessage);
-                setNewNotificationMessage();
+//                setNewNotificationMessage();
+
 //                displayLabel.setText(newNotificationMessage);
 
             } catch (IOException e) {
@@ -463,6 +464,8 @@ public class Agent_Display extends JPanel {
     }
 
     public void setNewNotificationMessage() {
+        newNotificationMessage.insert(0,newLine);
+        newLine="";
         displayLabel.setText(this.newNotificationMessage.toString());
     }
 
