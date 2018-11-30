@@ -12,6 +12,11 @@ import java.util.Scanner;
 
 public class Main extends Application {
 
+    @Override
+    public void stop() {
+        System.exit(0);
+    }
+
     public void start(Stage stage) throws IOException {
 
         System.out.println("Hello World!");
