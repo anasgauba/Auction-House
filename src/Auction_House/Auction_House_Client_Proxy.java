@@ -47,6 +47,15 @@ public class Auction_House_Client_Proxy extends Thread {
             System.out.println("here " + portNumber);
             clientSocket = new Socket(getServerIP(), portNumber);
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+            System.out.println("in ah client why " + clientOutput + clientType);
+
+
+            if (agent != null) {
+                while (clientOutput == null);
+                synchronized (agent) {
+                    agent.notifyAll();
+                }
+            }
 
 
             clientOutput.writeObject(clientType + " " + clientSocket.getPort() + " " + key);

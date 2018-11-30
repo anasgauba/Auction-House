@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import javax.swing.*;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
 public class Agent_Display extends JPanel {
@@ -30,7 +31,10 @@ public class Agent_Display extends JPanel {
     private ObservableList<String> listOfHouses = FXCollections.observableArrayList();
     public ObservableList<String> options;
     public StringBuilder newNotificationMessage;
-    private Text displayText;
+    private Label displayLabel;
+    private String agentNameInfo;
+    public TextField agentAccountTextField;
+    public TextField agentBalanceTextField;
 
     public TableView<tableItem> table = new TableView();
 
@@ -38,39 +42,46 @@ public class Agent_Display extends JPanel {
     private Auction_House auctionHouse;
     private Bank bank;
 
+    boolean getHouseListDone = false;
+
 
     public Agent_Display(Agent agent) {
         this.agent = agent;
-        displayText = new Text("");
+        displayLabel = new Label("");
         newNotificationMessage = new StringBuilder();
+        this.agentNameInfo=agent.agentName;
+        //agentAccountTextField = new Label();
+        //agentBalanceTextField = new Label();
+
 //        this.auctionHouse = auctionHouse;
 //        this.bank = bank;
+
     }
 
     public void drawGUI(Stage stage) {
         BorderPane agentInfo = new BorderPane();
         agentInfo.setPadding(new Insets(27, 20, 20, 20));
 
-        Label agentID = new Label("Agent ID:");
-        agentID.setFont(new Font("Calibri", 20));
-        agentID.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
-        agentID.setPadding(new Insets(0, 10, 0, 0));
+        Label agentName = new Label("Agent Name:");
+        agentName.setFont(new Font("Calibri", 20));
+        agentName.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
+        agentName.setPadding(new Insets(0, 10, 0, 0));
 
-        TextField agentIDTextField = new TextField();
-        agentIDTextField.setAlignment(Pos.CENTER_RIGHT);
-        agentIDTextField.setPrefWidth(163);
-        agentIDTextField.setEditable(false);
-        //agentIDTextField.setDisable(true);
-        agentIDTextField.setFocusTraversable(false);
-        HBox agentIDHBox = new HBox();
-        agentIDHBox.getChildren().addAll(agentID, agentIDTextField);
+        TextField agentNameTextField = new TextField(""+agentNameInfo);
+        agentNameTextField.setAlignment(Pos.CENTER_RIGHT);
+        agentNameTextField.setPrefWidth(163);
+        agentNameTextField.setEditable(false);
+        //agentNameTextField.setDisable(true);
+        agentNameTextField.setFocusTraversable(false);
+        HBox agentNameHBox = new HBox();
+        agentNameHBox.getChildren().addAll(agentName, agentNameTextField);
 
         Label agentAccount = new Label("Agent Account:");
         agentAccount.setFont(new Font("Calibri", 20));
         agentAccount.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         agentAccount.setPadding(new Insets(0, 10, 0, 0));
 
-        TextField agentAccountTextField = new TextField();
+        agentAccountTextField = new TextField();
         agentAccountTextField.setAlignment(Pos.CENTER_RIGHT);
         agentAccountTextField.setPrefWidth(113);
         agentAccountTextField.setEditable(false);
@@ -85,7 +96,7 @@ public class Agent_Display extends JPanel {
         agentBalance.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         agentBalance.setPadding(new Insets(0, 10, 0, 0));
 
-        TextField agentBalanceTextField = new TextField();
+        agentBalanceTextField = new TextField();
         agentBalanceTextField.setAlignment(Pos.CENTER_RIGHT);
         agentBalanceTextField.setPrefWidth(116);
         agentBalanceTextField.setEditable(false);
@@ -95,7 +106,7 @@ public class Agent_Display extends JPanel {
         agentBalanceHBox.getChildren().addAll(agentBalance, agentBalanceTextField);
 
 
-        VBox agentLabels = new VBox(agentIDHBox, agentAccountHBox, agentBalanceHBox);
+        VBox agentLabels = new VBox(agentNameHBox, agentAccountHBox, agentBalanceHBox);
         agentLabels.setMaxWidth(250);
         agentLabels.setMinWidth(250);
         agentLabels.setPrefWidth(250);
@@ -211,32 +222,18 @@ public class Agent_Display extends JPanel {
         ComboBox comboBox = new ComboBox(options);
         comboBox.setMinWidth(100);
         comboBox.getStyleClass().add("center-aligned");
-        Object[] message = {Command.GetListItems};
-        try {
-            agent.getHouseList();
-            Thread.sleep(250);
 
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        //initialize the selected first
-        comboBox.getSelectionModel().selectFirst(); //no idea why this doesn work
-        message[0] = Command.GetListItems;
-        try {
-            String tempAuctionID = (String) comboBox.getValue();
-            agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
-            agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+//        initialize the selected first
+
         ScrollPane messagesPane = new ScrollPane();
-        displayText.setWrappingWidth(500);
-        displayText.setTextAlignment(TextAlignment.LEFT);
+//        displayLabel.setWrappingWidth(500);
+
+        displayLabel.setTextAlignment(TextAlignment.LEFT);
         messagesPane.setPrefSize(200, 200);
-        messagesPane.setContent(displayText);
+        messagesPane.setContent(displayLabel);
         String notifications = "This is a test";
-        displayText.setText(notifications);
+        displayLabel.setText(notifications);
         placeBid.setOnAction(event -> {
             try {
                 agent.sendBid(itemIDTextField.getText(), Double.parseDouble(bidAmount.getText()));
@@ -244,7 +241,7 @@ public class Agent_Display extends JPanel {
                         + " Item: " + itemDescriptionTextField.getText());
                 System.out.println("Placebid clicked message is "+newNotificationMessage);
                 setNewNotificationMessage();
-//                displayText.setText(newNotificationMessage);
+//                displayLabel.setText(newNotificationMessage);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -252,19 +249,7 @@ public class Agent_Display extends JPanel {
             //agent.getListActiveAuctions();
         });
 
-        comboBox.setOnAction(e -> {
-            listofTableItems.clear();
-            message[0] = Command.GetListItems;
-            try {
-                //System.out.println("work ree " + comboBox.getSelectionModel().getSelectedItem().getClass());
-                String tempAuctionID = (String) comboBox.getValue();
-                agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
-                agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
-                //agent.getHouseList();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        });
+
 
         comboBox.setOnMouseClicked(e -> {
             //agent.getHouseList();
@@ -362,26 +347,11 @@ public class Agent_Display extends JPanel {
 
 
         /******************debug*********************/
-        agentIDTextField.setText("10034");
-        agentAccountTextField.setText("00900");
-        agentBalanceTextField.setText("3000.03");
+//        agentNameTextField.setText("10034");
+//        agentAccountTextField.setText("00900");
+//        agentBalanceTextField.setText("3000.03");
 
-        Button test1 = new Button("test Agent");
-        Button test2 = new Button("test AH");
-        Button test3 = new Button("test Bank");
-        test1.setMinWidth(100);
-        test2.setMinWidth(100);
-        test3.setMinWidth(100);
-        HBox tempdebug = new HBox(test1, test2, test3);
-        borderpane.getChildren().addAll(tempdebug);
 
-        test1.setOnAction(e -> {
-            try {
-                agent.debug();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        });
 
         AnimationTimer animationTimer = new AnimationTimer() {
             private long nextTime = 0;
@@ -414,15 +384,97 @@ public class Agent_Display extends JPanel {
 
         };
         animationTimer.start();
+
+        synchronized (agent) {
+            agent.notifyAll();
+            System.out.println("???");
+        }
+        Object[] message = {Command.GetListItems};
+        try {
+            agent.getHouseList();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        synchronized (this) {
+            while (!getHouseListDone) {
+                try {
+                    wait();
+                    System.out.println("done getting house list" + options);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        getHouseListDone = false;
+
+
+        comboBox.getSelectionModel().selectFirst(); //no idea why this doesn work
+        message[0] = Command.GetListItems;
+
+
+        try {
+            String tempAuctionID = (String) comboBox.getValue();
+
+            System.out.println("temp id " + tempAuctionID);
+
+            System.out.println("temp id2 " + tempAuctionID);
+
+//            synchronized ()
+            agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
+            System.out.println("agents lcients " + agent.clients);
+
+            System.out.println("agents lcients 2" + agent.clients.get(Integer.valueOf(tempAuctionID)));
+            System.out.println("agents lcients 3" + agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput);
+
+            synchronized (this) {
+                while (agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput == null) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+
+        comboBox.setOnAction(e -> {
+            listofTableItems.clear();
+            message[0] = Command.GetListItems;
+            try {
+                //System.out.println("work ree " + comboBox.getSelectionModel().getSelectedItem().getClass());
+                String tempAuctionID = (String) comboBox.getValue();
+                agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
+                agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
+                //agent.getHouseList();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+
+
+
     }
 
     public void setNewNotificationMessage() {
-        //System.out.println("null " + displayText + this.newNotificationMessage.toString());
+        displayLabel.setText(this.newNotificationMessage.toString());
+    }
 
-        displayText = null;
-        displayText = new Text(this.newNotificationMessage.toString());
-//    System.out.println("String builder to string is "+this.newNotificationMessage.toString());
-//    System.out.println("String builder is "+this.newNotificationMessage);
+    public void setAccountBalance(double agentBalance){
+        System.out.println("account balance  " + agentBalance);
+        this.agentBalanceTextField.setText(Double.toString(agentBalance));
+
+    }
+    public void setAccountID(int accountIDPassed){
+        System.out.println("account id paassed " + accountIDPassed);
+        this.agentAccountTextField.setText(Integer.toString(accountIDPassed));
+
     }
     public static class tableItem {
         private final SimpleStringProperty itemID;

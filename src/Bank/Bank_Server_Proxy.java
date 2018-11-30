@@ -93,7 +93,7 @@ public class Bank_Server_Proxy {
 //=======
                             Object[] tempArray = bank.createAccount((String) message[1],(Double) message[2]);
                             if (message[3].equals("Agent")) {
-                                serverOutput.writeObject(new Object[]{Command.SetAgentKey, tempArray[2]});
+                                serverOutput.writeObject(new Object[]{Command.SetAgentKey, tempArray});
                             }
                             else {
                                 serverOutput.writeObject(new Object[]{Command.SetAuctionHouseKey, tempArray[2]});

@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-public class Agent {
+public class Agent extends Thread{
     LinkedList<String> names;
     public String agentName;
     private int secretBiddingKey;
@@ -24,6 +24,7 @@ public class Agent {
     Agent_Server_Proxy agent_server_proxy;
     Bank_Client_Proxy bankClient;
     int portNumber;
+    Boolean houseListDone = false;
     ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
 
 
@@ -35,6 +36,7 @@ public class Agent {
         this.agent_server_proxy = new Agent_Server_Proxy(this, portNumber);
         this.bankClient = new Bank_Client_Proxy(this, 1, "Agent " + this.portNumber, 7277);
         secretBiddingKey = 12340; //do function call for client to get bank key
+        start();
         agentDisplay = new Agent_Display(this);
         agentDisplay.drawGUI(new Stage());
     }
@@ -70,6 +72,30 @@ public class Agent {
     //uses the secret key to make a bid and received back acceptance, rejection, pass (higher bid in place)
     //and winner.
     public void placeBid(){
+
+    }
+
+    public void setAgentDisplayValues(int accountID , double accountBalance){
+        System.out.println("In display, account ID is "+accountID);
+        System.out.println("In display, balance is "+accountBalance);
+
+        synchronized (this) {
+            while (agentDisplay == null) {
+                try {
+                    System.out.println("strtubg wait");
+                    wait();
+                    System.out.println("waitt");
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    //e.printStackTrace();
+                }
+            }
+        }
+        System.out.println("we dib sleeepin");
+        System.out.println("Does balance exist? "+agentDisplay.agentBalanceTextField);
+        System.out.println("Does account exist? "+agentDisplay.agentAccountTextField);
+        agentDisplay.setAccountBalance(accountBalance);
+        agentDisplay.setAccountID(accountID);
 
     }
 
@@ -161,7 +187,23 @@ public class Agent {
                 Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this, secretBiddingKey, "Agent " + portNumber, auctionHousePorts.get(auctionHouseList.get(i))); //key would be auction house id, to do
 
                 clients.put(auctionHouseList.get(i), clientProxy);
+
+                synchronized (this) {
+                    while (clients.get(auctionHouseList.get(i)).clientOutput == null) {
+                        try {
+                            wait();
+                            System.out.println("Client created for gent");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
+        }
+
+        agentDisplay.getHouseListDone = true;
+        synchronized (agentDisplay) {
+            agentDisplay.notifyAll();
         }
     }
 

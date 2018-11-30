@@ -57,6 +57,7 @@ public class Bank_Client_Proxy extends Thread {
 //                int randomBalance = new Random().nextInt(10000)+1000;
 //                System.out.println("Random balance: "+randomBalance);
                 clientOutput.writeObject(new Object[] {Command.CreateBankAccount, agent.agentName, 2000.0, "Agent"});
+//                clientOutput.writeObject(new Object[]{Command.CreateBankAccount,"Sam", 3333.0, "Agent"});
 
             }
 
@@ -91,8 +92,14 @@ public class Bank_Client_Proxy extends Thread {
                         break;
 
                     case SetAgentKey:
-                        agent.setBiddingKey((int)message[1]);
-                        System.out.println("Agent.Agent key" +message[1]);
+                        Object[] bankInfo = (Object [])message[1];
+                        System.out.println("Message in bank client is: "+message);
+                        agent.setBiddingKey((Integer) bankInfo[2]);
+                        System.out.println("Account ID is "+bankInfo[0]);
+                        System.out.println("Initial balance is "+bankInfo[1]);
+                        System.out.println("Secret key is "+bankInfo[2]);
+                        agent.setAgentDisplayValues((int)bankInfo[0],(double)bankInfo[1]);
+//                        System.out.println("Agent.Agent key" +message[1]);
                         break;
 
                     case SetAuctionHouseKey:
