@@ -42,7 +42,7 @@ public class Agent_Display extends JPanel {
     public Agent_Display(Agent agent) {
         this.agent = agent;
         displayText = new Text("");
-        newNotificationMessage = new StringBuilder("");
+        newNotificationMessage = new StringBuilder();
 //        this.auctionHouse = auctionHouse;
 //        this.bank = bank;
     }
@@ -416,11 +416,14 @@ public class Agent_Display extends JPanel {
         animationTimer.start();
     }
 
-public void setNewNotificationMessage(){
-    displayText.setText(this.newNotificationMessage.toString());
-    System.out.println("String builder is "+this.newNotificationMessage);
-    System.out.println("String builder to string is "+this.newNotificationMessage.toString());
-}
+    public void setNewNotificationMessage() {
+        //System.out.println("null " + displayText + this.newNotificationMessage.toString());
+
+        displayText = null;
+        displayText = new Text(this.newNotificationMessage.toString());
+//    System.out.println("String builder to string is "+this.newNotificationMessage.toString());
+//    System.out.println("String builder is "+this.newNotificationMessage);
+    }
     public static class tableItem {
         private final SimpleStringProperty itemID;
         private final SimpleStringProperty itemName;
