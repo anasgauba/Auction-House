@@ -10,18 +10,20 @@ import java.util.Scanner;
 
 public class Auction_House_Client_Proxy extends Thread {
 
-    Agent agent;
+
 
     private Socket clientSocket;
     public ObjectInputStream clientInput;
     public ObjectOutputStream clientOutput;
 
+    Agent agent;
     String clientType;
     int portNumber;
+    int key;
     boolean run;
 
     public Auction_House_Client_Proxy(int key, String clientType, int portNumber) {
-        this.agent = agent;
+        this.key = key;
         this.clientType = clientType;
         this.portNumber = portNumber;
         this.run = true;
@@ -30,10 +32,12 @@ public class Auction_House_Client_Proxy extends Thread {
 
     public Auction_House_Client_Proxy(Agent agent, int key, String clientType, int portNumber) {
         this.agent = agent;
+        this.key = key;
         this.clientType = clientType;
         this.portNumber = portNumber;
         this.run = true;
         start();
+        System.out.println("agent client proxy key " + key);
     }
 
 
@@ -45,7 +49,7 @@ public class Auction_House_Client_Proxy extends Thread {
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
 
 
-            clientOutput.writeObject(clientType + " " + clientSocket.getPort());
+            clientOutput.writeObject(clientType + " " + clientSocket.getPort() + " " + key);
             while (run && clientSocket.isConnected()) {
 
                 if (clientInput == null) {

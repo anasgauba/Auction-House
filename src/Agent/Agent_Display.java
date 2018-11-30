@@ -1,10 +1,10 @@
 package Agent;
 
-import javafx.animation.AnimationTimer;
 import Auction_House.Auction_House;
 import Auction_House.Item;
 import Bank.Bank;
 import Misc.Command;
+import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,9 +12,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -22,10 +19,9 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 public class Agent_Display extends JPanel {
     public ObservableList<tableItem> listofTableItems = FXCollections.observableArrayList();
@@ -48,7 +44,7 @@ public class Agent_Display extends JPanel {
         BorderPane agentInfo = new BorderPane();
         agentInfo.setPadding(new Insets(27, 20, 20, 20));
 
-        Label agentID = new Label("Agent.Agent ID:");
+        Label agentID = new Label("Agent ID:");
         agentID.setFont(new Font("Calibri", 20));
         agentID.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         agentID.setPadding(new Insets(0, 10, 0, 0));
@@ -62,7 +58,7 @@ public class Agent_Display extends JPanel {
         HBox agentIDHBox = new HBox();
         agentIDHBox.getChildren().addAll(agentID, agentIDTextField);
 
-        Label agentAccount = new Label("Agent.Agent Bank.Account:");
+        Label agentAccount = new Label("Agent Account:");
         agentAccount.setFont(new Font("Calibri", 20));
         agentAccount.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         agentAccount.setPadding(new Insets(0, 10, 0, 0));
@@ -77,7 +73,7 @@ public class Agent_Display extends JPanel {
         agentAccountHBox.getChildren().addAll(agentAccount, agentAccountTextField);
 
 
-        Label agentBalance = new Label("Agent.Agent Balance:");
+        Label agentBalance = new Label("Agent Balance:");
         agentBalance.setFont(new Font("Calibri", 20));
         agentBalance.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         agentBalance.setPadding(new Insets(0, 10, 0, 0));
@@ -104,7 +100,7 @@ public class Agent_Display extends JPanel {
         BorderPane itemInfo = new BorderPane();
         itemInfo.setPadding(new Insets(20, 20, 5, 20));
 
-        Label itemIDLabel = new Label("Auction_House.Item ID:");
+        Label itemIDLabel = new Label("Item ID:");
         itemIDLabel.setFont(new Font("Calibri", 20));
         itemIDLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         itemIDLabel.setPadding(new Insets(0, 10, 0, 0));
@@ -119,7 +115,7 @@ public class Agent_Display extends JPanel {
         itemIDTextFieldHBox.getChildren().addAll(itemIDLabel, itemIDTextField);
 
 
-        Label itemDescriptionLabel = new Label("Auction_House.Item Name:");
+        Label itemDescriptionLabel = new Label("Item Name:");
         itemDescriptionLabel.setFont(new Font("Calibri", 20));
         itemDescriptionLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         itemDescriptionLabel.setPadding(new Insets(0, 10, 0, 0));
@@ -218,28 +214,25 @@ public class Agent_Display extends JPanel {
         ComboBox comboBox = new ComboBox(options);
         comboBox.setMinWidth(100);
         comboBox.getStyleClass().add("center-aligned");
-        //comboBox.getSelectionModel().selectFirst();
         Object[] message = {Command.GetListItems};
         try {
             agent.getHouseList();
+            Thread.sleep(50);
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
-        comboBox.getSelectionModel().selectFirst();
-// no idea why this doesn work
-        comboBox.getSelectionModel().select(0);
-        comboBox.getSelectionModel().selectLast();
-        comboBox.getSelectionModel().selectFirst();
-        comboBox.getSelectionModel().selectNext();
-        comboBox.getSelectionModel().selectPrevious();
-
-
-
-
-
-        // agent.clients.get(12340).clientOutput.writeObject(message);
+        //initialize the selected first
+        comboBox.getSelectionModel().selectFirst(); //no idea why this doesn work
+        message[0] = Command.GetListItems;
+        try {
+            String tempAuctionID = (String) comboBox.getValue();
+            agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
+            agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
 
 
         comboBox.setOnAction(e -> {
@@ -249,7 +242,6 @@ public class Agent_Display extends JPanel {
                 //System.out.println("work ree " + comboBox.getSelectionModel().getSelectedItem().getClass());
                 String tempAuctionID = (String) comboBox.getValue();
                 agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
-                System.out.println("string " + tempAuctionID);
                 agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
                 //agent.getHouseList();
             } catch (IOException e1) {
@@ -277,19 +269,20 @@ public class Agent_Display extends JPanel {
         table.setPrefHeight(700);
         table.setPadding(new Insets(0, 0, 20, 0));
         table.setBackground(new Background(new BackgroundFill(Color.rgb(171, 171, 171), CornerRadii.EMPTY, Insets.EMPTY)));
-        TableColumn itemID = new TableColumn("Auction_House.Item ID");
+        TableColumn itemID = new TableColumn("Item ID");
         itemID.setMinWidth(100);
-        TableColumn itemName = new TableColumn("Auction_House.Item Name");
+        TableColumn itemName = new TableColumn("Item Name");
         itemName.setMinWidth(200);
         itemName.setStyle("-fx-alignment: CENTER;");
-        TableColumn itemStartingBid = new TableColumn("Auction_House.Item Starting Bid");
+        TableColumn itemStartingBid = new TableColumn("Starting Bid");
         itemStartingBid.setMinWidth(150);
         itemStartingBid.setStyle("-fx-alignment: CENTER-RIGHT;");
-        TableColumn itemCurrentBid = new TableColumn("Auction_House.Item Current Bid");
+        TableColumn itemCurrentBid = new TableColumn("Current Bid");
         itemCurrentBid.setMinWidth(150);
         itemCurrentBid.setStyle("-fx-alignment: CENTER-RIGHT;");
         TableColumn itemTime = new TableColumn("Item Time Remaining");
         itemTime.setMinWidth(150);
+        itemTime.setStyle("-fx-alignment: CENTER;");
 
         itemID.setCellValueFactory(
                 new PropertyValueFactory<tableItem, String>("itemID")
@@ -358,9 +351,9 @@ public class Agent_Display extends JPanel {
         agentAccountTextField.setText("00900");
         agentBalanceTextField.setText("3000.03");
 
-        Button test1 = new Button("test Agent.Agent");
+        Button test1 = new Button("test Agent");
         Button test2 = new Button("test AH");
-        Button test3 = new Button("test Bank.Bank");
+        Button test3 = new Button("test Bank");
         test1.setMinWidth(100);
         test2.setMinWidth(100);
         test3.setMinWidth(100);
@@ -393,20 +386,25 @@ public class Agent_Display extends JPanel {
         //THIS IS THE ANIMATION TIMER I TRIED TO DO.
 
         AnimationTimer animationTimer = new AnimationTimer () {
+            private long nextTime = 0;
             @Override
             public void handle (long now) {
+
+                if (now > nextTime) {
+                    nextTime = now + 1000000000;
 //                System.out.println("Animation timer is running. Attempt to display time");
-                listofTableItems.clear();
-                message[0] = Command.GetListItems;
-                String tempAuctionID = (String) comboBox.getValue();
+                    listofTableItems.clear();
+                    message[0] = Command.GetListItems;
+                    String tempAuctionID = (String) comboBox.getValue();
 //                System.out.println("***********************************");
 //                System.out.println("COMBO BOX VALUE IN STRING "+tempAuctionID);
-                agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
+                    agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
 //                System.out.println("AUCTION HOUSE IN INTEGER" + tempAuctionID);
-                try {
-                    agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    try {
+                        agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -430,7 +428,15 @@ public class Agent_Display extends JPanel {
             this.itemName = new SimpleStringProperty(itemPassedIn.getDescription());
             this.itemStartingBid = new SimpleStringProperty(tempFormat.format(itemPassedIn.getMinimumBidAmount()));
             this.itemCurrentBid = new SimpleStringProperty(tempFormat.format(itemPassedIn.getCurrentBidAmount()));
-            this.itemTime =  new SimpleStringProperty(Long.toString(itemPassedIn.getBidTimeRemaining()));
+
+            if (itemPassedIn.getBidTimeRemaining() > 0) {
+                long secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(itemPassedIn.getBidTimeRemaining() - System.currentTimeMillis());
+                this.itemTime = new SimpleStringProperty(Long.toString(secondsRemaining));
+            }
+
+            else {
+                this.itemTime = new SimpleStringProperty("0");
+            }
 
 
         }

@@ -101,8 +101,7 @@ public class Agent {
     public void createItemList(LinkedList<Item> itemList) {
         for (int i = 0; i < itemList.size(); i++) {
             Item tempItem = itemList.get(i);
-            agentDisplay.listofTableItems.add(new Agent_Display.tableItem(new Item(tempItem.getAuctionHouseID(), tempItem.getItemID(),
-                    tempItem.getDescription(), tempItem.getMinimumBidAmount(), tempItem.getCurrentBidAmount())));
+            agentDisplay.listofTableItems.add(new Agent_Display.tableItem(tempItem));
         }
         agentDisplay.table.setItems(agentDisplay.listofTableItems);
     }
@@ -116,7 +115,7 @@ public class Agent {
             if (clients.get(auctionHouseList.get(i)) == null) {
                 System.out.println("starting new client! " + auctionHouseList.get(i) + auctionHousePorts.get(auctionHouseList.get(i)));
                 System.out.println("starting new client! " + auctionHouseList.get(i) + auctionHousePorts);
-                Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this, auctionHouseList.get(i), "Agent " + portNumber, auctionHousePorts.get(auctionHouseList.get(i))); //key would be auction house id, to do
+                Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this, secretBiddingKey, "Agent " + portNumber, auctionHousePorts.get(auctionHouseList.get(i))); //key would be auction house id, to do
 
                 clients.put(auctionHouseList.get(i), clientProxy);
             }

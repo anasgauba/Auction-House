@@ -16,7 +16,7 @@ public class Auction_House extends Thread {
     LinkedList<Item> itemList;
     LinkedList<String> nouns;
     LinkedList<String> adjectives;
-    Boolean DEBUG = true;
+    Boolean DEBUG = false;
 
     public int auctionHouseID;
     public int portNumber;
@@ -39,6 +39,9 @@ public class Auction_House extends Thread {
         this.bankClient = new Bank_Client_Proxy(this, auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
         this.run = true;
         start();
+
+        //temp debug
+        itemList.get(0).startBidTime();
     }
 
     public void run () {
@@ -89,15 +92,15 @@ public class Auction_House extends Thread {
             if (secondsRemaining < 1 && secondsRemaining >= 0) {
                 //System.out.println("Times up!");
                 Object[] message = {Command.WinMessage};
-                try {
+                /*try {
                     clients.get(itemList.get(i).getSecretBidderKey()).clientOutput.writeObject(message); //send msg to agent that won
                     //System.out.println("12340 won!");
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
             if (secondsRemaining > 0) {
-                System.out.println(secondsRemaining);
+                //System.out.println(secondsRemaining);
             }
         }
     }
@@ -117,6 +120,8 @@ public class Auction_House extends Thread {
                 //update current bid time if going,
                 //check if they have .01 over the current bid, if so lock in bidder secret key,
                 //add secret key to parameters
+
+
             }
         }
     }
@@ -154,8 +159,9 @@ public class Auction_House extends Thread {
     public void startAuctionHouseClient(String data) {
         System.out.println("Starting AH client: " + data);
         String[] clientInfoTokens = data.split("\\s");
-        Agent_Client_Proxy proxyClient = new Agent_Client_Proxy(12340, clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
-        clients.put(12340, proxyClient);
+        Agent_Client_Proxy proxyClient = new Agent_Client_Proxy(Integer.valueOf(clientInfoTokens[3]), clientInfoTokens[0], Integer.valueOf(clientInfoTokens[1]));
+        clients.put(Integer.valueOf(clientInfoTokens[3]), proxyClient);
+        System.out.println("AH clients " + clients);
     }
 
     public void debug() throws IOException {

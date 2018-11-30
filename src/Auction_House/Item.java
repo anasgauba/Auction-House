@@ -1,7 +1,6 @@
 package Auction_House;
 
 import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
 
 public class Item implements Serializable {
 
@@ -19,7 +18,7 @@ public class Item implements Serializable {
         this.description = description;
         this.minimumBidAmount = minimumBidAmount;
         this.currentBidAmount = currentBidAmount;
-        startBidTime();
+        bidTimeRemaining = 0;
     }
 
     public int getAuctionHouseID() {
