@@ -113,7 +113,9 @@ public class Bank_Client_Proxy extends Thread {
                             auctionHouse.notifyAll();
                         }
                         break;
-
+                    case SetBalance:
+                        agent.changeBalance((Double) message[1]);
+                        break;
                 }
                 //System.out.println("message received: " + message);
                 Thread.sleep(0);

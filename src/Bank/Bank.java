@@ -34,7 +34,7 @@ public class Bank {
 
     //Opens Bank.Bank Bank.Account for Agent.Agent or AuctionHouse
     //return the biddingKey that is created when an account is created
-    public Object[] createAccount(String name, Double initialBalance) throws
+    public Object[] createAccount(String name, double initialBalance) throws
             Exception {
         Account account = new Account(name, initialBalance);
         String secretKey;
@@ -95,7 +95,8 @@ public class Bank {
     }
 
     //reduces the account that is looked up by the amount of money passed in
-    public synchronized void withdraw(int secretKey,int moneyToReduce) throws Exception {
+    public synchronized void withdraw(int secretKey,double moneyToReduce) throws
+            Exception {
         if (list.containsKey(secretKey)) {
             Account account = list.get(secretKey);
             if (moneyToReduce > account.balance) {
@@ -110,7 +111,8 @@ public class Bank {
     }
     //adds the account that is looked up by the amount of money passed in
 
-    public synchronized void deposit(int secretKey,int moneyToGive) throws Exception {
+    public synchronized void deposit(int secretKey,double moneyToGive) throws
+            Exception {
         if (list.containsKey(secretKey)) {
             Account account = list.get(secretKey);
             account.balance += moneyToGive;

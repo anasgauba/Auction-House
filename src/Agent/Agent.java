@@ -18,6 +18,8 @@ public class Agent extends Thread{
     public String agentName;
     private int secretBiddingKey;
     private int currentAuctionHouse;
+    private int accountID;
+    private double accountBalance;
 
     private Agent_Display agentDisplay;
     //Stage agentStage = new Stage();
@@ -74,10 +76,11 @@ public class Agent extends Thread{
     public void placeBid(){
 
     }
-
     public void setAgentDisplayValues(int accountID , double accountBalance){
+        this.accountID = accountID;
+        this.accountBalance = accountBalance;
         System.out.println("In display, account ID is "+accountID);
-        System.out.println("In display, balance is "+accountBalance);
+        System.out.println("In display, accountBalance is "+accountBalance);
 
         synchronized (this) {
             while (agentDisplay == null) {
@@ -92,11 +95,20 @@ public class Agent extends Thread{
             }
         }
         System.out.println("we dib sleeepin");
-        System.out.println("Does balance exist? "+agentDisplay.agentBalanceTextField);
+        System.out.println("Does accountBalance exist? "+agentDisplay.agentBalanceTextField);
         System.out.println("Does account exist? "+agentDisplay.agentAccountTextField);
         agentDisplay.setAccountBalance(accountBalance);
         agentDisplay.setAccountID(accountID);
 
+    }
+
+//    public double getAccountBalance() {
+//        return this.accountBalance;
+//    }
+
+    public void changeBalance(double accountBalance) {
+        this.accountBalance = accountBalance;
+        agentDisplay.setAccountBalance(accountBalance);
     }
 
     //notifies the bank to transfer the blocked funds to the auction house when winning a bid.
@@ -125,7 +137,7 @@ public class Agent extends Thread{
         currentAuctionHouse = auctionHouseID;
     }
 
-    public void printDetermination(Command theDetermination){
+    public void printDetermination(Command theDetermination) throws IOException {
         switch (theDetermination) {
             case WinMessage:
                 agentDisplay.newLine+=" You won the bid!\n";
@@ -139,6 +151,11 @@ public class Agent extends Thread{
                 agentDisplay.newLine+=" You have lost the bid. Sorry!\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
+            case AcceptResponse:
+                bankClient.clientOutput.writeObject(new Object[] {Command
+                        .GetBalance, secretBiddingKey});
+                break;
+
         }
 
     }

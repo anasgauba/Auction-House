@@ -99,6 +99,14 @@ public class Bank_Server_Proxy {
                         case CheckAgentFunds:
                             boolean tempResponse = bank.abilityToBuy((Integer) message[1], (Double) message[2]);
                             serverOutput.writeObject(new Object[] {Command.CheckAgentFunds, tempResponse});
+
+                        case GetBalance:
+                            double currBal = bank.getBalance((Integer)
+                                    message[1]);
+                            System.out.println("Current balance " +currBal);
+                            serverOutput.writeObject(new Object[] {Command
+                                    .SetBalance, currBal});
+
                     }
 
                     serverOutput.reset();
