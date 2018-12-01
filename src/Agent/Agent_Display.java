@@ -467,7 +467,8 @@ public class Agent_Display extends JPanel {
     }
 
     public void setNewNotificationMessage() {
-        newNotificationMessage.insert(0,newLine);
+        newNotificationMessage.insert(0, newLine + "-----------------------------" +
+                "-------------------\n");
         newLine="";
         displayLabel.setText(this.newNotificationMessage.toString());
     }

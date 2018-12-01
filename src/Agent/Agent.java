@@ -139,22 +139,26 @@ public class Agent extends Thread{
 
     public void printDetermination(Command theDetermination) throws IOException {
         switch (theDetermination) {
+
             case WinMessage:
-                agentDisplay.newLine+=" You won the bid!\n";
+                agentDisplay.newLine+="You won the bid!\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
+
             case BidOvertaken:
-                agentDisplay.newLine+=" Your bid has been overtaken\n";
+                agentDisplay.newLine+="Your bid has been overtaken\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command
                         .GetBalance, secretBiddingKey});
                 break;
+
             case RejectResponse:
-                agentDisplay.newLine+=" You have lost the bid. Sorry!\n";
+                agentDisplay.newLine+="You do not have sufficient funds or you're the current bidder\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
+
             case AcceptResponse:
-                agentDisplay.newLine+=" You are now the current bidder on this item\n";
+                agentDisplay.newLine+="You are now the current bidder on this item\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command
                         .GetBalance, secretBiddingKey});

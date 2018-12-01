@@ -182,7 +182,7 @@ public class Auction_House extends Thread {
 
 
                     //if item is going
-                    else if (item.getBidTimeRemaining() > 0 && bidAmount > item.getCurrentBidAmount()) {
+                    else if (item.getBidTimeRemaining() > 0 && bidAmount > item.getCurrentBidAmount() && item.getSecretBidderKey() != agentSecretKey) {
 
 
                         bankClient.clientOutput.writeObject(new Object[] {Command.UnlockFunds, item.getSecretBidderKey(), item.getCurrentBidAmount()});
@@ -227,11 +227,13 @@ public class Auction_House extends Thread {
 
 
                 //case reject bid
+                if (!hasFunds) {
 
-
+                    return Command.RejectResponse;
+                }
             }
         }
-        return Command.WinMessage;
+        return Command.RejectResponse;
     }
 
     private void createItems(int amountOfItems) {
