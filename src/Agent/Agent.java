@@ -146,12 +146,15 @@ public class Agent extends Thread{
             case BidOvertaken:
                 agentDisplay.newLine+=" Your bid has been overtaken\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
+                bankClient.clientOutput.writeObject(new Object[] {Command
+                        .GetBalance, secretBiddingKey});
                 break;
             case RejectResponse:
                 agentDisplay.newLine+=" You have lost the bid. Sorry!\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 break;
             case AcceptResponse:
+                agentDisplay.newLine+=" You are now the current bidder on this item\n";
                 bankClient.clientOutput.writeObject(new Object[] {Command
                         .GetBalance, secretBiddingKey});
                 break;
@@ -177,9 +180,9 @@ public class Agent extends Thread{
             Agent_Display.tableItem temp = new Agent_Display.tableItem(tempItem);
             agentDisplay.listofTableItems.add(temp);
             timeList.add(temp);
-            System.out.println("adding: " + itemList.get(i).getBidTimeRemaining());
+            //System.out.println("adding: " + itemList.get(i).getBidTimeRemaining());
             this.itemList.add(itemList.get(i));
-            System.out.println("adding: 2 " + this.itemList.get(i).getBidTimeRemaining());
+           // System.out.println("adding: 2 " + this.itemList.get(i).getBidTimeRemaining());
 
         }
         agentDisplay.table.setItems(agentDisplay.listofTableItems);
@@ -196,7 +199,6 @@ public class Agent extends Thread{
             //System.out.println("time in agnet: " + Long.valueOf(timeList.get(i).getItemTime()));
             //System.out.println("? " + secondsRemaining);
             if (Long.valueOf(timeList.get(i).getItemTime()) > 0) {
-                System.out.println("time in agnet: " + Long.valueOf(timeList.get(i).getItemTime()));
                 timeList.get(i).setItemTime(Long.toString(secondsRemaining));
             }
         }
@@ -241,15 +243,6 @@ public class Agent extends Thread{
     }
 
     public void debug() throws IOException {
-        Object[] message = {Command.BlockFunds, "test2"};
-        clients.get(12340).clientOutput.writeObject(message);
-        bankClient.clientOutput.writeObject(message);
-
-        Object[] message2 = {Command.GetListItems};
-        clients.get(12340).clientOutput.writeObject(message2);
-
-        getHouseList();
-
     }
 
 }

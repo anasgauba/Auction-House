@@ -41,11 +41,14 @@ public class Agent_Client_Proxy extends Thread {
                 System.out.println("THE COMMAND THAT AGENT CLIENT HAS RECEIVED IS:  "+command);
 
                 switch (command) {
-                    case BlockFunds:
-                        System.out.println("test! in agent client! " + message[1]);
-                        break;
 
                     case WinMessage:
+                        break;
+
+                    case BidOvertaken:
+
+                        clientOutput.writeObject(new Object[] {Command.BidOvertaken});
+
                         break;
 
                     case RefreshTimes:

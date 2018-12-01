@@ -83,10 +83,6 @@ public class Bank_Client_Proxy extends Thread {
 
                 switch (command) {
 
-                    case BlockFunds:
-                        System.out.println("test! in bank client! " + message[1]);
-                        break;
-
                     case SetListHouses:
                         agent.createHouseList((LinkedList<Integer>) message[1], (ConcurrentHashMap<Integer, Integer>) message[2]);
                         break;
@@ -115,6 +111,18 @@ public class Bank_Client_Proxy extends Thread {
                         break;
                     case SetBalance:
                         agent.changeBalance((Double) message[1]);
+                        break;
+
+                    case BlockFunds:
+                        synchronized (auctionHouse) {
+                            auctionHouse.notifyAll();
+                        }
+                        break;
+
+                    case UnlockFunds:
+                        synchronized (auctionHouse) {
+                            auctionHouse.notifyAll();
+                        }
                         break;
                 }
                 //System.out.println("message received: " + message);

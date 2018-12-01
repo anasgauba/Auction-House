@@ -1,7 +1,6 @@
 package Bank;
 
 import Auction_House.Auction_House_Client_Proxy;
-import Misc.Command;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -81,17 +80,23 @@ public class Bank {
         return false;
     }
     //locks balance to prevent proper funding
-    public void lockBalance(int key, int amount){
+    public void lockBalance(int key, double amount){
         Account account = list.get(key);
         account.balance -= amount;
-        account.lock(amount);
+        account.lockBalance += amount;
+
+        System.out.println("agents balance: " + account.balance + " lock amount " + amount);
+        System.out.println("agents lock balance: " + account.lockBalance + " lock amount " + amount);
     }
     //unlocks balance to release proper funding
-    public void unlockBalance(int key){
-        double unlock;
+    public void unlockBalance(int key, double amount){
         Account account = list.get(key);
-        unlock = account.getLock();
-        account.balance += unlock;
+        account.lockBalance -= amount;
+        account.balance += amount;
+
+        System.out.println("agents balance afer unlock: " + account.balance + " lock amount " + amount);
+        System.out.println("agents lock balance after unlock: " + account.lockBalance + " lock amount " + amount);
+
     }
 
     //reduces the account that is looked up by the amount of money passed in
@@ -208,7 +213,5 @@ public class Bank {
     }
 
     public void debug() throws IOException {
-        Object[] message = {Command.BlockFunds, "test2"};
-        clients.get(12340).clientOutput.writeObject(message);
     }
 }

@@ -45,6 +45,7 @@ public class Main extends Application {
         Auction_House auction_house2 = new Auction_House(6667, nouns, adjectives);
         Auction_House auction_house3 = new Auction_House(6668, nouns, adjectives);
         Agent agent = new Agent(8900, names);
+        Agent agent2 = new Agent(8901, names);
 
         //Agent.Agent_Display agentdisp = new Agent.Agent_Display();
         //agentdisp.drawGUI(stage);

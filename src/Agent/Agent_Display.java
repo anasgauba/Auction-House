@@ -319,7 +319,7 @@ public class Agent_Display extends JPanel {
         table.setRowFactory(tv -> {
             TableRow row = new TableRow();
             row.setOnMouseClicked(event -> {
-                if (!row.isEmpty()) {
+                if (!row.isEmpty() && event.getClickCount() == 2) {
                     DecimalFormat tempFormat = new DecimalFormat("#.00");
                     tableItem rowData = (tableItem) row.getItem();
                     itemDescriptionTextField.setText(rowData.getItemName());
@@ -332,6 +332,8 @@ public class Agent_Display extends JPanel {
             });
             return row;
         });
+
+
 
 
         VBox leftVBox = new VBox();

@@ -52,6 +52,16 @@ public class Item implements Serializable {
         return bidTimeRemaining;
     }
 
+    public void setBidAmount(double amount) {
+
+        currentBidAmount = amount;
+    }
+
+    public void setSecretBidderKey(int secretBidderKey) {
+
+        this.secretBidderKey = secretBidderKey;
+    }
+
     public int getSecretBidderKey() {
 
         return secretBidderKey;
@@ -60,11 +70,6 @@ public class Item implements Serializable {
     public void startBidTime() {
 
         bidTimeRemaining = System.currentTimeMillis() + 30000;
-    }
-
-    public void setCurrentBidder(int secretBidderKey) {
-
-        this.secretBidderKey = secretBidderKey;
     }
 
     @Override

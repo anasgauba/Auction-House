@@ -70,10 +70,6 @@ public class Auction_House_Client_Proxy extends Thread {
 
                 switch (command) {
 
-                    case BlockFunds:
-                        System.out.println("test! in ah client! " + message[1]);
-                        break;
-
                     case SetListItems:
                         agent.createItemList((LinkedList<Item>) message[1]);
                         break;

@@ -71,11 +71,6 @@ public class Auction_House_Server_Proxy extends Thread{
                     //Clients switch will be for INCOMING messages from Server or the ser
                     switch (command) {
 
-                        case BlockFunds:
-                            System.out.println("test in ah serv! " + message[1] + command);
-                            serverOutput.writeObject(message);
-                            break;
-
                         case GetListItems:
                             Object[] tempArray = {Command.SetListItems, auctionHouse.getItemList()};
                             serverOutput.writeObject(tempArray);

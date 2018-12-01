@@ -8,21 +8,23 @@ import java.util.Random;
  */
 public class Account {
     protected double balance;
+    protected double lockBalance;
     private int secretKey;
     private int accountId;
     private String accountName;
-    private double lock;
 
     //upon creation of account return unique ID for the client
     public Account(String name, Double initialBalance){
         this.balance = initialBalance;
+        this.lockBalance = 0;
         this.accountName = name;
     }
     public double getLock() {
-        return lock;
+        return lockBalance;
     }
-    public void lock(int moneyToLock) {
-        lock = moneyToLock;
+
+    public void lock(double moneyToLock) {
+        lockBalance += moneyToLock;
     }
     public int getAccountId() {
         return accountId;

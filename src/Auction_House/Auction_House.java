@@ -6,7 +6,9 @@ import Bank.Bank_Server_Proxy;
 import Misc.Command;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -113,8 +115,9 @@ public class Auction_House extends Thread {
 //        Enum_Commands.Misc.Command wonAuction = Enum_Commands.Misc.Command.WinMessage;
     }
 
-    public Command sendBid(int agentSecretKey, String itemID, double bidAmount) throws IOException {
+    public synchronized Command sendBid(int agentSecretKey, String itemID, double bidAmount) throws IOException {
 
+        System.out.println("item looking for " + itemID);
 
         for (int i = 0; i < itemList.size(); i++) {
             if (itemID.equals(itemList.get(i).getItemID())) {
@@ -126,30 +129,92 @@ public class Auction_House extends Thread {
                 //add secret key to parameters
 
 
+                //check funds
                 bankClient.clientOutput.writeObject(new Object[]{Command.CheckAgentFunds, agentSecretKey, bidAmount});
-                //case accept bid check funds
-
-
                 synchronized (this) {
                     try {
                         wait();
+                        System.out.println("after wait for check funds");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
 
+
+
                 System.out.println("has funds? " + hasFunds);
                 if (hasFunds) {
+
+                    //lock balance
+                    bankClient.clientOutput.writeObject(new Object[] {Command.BlockFunds, agentSecretKey, bidAmount});
+                    synchronized (this) {
+                        try {
+                            wait();
+                            System.out.println("after wait for lock funds");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
                     //if item hasnt started yet:
-                    //System.out.println("current time in ah " + item.getBidTimeRemaining());
-                    if (item.getBidTimeRemaining() == 0) {
+                    System.out.println("current time in ah " + item.getBidTimeRemaining() + " item " + item.getDescription());
+                    if (item.getBidTimeRemaining() == 0 && bidAmount >= item.getCurrentBidAmount()) {
 
                         item.startBidTime();
+                        item.setSecretBidderKey(agentSecretKey);
+                        item.setBidAmount(bidAmount);
                         System.out.println("secret key " + agentSecretKey + " " + clients);
-                        clients.get(agentSecretKey).clientOutput.writeObject(new Object[] {Command.RefreshTimes});
+
+                        Iterator it = clients.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pair = (Map.Entry) it.next();
+                            clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.RefreshTimes});
+                        }
+                        //clients.get(agentSecretKey).clientOutput.writeObject(new Object[] {Command.RefreshTimes});
 
                         System.out.println("time: " + (item.getBidTimeRemaining() - System.currentTimeMillis()));
                         System.out.println("I see the debug, time 0, item no started");
+
+
+                        return Command.AcceptResponse;
+                    }
+
+
+                    //if item is going
+                    else if (item.getBidTimeRemaining() > 0 && bidAmount > item.getCurrentBidAmount()) {
+
+
+                        bankClient.clientOutput.writeObject(new Object[] {Command.UnlockFunds, item.getSecretBidderKey(), item.getCurrentBidAmount()});
+                        synchronized (this) {
+                            try {
+                                wait();
+                                System.out.println("after wait for unlock funds");
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+
+
+                        item.startBidTime();
+
+
+                        Iterator it = clients.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pair = (Map.Entry) it.next();
+                            clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.RefreshTimes});
+                            //bankClient.clientOutput.writeObject(new Object[] {Command.CheckAgentFunds, agentSecretKey, 1.0});
+                        }
+
+                        clients.get(item.getSecretBidderKey()).clientOutput.writeObject(new Object[] {Command.BidOvertaken});
+
+                        item.setSecretBidderKey(agentSecretKey);
+                        item.setBidAmount(bidAmount);
+
+
+                        return Command.AcceptResponse;
                     }
 
 
@@ -214,8 +279,5 @@ public class Auction_House extends Thread {
     }
 
     public void debug() throws IOException {
-        Object[] message = {Command.BlockFunds, "test2"};
-        clients.get(12340).clientOutput.writeObject(message);
-        bankClient.clientOutput.writeObject(message);
     }
 }

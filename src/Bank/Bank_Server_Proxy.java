@@ -71,11 +71,6 @@ public class Bank_Server_Proxy {
                     //Clients switch will be for INCOMING messages from Server or the ser
                     switch (command) {
 
-                        case BlockFunds:
-                            System.out.println("test in bank serv! " + message[1] + command);
-                            serverOutput.writeObject(message);
-                            break;
-
                         case AddAuctionHouseID:
                             System.out.println("adding to list! " + message[1]);
                             bank.auctionHouseIDList.add((Integer) message[1]);
@@ -99,14 +94,27 @@ public class Bank_Server_Proxy {
                         case CheckAgentFunds:
                             boolean tempResponse = bank.abilityToBuy((Integer) message[1], (Double) message[2]);
                             serverOutput.writeObject(new Object[] {Command.CheckAgentFunds, tempResponse});
+                            break;
+
 
                         case GetBalance:
                             double currBal = bank.getBalance((Integer)
                                     message[1]);
-                            System.out.println("Current balance " +currBal);
+                            System.out.println("Current balance2 " +currBal);
                             serverOutput.writeObject(new Object[] {Command
                                     .SetBalance, currBal});
 
+                            break;
+
+                        case BlockFunds:
+                            bank.lockBalance((Integer) message[1], (Double) message[2]);
+                            serverOutput.writeObject(new Object[] {Command.BlockFunds});
+                            break;
+
+                        case UnlockFunds:
+                            bank.unlockBalance((Integer) message[1], (Double) message[2]);
+                            serverOutput.writeObject(new Object[] {Command.UnlockFunds});
+                            break;
                     }
 
                     serverOutput.reset();
