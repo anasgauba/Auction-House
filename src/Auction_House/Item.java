@@ -11,6 +11,7 @@ public class Item implements Serializable {
     private double minimumBidAmount;
     private double currentBidAmount;
     private long bidTimeRemaining;
+    private boolean auctionActive;
     private static final long serialVersionUID = 1L;
 
     public Item(int auctionHouseID, String itemID, String description, double minimumBidAmount, double currentBidAmount) {
@@ -20,6 +21,7 @@ public class Item implements Serializable {
         this.minimumBidAmount = minimumBidAmount;
         this.currentBidAmount = currentBidAmount;
         this.bidTimeRemaining = 0;
+        this.auctionActive = true;
     }
 
     public int getAuctionHouseID() {
@@ -54,7 +56,7 @@ public class Item implements Serializable {
 
     public void setBidAmount(double amount) {
 
-        currentBidAmount = amount;
+        this.currentBidAmount = amount;
     }
 
     public void setSecretBidderKey(int secretBidderKey) {
@@ -69,7 +71,17 @@ public class Item implements Serializable {
 
     public void startBidTime() {
 
-        bidTimeRemaining = System.currentTimeMillis() + 30000;
+        this.bidTimeRemaining = System.currentTimeMillis() + 30000;
+    }
+
+    public void setAuctionActive(boolean messageSent) {
+
+        this.auctionActive = messageSent;
+    }
+
+    public boolean getAuctionActive() {
+
+        return auctionActive;
     }
 
     @Override

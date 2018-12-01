@@ -73,9 +73,11 @@ public class Agent_Server_Proxy extends Thread {
                             break;
 
                         case BidOvertaken:
-
                             agent.printDetermination((Command) message[0]);
                             break;
+
+                        case WinMessage:
+                            agent.printDetermination((Command) message[0]);
                     }
 
                     serverOutput.reset();

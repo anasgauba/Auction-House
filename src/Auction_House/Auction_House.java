@@ -93,15 +93,21 @@ public class Auction_House extends Thread {
     public void bidSuccessfulCheck() {
         for (int i = 0; i < itemList.size(); i++) {
             long secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(itemList.get(i).getBidTimeRemaining() - System.currentTimeMillis());
-            if (secondsRemaining < 1 && secondsRemaining >= 0) {
-                //System.out.println("Times up!");
-                Object[] message = {Command.WinMessage};
-                /*try {
-                    clients.get(itemList.get(i).getSecretBidderKey()).clientOutput.writeObject(message); //send msg to agent that won
-                    //System.out.println("12340 won!");
+            if (secondsRemaining == 0 && itemList.get(i).getAuctionActive()) {
+                System.out.println("Times up!");
+                try {
+                    itemList.get(i).setAuctionActive(false);
+                    clients.get(itemList.get(i).getSecretBidderKey()).clientOutput.writeObject(new Object[] {Command.WinMessage}); //send msg to agent that won
+                    removeItemFromAuction(itemList.get(i));
+                    Iterator it = clients.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry pair = (Map.Entry) it.next();
+                        clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.RefreshTimes});
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
             if (secondsRemaining > 0) {
                 //System.out.println(secondsRemaining);
@@ -143,7 +149,8 @@ public class Auction_House extends Thread {
 
 
                 System.out.println("has funds? " + hasFunds);
-                if (hasFunds) {
+                if (hasFunds && item.getSecretBidderKey() != agentSecretKey) {
+                    System.out.println("in has funds and sees that keys not bidder");
 
                     //lock balance
                     bankClient.clientOutput.writeObject(new Object[] {Command.BlockFunds, agentSecretKey, bidAmount});
@@ -182,7 +189,7 @@ public class Auction_House extends Thread {
 
 
                     //if item is going
-                    else if (item.getBidTimeRemaining() > 0 && bidAmount > item.getCurrentBidAmount() && item.getSecretBidderKey() != agentSecretKey) {
+                    else if (item.getBidTimeRemaining() > 0 && bidAmount > item.getCurrentBidAmount()) {
 
 
                         bankClient.clientOutput.writeObject(new Object[] {Command.UnlockFunds, item.getSecretBidderKey(), item.getCurrentBidAmount()});
@@ -259,6 +266,18 @@ public class Auction_House extends Thread {
                 System.out.println(itemList.get(i));
             }
         }
+    }
+
+    private void removeItemFromAuction(Item item) {
+
+        System.out.println("removing item: " + item);
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).getItemID().equals(item.getItemID())) {
+                itemList.remove(i);
+            }
+        }
+
+        System.out.println("The item list after removal: " + itemList);
     }
 
     public LinkedList<Item> getItemList() {
