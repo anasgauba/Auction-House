@@ -155,6 +155,7 @@ public class Agent extends Thread{
                 break;
             case AcceptResponse:
                 agentDisplay.newLine+=" You are now the current bidder on this item\n";
+                Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command
                         .GetBalance, secretBiddingKey});
                 break;

@@ -1,8 +1,6 @@
 package Agent;
 
-import Auction_House.Auction_House;
 import Auction_House.Item;
-import Bank.Bank;
 import Misc.Command;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleStringProperty;
@@ -38,9 +36,6 @@ public class Agent_Display extends JPanel {
     public TableView<tableItem> table = new TableView();
 
     private Agent agent;
-    private Auction_House auctionHouse;
-    private Bank bank;
-
     boolean getHouseListDone = false;
 
 
@@ -50,12 +45,6 @@ public class Agent_Display extends JPanel {
         newNotificationMessage = new StringBuilder();
         this.agentNameInfo=agent.agentName;
         newLine = "";
-        //agentAccountTextField = new Label();
-        //agentBalanceTextField = new Label();
-
-//        this.auctionHouse = auctionHouse;
-//        this.bank = bank;
-
     }
 
     public void drawGUI(Stage stage) {
@@ -69,7 +58,7 @@ public class Agent_Display extends JPanel {
 
         TextField agentNameTextField = new TextField(""+agentNameInfo);
         agentNameTextField.setAlignment(Pos.CENTER_RIGHT);
-        agentNameTextField.setPrefWidth(163);
+        agentNameTextField.setPrefWidth(132);
         agentNameTextField.setEditable(false);
         //agentNameTextField.setDisable(true);
         agentNameTextField.setFocusTraversable(false);
@@ -226,19 +215,31 @@ public class Agent_Display extends JPanel {
 
 //        initialize the selected first
 
-        ScrollPane messagesPane = new ScrollPane();
-//        displayLabel.setWrappingWidth(500);
 
+
+
+        ScrollPane messagesPane = new ScrollPane();
         displayLabel.setTextAlignment(TextAlignment.LEFT);
-        messagesPane.setPrefSize(200, 200);
+        messagesPane.setPrefSize(200, 242);
         messagesPane.setContent(displayLabel);
-        String notifications = "This is a test";
+        String notifications = "";
         displayLabel.setText(notifications);
+
+        messagesPane.setFitToWidth(true);
+
+        displayLabel.setWrapText(true);
+
+        BorderPane notificationsPane = new BorderPane(messagesPane);
+        notificationsPane.setPadding(new Insets(20, 20, 5, 20));
+
+
+
+
         placeBid.setOnAction(event -> {
             try {
                 agent.sendBid(itemIDTextField.getText(), Double.parseDouble(bidAmount.getText()));
-                newLine=("Auction House " + comboBox.getSelectionModel().getSelectedItem().toString()
-                        + " Item: " + itemDescriptionTextField.getText()+" ");
+                //newLine=("Auction House " + comboBox.getSelectionModel().getSelectedItem().toString()
+                        //+ " Item: " + itemDescriptionTextField.getText()+" ");
                 System.out.println("Placebid clicked message is "+newNotificationMessage);
 //                setNewNotificationMessage();
 
@@ -338,7 +339,7 @@ public class Agent_Display extends JPanel {
 
         VBox leftVBox = new VBox();
         //You are going to add your scrollpane in the below line
-        leftVBox.getChildren().addAll(agentInfo, itemInfo, bidStackHBox, messagesPane);
+        leftVBox.getChildren().addAll(agentInfo, itemInfo, bidStackHBox, notificationsPane);
         BorderPane borderpane = new BorderPane();
         borderpane.setLeft(leftVBox);
         borderpane.setCenter(auctionHouseBox);
