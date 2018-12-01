@@ -22,6 +22,7 @@ public class Auction_House extends Thread {
     public int portNumber;
     int secretKey;
     boolean run;
+    boolean hasFunds;
     Auction_House_Server_Proxy auction_house_server_proxy;
     Bank_Server_Proxy bank_server_proxy;
     ConcurrentHashMap<Integer, Agent_Client_Proxy> clients;
@@ -38,10 +39,11 @@ public class Auction_House extends Thread {
         this.clients = new ConcurrentHashMap();
         this.bankClient = new Bank_Client_Proxy(this, auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
         this.run = true;
+        this.hasFunds = false;
         start();
 
         //temp debug
-        itemList.get(0).startBidTime();
+        //itemList.get(0).startBidTime();
     }
 
     public void run () {
@@ -111,15 +113,55 @@ public class Auction_House extends Thread {
 //        Enum_Commands.Misc.Command wonAuction = Enum_Commands.Misc.Command.WinMessage;
     }
 
-    public Command sendBid(String itemID, double bidAmount) {
+    public Command sendBid(int agentSecretKey, String itemID, double bidAmount) throws IOException {
 
 
         for (int i = 0; i < itemList.size(); i++) {
             if (itemID.equals(itemList.get(i).getItemID())) {
+                Item item = itemList.get(i);
+                //System.out.println("agents secret key : " + agentSecretKey);
                 //do item logic here, initialize time if hasnt been intitialized yet,
                 //update current bid time if going,
                 //check if they have .01 over the current bid, if so lock in bidder secret key,
                 //add secret key to parameters
+
+
+                bankClient.clientOutput.writeObject(new Object[]{Command.CheckAgentFunds, agentSecretKey, bidAmount});
+                //case accept bid check funds
+
+
+                synchronized (this) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                System.out.println("has funds? " + hasFunds);
+                if (hasFunds) {
+                    //if item hasnt started yet:
+                    //System.out.println("current time in ah " + item.getBidTimeRemaining());
+                    if (item.getBidTimeRemaining() == 0) {
+
+                        item.startBidTime();
+                        System.out.println("secret key " + agentSecretKey + " " + clients);
+                        clients.get(agentSecretKey).clientOutput.writeObject(new Object[] {Command.RefreshTimes});
+
+                        System.out.println("time: " + (item.getBidTimeRemaining() - System.currentTimeMillis()));
+                        System.out.println("I see the debug, time 0, item no started");
+                    }
+
+
+
+                }
+
+                System.out.println(itemList);
+
+
+
+
+                //case reject bid
 
 
             }
@@ -154,7 +196,13 @@ public class Auction_House extends Thread {
 
     public LinkedList<Item> getItemList() {
 
+        System.out.println("in ah " + itemList);
         return itemList;
+    }
+
+    public void setHasFunds(boolean hasFunds) {
+
+        this.hasFunds = hasFunds;
     }
 
     public void startAuctionHouseClient(String data) {

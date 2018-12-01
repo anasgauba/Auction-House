@@ -36,7 +36,6 @@ public class Agent extends Thread{
         this.clients = new ConcurrentHashMap();
         this.agent_server_proxy = new Agent_Server_Proxy(this, portNumber);
         this.bankClient = new Bank_Client_Proxy(this, 1, "Agent " + this.portNumber, 7277);
-        secretBiddingKey = 12340; //do function call for client to get bank key
         start();
         agentDisplay = new Agent_Display(this);
         agentDisplay.drawGUI(new Stage());
@@ -116,7 +115,9 @@ public class Agent extends Thread{
 
     public void sendBid(String itemID, double bidAmount) throws IOException {
         System.out.println("Bid amount " + bidAmount);
-        clients.get(currentAuctionHouse).clientOutput.writeObject(new Object[] {Command.SendBid, itemID, bidAmount});
+        clients.get(currentAuctionHouse).clientOutput.writeObject(new Object[] {Command.SendBid, secretBiddingKey, itemID, bidAmount});
+
+
     }
 
     public void setCurrentAuctionHouse(int auctionHouseID) {
@@ -152,28 +153,38 @@ public class Agent extends Thread{
         }
         if (!this.itemList.isEmpty()) {
             System.out.println("Clearing item list");
-            this.timeList.clear();
+            this.itemList.clear();
         }
         for (int i = 0; i < itemList.size(); i++) {
             Item tempItem = itemList.get(i);
             Agent_Display.tableItem temp = new Agent_Display.tableItem(tempItem);
             agentDisplay.listofTableItems.add(temp);
             timeList.add(temp);
-            //System.out.println("adding: " + itemList.get(i));
+            System.out.println("adding: " + itemList.get(i).getBidTimeRemaining());
             this.itemList.add(itemList.get(i));
+            System.out.println("adding: 2 " + this.itemList.get(i).getBidTimeRemaining());
 
         }
         agentDisplay.table.setItems(agentDisplay.listofTableItems);
     }
 
-    public void refreshTimes() {
+    public void refreshItems() throws IOException {
+        agentDisplay.listofTableItems.clear();
+        clients.get(currentAuctionHouse).clientOutput.writeObject(new Object[] {Command.GetListItems});
+    }
+
+    public synchronized void refreshTimes() {
         for (int i = 0; i < timeList.size(); i++) {
             long secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(itemList.get(i).getBidTimeRemaining() - System.currentTimeMillis());
+            //System.out.println("time in agnet: " + Long.valueOf(timeList.get(i).getItemTime()));
             //System.out.println("? " + secondsRemaining);
             if (Long.valueOf(timeList.get(i).getItemTime()) > 0) {
+                System.out.println("time in agnet: " + Long.valueOf(timeList.get(i).getItemTime()));
                 timeList.get(i).setItemTime(Long.toString(secondsRemaining));
             }
         }
+
+
     }
 
     public void createHouseList(LinkedList<Integer> auctionHouseList, ConcurrentHashMap<Integer, Integer> auctionHousePorts) {

@@ -79,21 +79,22 @@ public class Auction_House_Server_Proxy extends Thread{
                         case GetListItems:
                             Object[] tempArray = {Command.SetListItems, auctionHouse.getItemList()};
                             serverOutput.writeObject(tempArray);
+                            System.out.println("servers array returning " + tempArray[1]);
                             break;
 
                         case SendBid:
                             //call auction house method
-                            Command bidDetermination = auctionHouse.sendBid((String)message[1], (Double) message[2]);
+                            Command bidDetermination = auctionHouse.sendBid((Integer) message[1], (String)message[2], (Double) message[3]);
                             System.out.println("bid determination is "+bidDetermination);
                             Object[] tempArray2 = {Command.SendBid,bidDetermination};
                             serverOutput.writeObject(tempArray2);
                             break;
                     }
 
-                    Thread.sleep(0);
+                    serverOutput.reset();
                 }
 
-            } catch (InterruptedException | IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

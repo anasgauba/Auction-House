@@ -106,6 +106,14 @@ public class Bank_Client_Proxy extends Thread {
                         auctionHouse.setKey((Integer) message[1]);
                         System.out.println("AH key: " + message[1]);
                         break;
+
+                    case CheckAgentFunds:
+                        auctionHouse.setHasFunds((boolean) message[1]);
+                        synchronized (auctionHouse) {
+                            auctionHouse.notifyAll();
+                        }
+                        break;
+
                 }
                 //System.out.println("message received: " + message);
                 Thread.sleep(0);

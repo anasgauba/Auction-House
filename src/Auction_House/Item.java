@@ -11,6 +11,7 @@ public class Item implements Serializable {
     private double minimumBidAmount;
     private double currentBidAmount;
     private long bidTimeRemaining;
+    private static final long serialVersionUID = 1L;
 
     public Item(int auctionHouseID, String itemID, String description, double minimumBidAmount, double currentBidAmount) {
         this.auctionHouseID = auctionHouseID;
@@ -18,7 +19,7 @@ public class Item implements Serializable {
         this.description = description;
         this.minimumBidAmount = minimumBidAmount;
         this.currentBidAmount = currentBidAmount;
-        bidTimeRemaining = 0;
+        this.bidTimeRemaining = 0;
     }
 
     public int getAuctionHouseID() {
@@ -68,6 +69,6 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return getAuctionHouseID() + " " + getItemID() + " " + getDescription() + " " + getMinimumBidAmount() + " " + getCurrentBidAmount();
+        return getAuctionHouseID() + " " + getItemID() + " " + getDescription() + " " + getMinimumBidAmount() + " " + getCurrentBidAmount() + " " + getBidTimeRemaining();
     }
 }

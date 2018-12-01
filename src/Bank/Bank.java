@@ -73,7 +73,7 @@ public class Bank {
 
     //returns whether there is sufficient funds in the account to buy the object that is being bid on
     //look up the account of the agent, check if price of object execeeds account, returns true or false
-    public boolean abilityToBuy(int secretKey, int priceOfObject){
+    public boolean abilityToBuy(int secretKey, double priceOfObject){
         Account account = list.get(secretKey);
         if (account.balance >= priceOfObject) {
             return true;

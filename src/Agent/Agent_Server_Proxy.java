@@ -70,12 +70,17 @@ public class Agent_Server_Proxy extends Thread {
                             System.out.println("test in agent serv! " + message[1] + command);
                             serverOutput.writeObject(message);
                         break;
+
+                        case RefreshTimes:
+                            agent.refreshItems();
+                            System.out.println("refreshing");
+                            break;
                     }
 
-                    Thread.sleep(0);
+                    serverOutput.reset();
                 }
 
-            } catch (InterruptedException | IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

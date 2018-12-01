@@ -44,9 +44,12 @@ public class Agent_Client_Proxy extends Thread {
                     case BlockFunds:
                         System.out.println("test! in agent client! " + message[1]);
                         break;
-                    case WinMessage:
 
+                    case WinMessage:
                         break;
+
+                    case RefreshTimes:
+                        clientOutput.writeObject(new Object[] {Command.RefreshTimes});
                 }
                 //System.out.println("message received: " + message);
                 Thread.sleep(0);
