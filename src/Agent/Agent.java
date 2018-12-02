@@ -141,7 +141,7 @@ public class Agent extends Thread{
         switch (theDetermination) {
 
             case WinMessage:
-                agentDisplay.newLine+="You won the item: " + item.getDescription() + " for " + item.getCurrentBidAmount() + "\n";
+                agentDisplay.newLine+="You won the item: " + item.getDescription() + " for amount: " + item.getCurrentBidAmount() + "\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command.TransferBlockedFunds, secretBiddingKey, item.getAuctionHouseSecretKey(), item.getCurrentBidAmount()});
                 break;
@@ -159,7 +159,7 @@ public class Agent extends Thread{
                 break;
 
             case AcceptResponse:
-                agentDisplay.newLine+="You are now the current bidder on this item\n";
+                agentDisplay.newLine+="You are now the current bidder on item: " + item.getDescription() + " for amount: " + item.getCurrentBidAmount() + "\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command
                         .GetBalance, secretBiddingKey});

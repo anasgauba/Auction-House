@@ -95,7 +95,7 @@ public class Auction_House extends Thread {
         }
     }
 
-    public synchronized Command sendBid(int agentSecretKey, String itemID, double bidAmount) throws IOException {
+    public synchronized Object[] sendBid(int agentSecretKey, String itemID, double bidAmount) throws IOException {
 
         System.out.println("item looking for " + itemID);
 
@@ -158,7 +158,7 @@ public class Auction_House extends Thread {
                         System.out.println("I see the debug, time 0, item no started");
 
 
-                        return Command.AcceptResponse;
+                        return new Object[] {Command.AcceptResponse, item};
                     }
 
 
@@ -195,7 +195,7 @@ public class Auction_House extends Thread {
                         item.setBidAmount(bidAmount);
 
 
-                        return Command.AcceptResponse;
+                        return new Object[] {Command.AcceptResponse, item};
                     }
 
 
@@ -210,11 +210,11 @@ public class Auction_House extends Thread {
                 //case reject bid
                 if (!hasFunds) {
 
-                    return Command.RejectResponse;
+                    return new Object[] {Command.RejectResponse};
                 }
             }
         }
-        return Command.RejectResponse;
+        return new Object[] {Command.RejectResponse};
     }
 
     private void createItems(int amountOfItems) {

@@ -75,17 +75,16 @@ public class Auction_House_Client_Proxy extends Thread {
                         break;
 
                     case SendBid:
-                        agent.printDetermination((Command)message[1], null);
+                        agent.printDetermination((Command)message[1], (Item) message[2]);
                         break;
 
 
                 }
 
             }
-            Thread.sleep(0);
 
 
-    } catch (InterruptedException | IOException | ClassNotFoundException e) {
+    } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
