@@ -7,6 +7,8 @@ import Misc.Command;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import javax.sound.sampled.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
@@ -144,6 +146,7 @@ public class Agent extends Thread{
                 agentDisplay.newLine+="You won the item: " + item.getDescription() + " for amount: " + item.getCurrentBidAmount() + "\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command.TransferBlockedFunds, secretBiddingKey, item.getAuctionHouseSecretKey(), item.getCurrentBidAmount()});
+                sound("BidWon");
                 break;
 
             case BidOvertaken:
@@ -151,11 +154,13 @@ public class Agent extends Thread{
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command
                         .GetBalance, secretBiddingKey});
+                sound("BidPassed");
                 break;
 
             case RejectResponse:
                 agentDisplay.newLine+="You do not have sufficient funds or you're the current bidder\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
+                sound("BidReject");
                 break;
 
             case AcceptResponse:
@@ -248,7 +253,47 @@ public class Agent extends Thread{
         bankClient.clientOutput.writeObject(new Object[] {Command.GetListHouses});
     }
 
-    public void debug() throws IOException {
-    }
+    private void sound(String type) {
+        File soundFile = null;
 
+        if (type.equals("BidWon")) {
+            try {
+                soundFile = new File("resources/Sounds/BidWon.wav");
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        else if (type.equals("BidPassed")) {
+            try {
+                soundFile = new File("resources/Sounds/BidPassed.wav");
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        else if (type.equals("BidReject")) {
+            try {
+                soundFile = new File("resources/Sounds/BidReject.wav");
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
 }
