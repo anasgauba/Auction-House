@@ -22,13 +22,13 @@ public class Bank {
     Bank_Server_Proxy bank_server_proxy;
     ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
 
-    public Bank() {
+    public Bank(int portNumber) {
         this.list = new HashMap<>();
         this.auctionHouseIDList = new LinkedList<>();
         this.auctionHousePorts = new ConcurrentHashMap();
         this.bankID = 1;
         clients = new ConcurrentHashMap<>();
-        Bank_Server_Proxy bank_server_proxy = new Bank_Server_Proxy(this);
+        Bank_Server_Proxy bank_server_proxy = new Bank_Server_Proxy(this, portNumber);
     }
 
     //Opens Bank.Bank Bank.Account for Agent.Agent or AuctionHouse
@@ -148,7 +148,7 @@ public class Bank {
 
     //for testing purposes.
     public static void main(String[] args) throws Exception {
-        Bank b1 = new Bank();
+        Bank b1 = new Bank(7277);
 //        Bank.Bank b2 = new Bank.Bank();
         Object[] key, key2, key6;
         for (int i=0; i < 1000; i++) {

@@ -22,6 +22,7 @@ public class Auction_House extends Thread {
 
     public int auctionHouseID;
     public int portNumber;
+    public int bankPortNumber;
     int secretKey;
     boolean run;
     boolean hasFunds;
@@ -30,8 +31,9 @@ public class Auction_House extends Thread {
     ConcurrentHashMap<Integer, Agent_Client_Proxy> clients;
     Bank_Client_Proxy bankClient;
 
-    public Auction_House(int portNumber, LinkedList nouns, LinkedList adjectives) throws IOException {
+    public Auction_House(int portNumber, int bankPortNumber, LinkedList nouns, LinkedList adjectives) throws IOException {
         this.portNumber = portNumber;
+        this.bankPortNumber = bankPortNumber;
         this.auctionHouseID = new Random().nextInt(1000000000);
         this.itemList = new LinkedList<>();
         this.nouns = nouns;
@@ -39,7 +41,7 @@ public class Auction_House extends Thread {
         createItems(10);
         this.auction_house_server_proxy = new Auction_House_Server_Proxy(this, portNumber);
         this.clients = new ConcurrentHashMap();
-        this.bankClient = new Bank_Client_Proxy(this, auctionHouseID,"AuctionHouse " + portNumber,7277); //bank
+        this.bankClient = new Bank_Client_Proxy(this, auctionHouseID,"AuctionHouse " + portNumber, bankPortNumber); //bank
         this.run = true;
         this.hasFunds = false;
         start();
@@ -263,6 +265,21 @@ public class Auction_House extends Thread {
     public void setHasFunds(boolean hasFunds) {
 
         this.hasFunds = hasFunds;
+    }
+
+    public void getPortNumber() {
+
+        synchronized (this) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setPortNumber(int portNumber) {
+        this.portNumber = portNumber;
     }
 
     public void startAuctionHouseClient(String data) {

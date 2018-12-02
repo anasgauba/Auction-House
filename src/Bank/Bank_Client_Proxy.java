@@ -45,6 +45,7 @@ public class Bank_Client_Proxy extends Thread {
     public void run() {
 
         try {
+            System.out.println("portnn " + portNumber);
             clientSocket = new Socket(getServerIP(), portNumber);
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
             clientOutput.writeObject(clientType + " " + clientSocket.getPort());

@@ -50,15 +50,25 @@ public class Auction_House_Client_Proxy extends Thread {
             System.out.println("in ah client why " + clientOutput + clientType);
 
 
-            if (agent != null) {
-                while (clientOutput == null);
-                synchronized (agent) {
-                    agent.notifyAll();
-                }
-            }
+
+
+//            if (agent != null) {
+//                while (clientOutput == null);
+//                synchronized (agent) {
+//                    agent.notifyAll();
+//                }
+//            }
+
 
 
             clientOutput.writeObject(clientType + " " + clientSocket.getPort() + " " + key);
+
+            synchronized (agent) {
+                agent.notifyAll();
+            }
+
+            System.out.println("wtf");
+            System.out.println((clientType + " " + clientSocket.getPort() + " " + key).getClass());
             while (run && clientSocket.isConnected()) {
 
                 if (clientInput == null) {

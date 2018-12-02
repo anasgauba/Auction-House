@@ -466,8 +466,14 @@ public class Agent_Display extends JPanel {
                     }
                 }
             }
+            System.out.println("after wait debug");
 
-            agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
+
+            System.out.println("i dunno");
+            agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(new Object[] {Command.GetListItems});
+            System.out.println("list of items should've been created"); //breaks here.
+            System.out.println("list of items should've been created");
+
         } catch (IOException e1) {
             e1.printStackTrace();
         }

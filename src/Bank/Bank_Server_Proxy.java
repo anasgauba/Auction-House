@@ -16,12 +16,14 @@ public class Bank_Server_Proxy {
     private Bank bank;
 
     boolean auctionHouseClient;
+    int portNumber;
     boolean run;
 
-    public Bank_Server_Proxy(Bank bank) {
+    public Bank_Server_Proxy(Bank bank, int portNumber) {
         this.auctionHouseClient = true;
-        this.run = true;
+        this.portNumber = portNumber;
         this.bank = bank;
+        this.run = true;
         startBankServer();
     }
 
@@ -30,7 +32,7 @@ public class Bank_Server_Proxy {
         System.out.println("starting bank thread");
         new Thread(() -> {
             try {
-                serverSocket = new ServerSocket(7277);
+                serverSocket = new ServerSocket(portNumber);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -57,7 +59,7 @@ public class Bank_Server_Proxy {
 
                 String temp = (String) serverInput.readObject();
                 if (temp.contains("AuctionHouse")) {
-                    bank.startBankClient(temp);
+                    //bank.startBankClient(temp);
                 }
 
 

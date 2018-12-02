@@ -23,23 +23,25 @@ public class Agent extends Thread{
     private int accountID;
     private double accountBalance;
 
-    private Agent_Display agentDisplay;
+    public Agent_Display agentDisplay;
     //Stage agentStage = new Stage();
 
     Agent_Server_Proxy agent_server_proxy;
     Bank_Client_Proxy bankClient;
     int portNumber;
+    int bankPortNumber;
     Boolean houseListDone = false;
     ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
 
 
-    public Agent (int portNumber, LinkedList nameList){
+    public Agent (int portNumber, int bankPortNumber, LinkedList nameList){
         this.names = nameList;
         createName();
         this.portNumber = portNumber;
+        this.bankPortNumber = bankPortNumber;
         this.clients = new ConcurrentHashMap();
         this.agent_server_proxy = new Agent_Server_Proxy(this, portNumber);
-        this.bankClient = new Bank_Client_Proxy(this, 1, "Agent " + this.portNumber, 7277);
+        this.bankClient = new Bank_Client_Proxy(this, 1, "Agent " + this.portNumber, this.bankPortNumber);
         start();
         agentDisplay = new Agent_Display(this);
         agentDisplay.drawGUI(new Stage());
@@ -200,6 +202,7 @@ public class Agent extends Thread{
     }
 
     public void refreshItems() throws IOException {
+        System.out.println("requestion list of items");
         agentDisplay.listofTableItems.clear();
         clients.get(currentAuctionHouse).clientOutput.writeObject(new Object[] {Command.GetListItems});
     }
@@ -219,6 +222,7 @@ public class Agent extends Thread{
 
     public void createHouseList(LinkedList<Integer> auctionHouseList, ConcurrentHashMap<Integer, Integer> auctionHousePorts) {
         System.out.println("in auction house list creator " + auctionHouseList);
+
         for (int i = 0; i < auctionHouseList.size(); i++) {
             String tempID =  Integer.toString(auctionHouseList.get(i));
             agentDisplay.options.add(tempID);
@@ -226,6 +230,8 @@ public class Agent extends Thread{
             if (clients.get(auctionHouseList.get(i)) == null) {
                 System.out.println("starting new client! " + auctionHouseList.get(i) + auctionHousePorts.get(auctionHouseList.get(i)));
                 System.out.println("starting new client! " + auctionHouseList.get(i) + auctionHousePorts);
+
+
                 Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this, secretBiddingKey, "Agent " + portNumber, auctionHousePorts.get(auctionHouseList.get(i))); //key would be auction house id, to do
 
                 clients.put(auctionHouseList.get(i), clientProxy);
@@ -250,6 +256,7 @@ public class Agent extends Thread{
     }
 
     public void getHouseList() throws IOException {
+        System.out.println("getting house list");
         bankClient.clientOutput.writeObject(new Object[] {Command.GetListHouses});
     }
 
