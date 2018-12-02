@@ -81,7 +81,10 @@ public class Bank {
     }
     //locks balance to prevent proper funding
     public void lockBalance(int key, double amount){
+
         Account account = list.get(key);
+        System.out.println("Locking amount: " + amount + " bbefore " + account.balance);
+
         account.balance -= amount;
         account.lockBalance += amount;
 
@@ -100,7 +103,7 @@ public class Bank {
     }
 
     //reduces the account that is looked up by the amount of money passed in
-    public synchronized void withdraw(int secretKey,double moneyToReduce) throws
+    public synchronized void withdraw(int secretKey, double moneyToReduce) throws
             Exception {
         if (list.containsKey(secretKey)) {
             Account account = list.get(secretKey);
@@ -118,6 +121,7 @@ public class Bank {
 
     public synchronized void deposit(int agentSecretKey, int auctionHouseSecretKey, double moneyToGive) throws Exception {
 
+        System.out.println("money to give " + moneyToGive);
         Account agentAcount = list.get(agentSecretKey);
         Account auctionHouseAccount = list.get(auctionHouseSecretKey);
 

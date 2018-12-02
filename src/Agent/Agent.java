@@ -150,7 +150,7 @@ public class Agent extends Thread{
                 break;
 
             case BidOvertaken:
-                agentDisplay.newLine+="Your bid has been passed on item: " + item.getDescription() + "\nIn Auction House: " + item.getAuctionHouseID() + "\n";
+                agentDisplay.newLine+="Your bid has been passed on item: " + item.getDescription() + " In Auction House: " + item.getAuctionHouseID() + "\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command
                         .GetBalance, secretBiddingKey});
