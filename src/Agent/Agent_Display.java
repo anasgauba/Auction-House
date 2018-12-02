@@ -51,10 +51,28 @@ public class Agent_Display extends JPanel {
         BorderPane agentInfo = new BorderPane();
         agentInfo.setPadding(new Insets(27, 20, 20, 20));
 
+        HBox alignHorizontal = new HBox();
+        VBox labelInfo = new VBox();
+        VBox textInfo = new VBox();
+
         Label agentName = new Label("Agent Name:");
-        agentName.setFont(new Font("Calibri", 20));
+        agentName.setFont(new Font("Calibri", 17));
         agentName.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
-        agentName.setPadding(new Insets(0, 10, 0, 0));
+        agentName.setPadding(new Insets(1, 10, 0, 0));
+
+        Label agentAccount = new Label("Agent Account:");
+        agentAccount.setFont(new Font("Calibri", 17));
+        agentAccount.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
+        agentAccount.setPadding(new Insets(4, 10, 0, 0));
+
+        Label agentBalance = new Label("Agent Balance:");
+        agentBalance.setFont(new Font("Calibri", 17));
+        agentBalance.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
+        agentBalance.setPadding(new Insets(2, 10, 0, 0));
+
+        labelInfo.getChildren().addAll(agentName, agentAccount, agentBalance);
+        labelInfo.setSpacing(5);
+
 
         TextField agentNameTextField = new TextField(""+agentNameInfo);
         agentNameTextField.setAlignment(Pos.CENTER_RIGHT);
@@ -62,13 +80,9 @@ public class Agent_Display extends JPanel {
         agentNameTextField.setEditable(false);
         //agentNameTextField.setDisable(true);
         agentNameTextField.setFocusTraversable(false);
-        HBox agentNameHBox = new HBox();
-        agentNameHBox.getChildren().addAll(agentName, agentNameTextField);
+//        HBox agentNameHBox = new HBox();
+//        agentNameHBox.getChildren().addAll(agentName, agentNameTextField);
 
-        Label agentAccount = new Label("Agent Account:");
-        agentAccount.setFont(new Font("Calibri", 20));
-        agentAccount.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
-        agentAccount.setPadding(new Insets(0, 10, 0, 0));
 
         agentAccountTextField = new TextField();
         agentAccountTextField.setAlignment(Pos.CENTER_RIGHT);
@@ -76,14 +90,10 @@ public class Agent_Display extends JPanel {
         agentAccountTextField.setEditable(false);
         //agentAccoutnTextField.setDisable(true);
         agentAccountTextField.setFocusTraversable(false);
-        HBox agentAccountHBox = new HBox();
-        agentAccountHBox.getChildren().addAll(agentAccount, agentAccountTextField);
+//        HBox agentAccountHBox = new HBox();
+//        agentAccountHBox.getChildren().addAll(agentAccount, agentAccountTextField);
 
 
-        Label agentBalance = new Label("Agent Balance:");
-        agentBalance.setFont(new Font("Calibri", 20));
-        agentBalance.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
-        agentBalance.setPadding(new Insets(0, 10, 0, 0));
 
         agentBalanceTextField = new TextField();
         agentBalanceTextField.setAlignment(Pos.CENTER_RIGHT);
@@ -91,15 +101,20 @@ public class Agent_Display extends JPanel {
         agentBalanceTextField.setEditable(false);
         //agentBalanceTextField.setDisable(true);
         agentBalanceTextField.setFocusTraversable(false);
-        HBox agentBalanceHBox = new HBox();
-        agentBalanceHBox.getChildren().addAll(agentBalance, agentBalanceTextField);
+//        HBox agentBalanceHBox = new HBox();
+//        agentBalanceHBox.getChildren().addAll(agentBalance, agentBalanceTextField);
+
+        textInfo.getChildren().addAll(agentNameTextField,
+                agentAccountTextField, agentBalanceTextField);
+        textInfo.setSpacing(4);
+
+        alignHorizontal.getChildren().addAll(labelInfo, textInfo);
 
 
-        VBox agentLabels = new VBox(agentNameHBox, agentAccountHBox, agentBalanceHBox);
+        VBox agentLabels = new VBox(alignHorizontal);
         agentLabels.setMaxWidth(250);
         agentLabels.setMinWidth(250);
         agentLabels.setPrefWidth(250);
-        agentLabels.setSpacing(5);
         agentLabels.setSpacing(5);
 
 
@@ -108,63 +123,70 @@ public class Agent_Display extends JPanel {
         itemInfo.setPadding(new Insets(20, 20, 5, 20));
 
         Label itemIDLabel = new Label("Item ID:");
-        itemIDLabel.setFont(new Font("Calibri", 20));
+        itemIDLabel.setFont(new Font("Calibri", 17));
         itemIDLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         itemIDLabel.setPadding(new Insets(0, 10, 0, 0));
 
         TextField itemIDTextField = new TextField();
         itemIDTextField.setAlignment(Pos.CENTER_RIGHT);
-        itemIDTextField.setPrefWidth(174);
+        itemIDTextField.setPrefWidth(134);
         itemIDTextField.setEditable(false);
         //itemIDTextField.setDisable(true);
         itemIDTextField.setFocusTraversable(false);
         HBox itemIDTextFieldHBox = new HBox();
         itemIDTextFieldHBox.getChildren().addAll(itemIDLabel, itemIDTextField);
+        HBox.setMargin(itemIDTextField, new Insets(0,0,0,50));
 
 
         Label itemDescriptionLabel = new Label("Item Name:");
-        itemDescriptionLabel.setFont(new Font("Calibri", 20));
+        itemDescriptionLabel.setFont(new Font("Calibri", 17));
         itemDescriptionLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         itemDescriptionLabel.setPadding(new Insets(0, 10, 0, 0));
 
         TextField itemDescriptionTextField = new TextField();
         itemDescriptionTextField.setAlignment(Pos.CENTER_RIGHT);
-        itemDescriptionTextField.setPrefWidth(142);
+        itemDescriptionTextField.setPrefWidth(134);
         itemDescriptionTextField.setEditable(false);
         //itemDescriptionTextField.setDisable(true);
         itemDescriptionTextField.setFocusTraversable(false);
         HBox itemIDDescriptionHBox = new HBox();
         itemIDDescriptionHBox.getChildren().addAll(itemDescriptionLabel, itemDescriptionTextField);
+        HBox.setMargin(itemDescriptionTextField, new Insets(0,0,0,23));
+
 
 
         Label itemStartingBidLabel = new Label("Starting Bid:");
-        itemStartingBidLabel.setFont(new Font("Calibri", 20));
+        itemStartingBidLabel.setFont(new Font("Calibri", 17));
         itemStartingBidLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         itemStartingBidLabel.setPadding(new Insets(0, 8, 0, 0));
 
         TextField itemStartingBidTextField = new TextField();
         itemStartingBidTextField.setAlignment(Pos.CENTER_RIGHT);
-        itemStartingBidTextField.setPrefWidth(140);
+        itemStartingBidTextField.setPrefWidth(134);
         itemStartingBidTextField.setEditable(false);
         //itemStartingBidTextField.setDisable(true);
         itemStartingBidTextField.setFocusTraversable(false);
         HBox itemStartingBidHBox = new HBox();
         itemStartingBidHBox.getChildren().addAll(itemStartingBidLabel, itemStartingBidTextField);
+        HBox.setMargin(itemStartingBidTextField, new Insets(0,0,0,22));
+
 
 
         Label itemCurrentBidLabel = new Label("Current Bid:");
-        itemCurrentBidLabel.setFont(new Font("Calibri", 20));
+        itemCurrentBidLabel.setFont(new Font("Calibri", 17));
         itemCurrentBidLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         itemCurrentBidLabel.setPadding(new Insets(0, 10, 0, 0));
 
         TextField itemCurrentBidTextField = new TextField();
         itemCurrentBidTextField.setAlignment(Pos.CENTER_RIGHT);
-        itemCurrentBidTextField.setPrefWidth(140);
+        itemCurrentBidTextField.setPrefWidth(134);
         itemCurrentBidTextField.setEditable(false);
         //itemCurrentBidTextField.setDisable(true);
         itemCurrentBidTextField.setFocusTraversable(false);
         HBox itemCurrentBidHBox = new HBox();
         itemCurrentBidHBox.getChildren().addAll(itemCurrentBidLabel, itemCurrentBidTextField);
+        HBox.setMargin(itemCurrentBidTextField, new Insets(0,0,0,21));
+
 
 
         VBox itemLabels = new VBox(itemIDDescriptionHBox, itemIDTextFieldHBox, itemStartingBidHBox, itemCurrentBidHBox);
@@ -190,13 +212,16 @@ public class Agent_Display extends JPanel {
         });
 
         Button placeBid = new Button("Place Bid");
-        placeBid.setPrefWidth(75);
+        placeBid.setPrefWidth(134);
+        placeBid.setStyle("-fx-background-color: beige; -fx-font-weight: " +
+                "bold; -fx-font: 14 arial");
 
 
         HBox bidStackHBox = new HBox();
         bidStackHBox.getChildren().addAll(bidAmount, placeBid);
         bidStackHBox.setPadding(new Insets(0, 0, 20, 20));
         bidStackHBox.setSpacing(10);
+        HBox.setMargin(placeBid, new Insets(0,0,0,7));
 
 
         VBox auctionHouseBox = new VBox();
@@ -239,7 +264,7 @@ public class Agent_Display extends JPanel {
             try {
                 agent.sendBid(itemIDTextField.getText(), Double.parseDouble(bidAmount.getText()));
                 //newLine=("Auction House " + comboBox.getSelectionModel().getSelectedItem().toString()
-                        //+ " Item: " + itemDescriptionTextField.getText()+" ");
+                //+ " Item: " + itemDescriptionTextField.getText()+" ");
                 System.out.println("Placebid clicked message is "+newNotificationMessage);
 //                setNewNotificationMessage();
 
