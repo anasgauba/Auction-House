@@ -116,17 +116,20 @@ public class Bank {
     }
     //adds the account that is looked up by the amount of money passed in
 
-    public synchronized void deposit(int secretKey,double moneyToGive) throws
-            Exception {
-        if (list.containsKey(secretKey)) {
-            Account account = list.get(secretKey);
-            account.balance += moneyToGive;
-            System.out.println("DEPOSITED for Bank.Account " + account.getAccountId()
-                    +" " +moneyToGive);
-        }
-        else {
-            throw new Exception("No such account");
-        }
+    public synchronized void deposit(int agentSecretKey, int auctionHouseSecretKey, double moneyToGive) throws Exception {
+
+        Account agentAcount = list.get(agentSecretKey);
+        Account auctionHouseAccount = list.get(auctionHouseSecretKey);
+
+
+        agentAcount.lockBalance -= moneyToGive;
+        auctionHouseAccount.balance += moneyToGive;
+
+        System.out.println("WIN AH balance: " + auctionHouseAccount.balance);
+        System.out.println("WIN agent balance: " + agentAcount.balance);
+        System.out.println("WIN agent lock balance: " + agentAcount.lockBalance);
+
+
     }
 
     //closes account that was given to the client

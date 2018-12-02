@@ -137,16 +137,17 @@ public class Agent extends Thread{
         currentAuctionHouse = auctionHouseID;
     }
 
-    public void printDetermination(Command theDetermination) throws IOException {
+    public void printDetermination(Command theDetermination, Item item) throws IOException {
         switch (theDetermination) {
 
             case WinMessage:
-                agentDisplay.newLine+="You won the bid!\n";
+                agentDisplay.newLine+="You won the item: " + item.getDescription() + " for " + item.getCurrentBidAmount() + "\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
+                bankClient.clientOutput.writeObject(new Object[] {Command.TransferBlockedFunds, secretBiddingKey, item.getAuctionHouseSecretKey(), item.getCurrentBidAmount()});
                 break;
 
             case BidOvertaken:
-                agentDisplay.newLine+="Your bid has been overtaken\n";
+                agentDisplay.newLine+="Your bid has been passed on item: " + item.getDescription() + "\nIn Auction House: " + item.getAuctionHouseID() + "\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command
                         .GetBalance, secretBiddingKey});

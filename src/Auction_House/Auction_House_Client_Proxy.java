@@ -75,7 +75,7 @@ public class Auction_House_Client_Proxy extends Thread {
                         break;
 
                     case SendBid:
-                        agent.printDetermination((Command)message[1]);
+                        agent.printDetermination((Command)message[1], null);
                         break;
 
 

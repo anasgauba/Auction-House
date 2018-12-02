@@ -59,35 +59,14 @@ public class Auction_House extends Thread {
     //sets bidding key returned by the bank to the current agent
     public void setKey(int secretKey){
         this.secretKey = secretKey;
-    }
-
-    //upon creation, registers with bank by opening account with zero balance
-    public void createAccount() {
-//        Enum_Commands.Misc.Command createAccount = Enum_Commands.Misc.Command.CreateBankAccount;
-
+        for (int i = 0; i < itemList.size(); i++) {
+            itemList.get(i).setAuctionHouseSecretKey(secretKey);
+        }
     }
 
     //closes account at termination
     public void closeAccount() {
 //        Enum_Commands.Misc.Command closeAccount = Enum_Commands.Misc.Command.CloseBankAccount;
-
-
-    }
-
-    //recives bid and acknowledges with a reject or accept response
-    public void validateBid() {
-//        Enum_Commands.Misc.Command acceptResponse = Enum_Commands.Misc.Command.AcceptResponse;
-//        Enum_Commands.Misc.Command rejectResponse = Enum_Commands.Misc.Command.RejectResponse;
-    }
-
-    //When bid is accepted, bank is requested to block the funds
-    public void acceptedBid() {
-//        Enum_Commands.Misc.Command blockFunds = Enum_Commands.Misc.Command.BlockFunds;
-    }
-
-    //when a bid is overtaken, pass notification is sent to the agent and the funds are unblocked from the bank
-    public void bidOvertaken() {
-//        Enum_Commands.Misc.Command bidOvertaken = Enum_Commands.Misc.Command.BidOvertaken;
     }
 
     public void bidSuccessfulCheck() {
@@ -96,13 +75,14 @@ public class Auction_House extends Thread {
             if (secondsRemaining == 0 && itemList.get(i).getAuctionActive()) {
                 System.out.println("Times up!");
                 try {
-                    itemList.get(i).setAuctionActive(false);
-                    clients.get(itemList.get(i).getSecretBidderKey()).clientOutput.writeObject(new Object[] {Command.WinMessage}); //send msg to agent that won
-                    removeItemFromAuction(itemList.get(i));
+                    Item tempItem = itemList.get(i);
+                    tempItem.setAuctionActive(false);
+                    clients.get(tempItem.getSecretBidderKey()).clientOutput.writeObject(new Object[] {Command.WinMessage, tempItem}); //send msg to agent that won
+                    removeItemFromAuction(tempItem);
                     Iterator it = clients.entrySet().iterator();
                     while (it.hasNext()) {
                         Map.Entry pair = (Map.Entry) it.next();
-                        clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.RefreshTimes});
+                        clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.RefreshTimes, tempItem});
                     }
 
                 } catch (IOException e) {
@@ -113,12 +93,6 @@ public class Auction_House extends Thread {
                 //System.out.println(secondsRemaining);
             }
         }
-    }
-
-    //when winning a bid, agent receives "winner" notification and auction house waits for
-    //the blocked funds to be transferred into its account
-    public void wonAuction() {
-//        Enum_Commands.Misc.Command wonAuction = Enum_Commands.Misc.Command.WinMessage;
     }
 
     public synchronized Command sendBid(int agentSecretKey, String itemID, double bidAmount) throws IOException {
@@ -215,7 +189,7 @@ public class Auction_House extends Thread {
                             //bankClient.clientOutput.writeObject(new Object[] {Command.CheckAgentFunds, agentSecretKey, 1.0});
                         }
 
-                        clients.get(item.getSecretBidderKey()).clientOutput.writeObject(new Object[] {Command.BidOvertaken});
+                        clients.get(item.getSecretBidderKey()).clientOutput.writeObject(new Object[] {Command.BidOvertaken, item});
 
                         item.setSecretBidderKey(agentSecretKey);
                         item.setBidAmount(bidAmount);

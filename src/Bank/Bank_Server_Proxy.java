@@ -115,6 +115,12 @@ public class Bank_Server_Proxy {
                             bank.unlockBalance((Integer) message[1], (Double) message[2]);
                             serverOutput.writeObject(new Object[] {Command.UnlockFunds});
                             break;
+
+                        case TransferBlockedFunds:
+
+
+                            bank.deposit((Integer) message[1], (Integer) message[2], (Double) message[3]);
+                            break;
                     }
 
                     serverOutput.reset();

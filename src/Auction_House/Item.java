@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Item implements Serializable {
 
     private int auctionHouseID;
+    private int auctionHouseSecretKey;
     private int secretBidderKey;
     private String itemID;
     private String description;
@@ -16,6 +17,7 @@ public class Item implements Serializable {
 
     public Item(int auctionHouseID, String itemID, String description, double minimumBidAmount, double currentBidAmount) {
         this.auctionHouseID = auctionHouseID;
+        this.auctionHouseSecretKey = 0;
         this.itemID = itemID;
         this.description = description;
         this.minimumBidAmount = minimumBidAmount;
@@ -82,6 +84,16 @@ public class Item implements Serializable {
     public boolean getAuctionActive() {
 
         return auctionActive;
+    }
+
+    public void setAuctionHouseSecretKey(int key) {
+
+        this.auctionHouseSecretKey = key;
+    }
+
+    public int getAuctionHouseSecretKey() {
+
+        return auctionHouseSecretKey;
     }
 
     @Override

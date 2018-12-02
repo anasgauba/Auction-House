@@ -1,5 +1,6 @@
 package Agent;
 
+import Auction_House.Item;
 import Misc.Command;
 
 import java.io.IOException;
@@ -73,11 +74,12 @@ public class Agent_Server_Proxy extends Thread {
                             break;
 
                         case BidOvertaken:
-                            agent.printDetermination((Command) message[0]);
+                            agent.printDetermination((Command) message[0], (Item) message[1]);
                             break;
 
                         case WinMessage:
-                            agent.printDetermination((Command) message[0]);
+                            agent.printDetermination((Command) message[0], (Item) message[1]);
+                            break;
                     }
 
                     serverOutput.reset();
