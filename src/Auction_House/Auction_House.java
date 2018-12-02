@@ -210,11 +210,11 @@ public class Auction_House extends Thread {
                 //case reject bid
                 if (!hasFunds) {
 
-                    return new Object[] {Command.RejectResponse};
+                    return new Object[] {Command.RejectResponse, null};
                 }
             }
         }
-        return new Object[] {Command.RejectResponse};
+        return new Object[] {Command.RejectResponse, null}; //it should never reach this
     }
 
     private void createItems(int amountOfItems) {
