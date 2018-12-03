@@ -70,7 +70,7 @@ public class Agent_Client_Proxy extends Thread {
         while (in.hasNextLine()) {
             Scanner scanner = new Scanner(in.nextLine());
 
-            if (scanner.hasNext() && scanner.next().equals("AuctionHouseServerIP")) {
+            if (scanner.hasNext() && scanner.next().equals("AgentIP")) {
                 return scanner.next();
             }
         }
