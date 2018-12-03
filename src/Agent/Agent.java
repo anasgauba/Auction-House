@@ -30,6 +30,7 @@ public class Agent extends Thread{
     Bank_Client_Proxy bankClient;
     int portNumber;
     int bankPortNumber;
+    long timeOffSet;
     Boolean houseListDone = false;
     ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
 
@@ -39,7 +40,9 @@ public class Agent extends Thread{
         createName();
         this.portNumber = portNumber;
         this.bankPortNumber = bankPortNumber;
+        this.timeOffSet = 0;
         this.clients = new ConcurrentHashMap();
+        System.out.println("" + portNumber);
         this.agent_server_proxy = new Agent_Server_Proxy(this, portNumber);
         this.bankClient = new Bank_Client_Proxy(this, 1, "Agent " + this.portNumber, this.bankPortNumber);
         start();
@@ -209,7 +212,7 @@ public class Agent extends Thread{
 
     public synchronized void refreshTimes() {
         for (int i = 0; i < timeList.size(); i++) {
-            long secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(itemList.get(i).getBidTimeRemaining() - System.currentTimeMillis());
+            long secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(itemList.get(i).getBidTimeRemaining() - (System.currentTimeMillis() - getTimeOffSet()));
             //System.out.println("time in agnet: " + Long.valueOf(timeList.get(i).getItemTime()));
             //System.out.println("? " + secondsRemaining);
             if (Long.valueOf(timeList.get(i).getItemTime()) > 0) {
@@ -258,6 +261,17 @@ public class Agent extends Thread{
     public void getHouseList() throws IOException {
         System.out.println("getting house list");
         bankClient.clientOutput.writeObject(new Object[] {Command.GetListHouses});
+    }
+
+    public void setTimeOffSet(Long timeOffSet) {
+
+        System.out.println("time off set it " + (System.currentTimeMillis()) + timeOffSet);
+        this.timeOffSet = System.currentTimeMillis() - timeOffSet;
+    }
+
+    private Long getTimeOffSet() {
+
+        return timeOffSet;
     }
 
     private void sound(String type) {

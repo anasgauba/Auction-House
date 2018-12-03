@@ -84,6 +84,10 @@ public class Auction_House_Server_Proxy extends Thread{
                             Object[] tempArray2 = {Command.SendBid, bidDetermination[0], bidDetermination[1]};
                             serverOutput.writeObject(tempArray2);
                             break;
+
+                        case TimeOffSet:
+                            serverOutput.writeObject(new Object[] {Command.TimeOffSet, System.currentTimeMillis()});
+                            break;
                     }
 
                     serverOutput.reset();

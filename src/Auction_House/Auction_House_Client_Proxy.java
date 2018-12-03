@@ -62,13 +62,12 @@ public class Auction_House_Client_Proxy extends Thread {
 
 
             clientOutput.writeObject(clientType + " " + clientSocket.getPort() + " " + key);
+            clientOutput.writeObject(new Object[] {Command.TimeOffSet});
 
             synchronized (agent) {
                 agent.notifyAll();
             }
 
-            System.out.println("wtf");
-            System.out.println((clientType + " " + clientSocket.getPort() + " " + key).getClass());
             while (run && clientSocket.isConnected()) {
 
                 if (clientInput == null) {
@@ -86,6 +85,10 @@ public class Auction_House_Client_Proxy extends Thread {
 
                     case SendBid:
                         agent.printDetermination((Command)message[1], (Item) message[2]);
+                        break;
+
+                    case TimeOffSet:
+                        agent.setTimeOffSet((Long) message[1]);
                         break;
 
 
