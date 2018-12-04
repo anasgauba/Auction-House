@@ -10,7 +10,9 @@ import javafx.stage.Stage;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -273,6 +275,18 @@ public class Agent extends Thread{
     private Long getTimeOffSet() {
 
         return timeOffSet;
+    }
+
+    public void closeAccount() throws IOException {
+
+        bankClient.clientOutput.writeObject(new Object[] {Command.CloseBankAccount, secretBiddingKey});
+        Iterator it = clients.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.CloseAgentAccount, secretBiddingKey});
+            //bankClient.clientOutput.writeObject(new Object[] {Command.CheckAgentFunds, agentSecretKey, 1.0});
+        }
+
     }
 
     private void sound(String type) {

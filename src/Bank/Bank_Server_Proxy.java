@@ -109,7 +109,6 @@ public class Bank_Server_Proxy {
                             serverOutput.writeObject(new Object[] {Command.CheckAgentFunds, tempResponse});
                             break;
 
-
                         case GetBalance:
                             double currBal = bank.getBalance((Integer)
                                     message[1]);
@@ -136,18 +135,22 @@ public class Bank_Server_Proxy {
                         case CloseBankAccount:
                             bank.closeAccount((Integer) message[1]);
                             break;
-                    }
 
-                    serverOutput.reset();
+                    }
+                    if (!clientSocket.isClosed()) {
+                        serverOutput.reset();
+                    }
                 }
+
 
                 clientSocket.close();
 
 
-            } catch (InterruptedException | IOException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+            } catch (IOException e) {
             } catch (Exception e) {
                 e.printStackTrace();
             }

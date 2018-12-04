@@ -94,11 +94,13 @@ public class Bank {
     //unlocks balance to release proper funding
     public void unlockBalance(int key, double amount){
         Account account = list.get(key);
-        account.lockBalance -= amount;
-        account.balance += amount;
+        if (account != null) {
+            account.lockBalance -= amount;
+            account.balance += amount;
+            System.out.println("agents balance afer unlock: " + account.balance + " lock amount " + amount);
+            System.out.println("agents lock balance after unlock: " + account.lockBalance + " lock amount " + amount);
+        }
 
-        System.out.println("agents balance afer unlock: " + account.balance + " lock amount " + amount);
-        System.out.println("agents lock balance after unlock: " + account.lockBalance + " lock amount " + amount);
 
     }
 
@@ -125,13 +127,18 @@ public class Bank {
         Account agentAcount = list.get(agentSecretKey);
         Account auctionHouseAccount = list.get(auctionHouseSecretKey);
 
+        if (agentAcount != null && auctionHouseAccount != null) {
+            agentAcount.lockBalance -= moneyToGive;
+            auctionHouseAccount.balance += moneyToGive;
+            System.out.println("WIN AH balance: " + auctionHouseAccount.balance);
+            System.out.println("WIN agent balance: " + agentAcount.balance);
+            System.out.println("WIN agent lock balance: " + agentAcount.lockBalance);
+        }
 
-        agentAcount.lockBalance -= moneyToGive;
-        auctionHouseAccount.balance += moneyToGive;
+        else if (agentAcount == null && auctionHouseAccount != null) {
+            auctionHouseAccount.balance += moneyToGive;
+        }
 
-        System.out.println("WIN AH balance: " + auctionHouseAccount.balance);
-        System.out.println("WIN agent balance: " + agentAcount.balance);
-        System.out.println("WIN agent lock balance: " + agentAcount.lockBalance);
 
 
     }

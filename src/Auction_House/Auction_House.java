@@ -43,7 +43,7 @@ public class Auction_House extends Thread {
         this.itemList = new LinkedList<>();
         this.nouns = nouns;
         this.adjectives = adjectives;
-        createItems(2);
+        createItems(new Random().nextInt(25 - 5) + 5);
         this.auction_house_server_proxy = new Auction_House_Server_Proxy(this, portNumber);
         this.clients = new ConcurrentHashMap();
         this.bankClient = new Bank_Client_Proxy(this, auctionHouseID,"AuctionHouse " + portNumber, bankPortNumber); //bank
@@ -78,11 +78,6 @@ public class Auction_House extends Thread {
         }
     }
 
-    //closes account at termination
-    public void closeAccount() {
-//        Enum_Commands.Misc.Command closeAccount = Enum_Commands.Misc.Command.CloseBankAccount;
-    }
-
     public void bidSuccessfulCheck() {
         for (int i = 0; i < itemList.size(); i++) {
             long secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(itemList.get(i).getBidTimeRemaining() - System.currentTimeMillis());
@@ -91,8 +86,12 @@ public class Auction_House extends Thread {
                 try {
                     Item tempItem = itemList.get(i);
                     tempItem.setAuctionActive(false);
-                    clients.get(tempItem.getSecretBidderKey()).clientOutput.writeObject(new Object[] {Command.WinMessage, tempItem}); //send msg to agent that won
+                    if (clients.get(tempItem.getSecretBidderKey()) != null) {
+                        clients.get(tempItem.getSecretBidderKey()).clientOutput.writeObject(new Object[]{Command.WinMessage, tempItem}); //send msg to agent that won
+                    }
+                    System.out.println("after times up");
                     removeItemFromAuction(tempItem);
+                    System.out.println("after times up2");
                     Iterator it = clients.entrySet().iterator();
                     while (it.hasNext()) {
                         Map.Entry pair = (Map.Entry) it.next();
@@ -200,7 +199,9 @@ public class Auction_House extends Thread {
                             //bankClient.clientOutput.writeObject(new Object[] {Command.CheckAgentFunds, agentSecretKey, 1.0});
                         }
 
-                        clients.get(item.getSecretBidderKey()).clientOutput.writeObject(new Object[] {Command.BidOvertaken, item});
+                        if (clients.get(item.getSecretBidderKey()) != null) {
+                            clients.get(item.getSecretBidderKey()).clientOutput.writeObject(new Object[]{Command.BidOvertaken, item});
+                        }
 
                         item.setSecretBidderKey(agentSecretKey);
                         item.setBidAmount(bidAmount);
@@ -255,12 +256,19 @@ public class Auction_House extends Thread {
 
     private void removeItemFromAuction(Item item) throws IOException {
 
-        synchronized (this) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if (clients.get(item.getSecretBidderKey()) != null) {
+            synchronized (this) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+        }
+
+        else {
+            System.out.println("Agent dc'ed that moneys mine!");
+            bankClient.clientOutput.writeObject(new Object[] {Command.TransferBlockedFunds, item.getSecretBidderKey(), secretKey, item.getCurrentBidAmount()});
         }
 
         System.out.println("removing item: " + item);
@@ -332,6 +340,13 @@ public class Auction_House extends Thread {
         run = false;
     }
 
+    public void removeAgent(Integer agentID) {
+
+        System.out.println("removing agent account " + agentID);
+        clients.remove(agentID);
+        System.out.println("after removing agent account " + clients.get(agentID));
+    }
+
     public void startAuctionHouseClient(String data) {
         System.out.println("Starting AH client: " + data);
         String[] clientInfoTokens = data.split("\\s");
@@ -340,6 +355,5 @@ public class Auction_House extends Thread {
         System.out.println("AH clients " + clients);
     }
 
-    public void debug() throws IOException {
-    }
+
 }

@@ -161,10 +161,12 @@ public class Auction_House_Display {
             System.out.println("stopping ah");
             try {
                 auctionHouse.stopAuctionHouse();
+                auctionHouse = null;
+                System.exit(0);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.exit(0);
+
         });
 
 

@@ -70,6 +70,10 @@ public class Agent_Display extends JPanel {
         agentBalance.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         agentBalance.setPadding(new Insets(2, 10, 0, 0));
 
+
+
+
+
         labelInfo.getChildren().addAll(agentName, agentAccount, agentBalance);
         labelInfo.setSpacing(5);
 
@@ -108,10 +112,16 @@ public class Agent_Display extends JPanel {
                 agentAccountTextField, agentBalanceTextField);
         textInfo.setSpacing(4);
 
+
+
         alignHorizontal.getChildren().addAll(labelInfo, textInfo);
 
+        Button closeAccount = new Button("Close Account");
+        closeAccount.setStyle("-fx-background-color: beige; -fx-font-weight: " +
+                "bold; -fx-font: 14 arial");
+        closeAccount.setPrefWidth(300);
 
-        VBox agentLabels = new VBox(alignHorizontal);
+        VBox agentLabels = new VBox(alignHorizontal, closeAccount);
         agentLabels.setMaxWidth(250);
         agentLabels.setMinWidth(250);
         agentLabels.setPrefWidth(250);
@@ -245,7 +255,7 @@ public class Agent_Display extends JPanel {
 
         ScrollPane messagesPane = new ScrollPane();
         displayLabel.setTextAlignment(TextAlignment.LEFT);
-        messagesPane.setPrefSize(200, 242);
+        messagesPane.setPrefSize(200, 213);
         messagesPane.setContent(displayLabel);
         String notifications = "";
         displayLabel.setText(notifications);
@@ -508,6 +518,17 @@ public class Agent_Display extends JPanel {
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
+            }
+        });
+
+        closeAccount.setOnAction(event -> {
+            try {
+                System.out.println("??????");
+                agent.closeAccount();
+                agent = null;
+                System.exit(0);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }

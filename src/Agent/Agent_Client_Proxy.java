@@ -4,6 +4,7 @@ import Misc.Command;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Agent_Client_Proxy extends Thread {
@@ -60,8 +61,13 @@ public class Agent_Client_Proxy extends Thread {
 
             clientSocket.close();
 
-        } catch (InterruptedException | IOException | ClassNotFoundException e) {
+        } catch (InterruptedException | ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
         }
     }
 

@@ -94,6 +94,11 @@ public class Auction_House_Server_Proxy extends Thread{
                                 auctionHouse.notifyAll();
                             }
                             break;
+
+                        case CloseAgentAccount:
+
+                            auctionHouse.removeAgent((Integer) message[1]);
+                            break;
                     }
 
                     serverOutput.reset();
@@ -102,7 +107,6 @@ public class Auction_House_Server_Proxy extends Thread{
                 clientSocket.close();
 
             } catch (IOException e) {
-                e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

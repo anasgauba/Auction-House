@@ -5,6 +5,6 @@ public enum Command {
     CreateBankAccount, BlockFunds, UnlockFunds, WinMessage, BidOvertaken, AcceptResponse,
     RejectResponse, AddAuctionHouseID, SetListHouses, SendBid, SetAgentKey, SetAuctionHouseKey,
     CheckBid, CheckAgentFunds, RefreshTimes, GetBalance, SetBalance, TimeOffSet, CloseAuctionHouseID,
-    FundsTransferred
+    FundsTransferred, CloseAgentAccount
 
 }

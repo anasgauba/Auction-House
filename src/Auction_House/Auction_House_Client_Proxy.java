@@ -5,6 +5,7 @@ import Misc.Command;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -99,8 +100,13 @@ public class Auction_House_Client_Proxy extends Thread {
             clientSocket.close();
 
 
-    } catch (IOException | ClassNotFoundException e) {
+    } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
         }
     }
 

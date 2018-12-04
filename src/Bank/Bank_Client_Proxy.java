@@ -139,7 +139,6 @@ public class Bank_Client_Proxy extends Thread {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
