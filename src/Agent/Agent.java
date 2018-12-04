@@ -152,6 +152,7 @@ public class Agent extends Thread{
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
                 bankClient.clientOutput.writeObject(new Object[] {Command.TransferBlockedFunds, secretBiddingKey, item.getAuctionHouseSecretKey(), item.getCurrentBidAmount()});
                 sound("BidWon");
+                clients.get(item.getAuctionHouseID()).clientOutput.writeObject(new Object[] {Command.FundsTransferred});
                 break;
 
             case BidOvertaken:

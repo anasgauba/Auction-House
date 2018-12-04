@@ -138,12 +138,13 @@ public class Bank {
 
     //closes account that was given to the client
     public synchronized void closeAccount(int idOfClient){
-        Account account = list.get(idOfClient);
+        //Account account = list.get(idOfClient);
         list.remove(idOfClient);
-        account.setSecretKey(0);
+        //account.setSecretKey(0);
 //        secretKey = 0;
-        account.balance = 0;
+        //account.balance = 0;
         System.out.println("Bank.Account closed of " +idOfClient);
+        System.out.println("closing acc " + list.get(idOfClient));
     }
 
     //for testing purposes.

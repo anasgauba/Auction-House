@@ -88,10 +88,18 @@ public class Auction_House_Server_Proxy extends Thread{
                         case TimeOffSet:
                             serverOutput.writeObject(new Object[] {Command.TimeOffSet, System.currentTimeMillis()});
                             break;
+
+                        case FundsTransferred:
+                            synchronized (auctionHouse) {
+                                auctionHouse.notifyAll();
+                            }
+                            break;
                     }
 
                     serverOutput.reset();
                 }
+
+                clientSocket.close();
 
             } catch (IOException e) {
                 e.printStackTrace();

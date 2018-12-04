@@ -4,6 +4,7 @@ import Agent.Agent_Client_Proxy;
 import Bank.Bank_Client_Proxy;
 import Bank.Bank_Server_Proxy;
 import Misc.Command;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Auction_House extends Thread {
 
+    Auction_House_Display display;
     LinkedList<Item> itemList;
     LinkedList<String> nouns;
     LinkedList<String> adjectives;
@@ -23,6 +25,7 @@ public class Auction_House extends Thread {
     public int auctionHouseID;
     public int portNumber;
     public int bankPortNumber;
+    public double auctionHouseBalance;
     int secretKey;
     boolean run;
     boolean hasFunds;
@@ -31,14 +34,16 @@ public class Auction_House extends Thread {
     ConcurrentHashMap<Integer, Agent_Client_Proxy> clients;
     Bank_Client_Proxy bankClient;
 
-    public Auction_House(int portNumber, int bankPortNumber, LinkedList nouns, LinkedList adjectives) throws IOException {
+    public Auction_House(Auction_House_Display display, int portNumber, int bankPortNumber, LinkedList nouns, LinkedList adjectives) throws IOException {
+        this.display = display;
         this.portNumber = portNumber;
         this.bankPortNumber = bankPortNumber;
+        this.auctionHouseBalance = 0.0;
         this.auctionHouseID = new Random().nextInt(1000000000);
         this.itemList = new LinkedList<>();
         this.nouns = nouns;
         this.adjectives = adjectives;
-        createItems(10);
+        createItems(2);
         this.auction_house_server_proxy = new Auction_House_Server_Proxy(this, portNumber);
         this.clients = new ConcurrentHashMap();
         this.bankClient = new Bank_Client_Proxy(this, auctionHouseID,"AuctionHouse " + portNumber, bankPortNumber); //bank
@@ -53,9 +58,16 @@ public class Auction_House extends Thread {
     public void run () {
         //itemList.get(0).startBidTime();
         //itemList.get(0).setCurrentBidder(12340);
+
+        Platform.runLater(()-> display.auctionHouseID.setText(String.valueOf(auctionHouseID)));
+        Platform.runLater(()-> display.itemsRemainingLabel.setText(String.valueOf(itemList.size())));
+        Platform.runLater(()-> display.auctionHouseBalance.setText("0.00"));
+
         while (run) {
             bidSuccessfulCheck();
         }
+
+        System.out.println("going to close AH");
     }
 
     //sets bidding key returned by the bank to the current agent
@@ -84,15 +96,12 @@ public class Auction_House extends Thread {
                     Iterator it = clients.entrySet().iterator();
                     while (it.hasNext()) {
                         Map.Entry pair = (Map.Entry) it.next();
-                        clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.RefreshTimes, tempItem});
+                        clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.RefreshTimes/*, tempItem*/});
                     }
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-            if (secondsRemaining > 0) {
-                //System.out.println(secondsRemaining);
             }
         }
     }
@@ -244,13 +253,43 @@ public class Auction_House extends Thread {
         }
     }
 
-    private void removeItemFromAuction(Item item) {
+    private void removeItemFromAuction(Item item) throws IOException {
+
+        synchronized (this) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         System.out.println("removing item: " + item);
         for (int i = 0; i < itemList.size(); i++) {
             if (itemList.get(i).getItemID().equals(item.getItemID())) {
                 itemList.remove(i);
+                try {
+                    bankClient.clientOutput.writeObject(new Object[] {Command.GetBalance, secretKey});
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(()-> display.itemsRemainingLabel.setText(String.valueOf(itemList.size())));
             }
+        }
+
+
+        if (itemList.isEmpty()) {
+            System.out.println("closing AH account");
+            bankClient.clientOutput.writeObject(new Object[] {Command.CloseBankAccount, secretKey});
+            bankClient.clientOutput.writeObject(new Object[] {Command.CloseAuctionHouseID, auctionHouseID});
+
+            Iterator it = clients.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.RefreshTimes});
+                //bankClient.clientOutput.writeObject(new Object[] {Command.CheckAgentFunds, agentSecretKey, 1.0});
+            }
+
+            run = false;
         }
 
         System.out.println("The item list after removal: " + itemList);
@@ -267,19 +306,30 @@ public class Auction_House extends Thread {
         this.hasFunds = hasFunds;
     }
 
-    public void getPortNumber() {
+    public synchronized void setBalance(double balance) {
+        System.out.println("setting funds");
+        auctionHouseBalance = balance;
+        Platform.runLater(()-> display.auctionHouseBalance.setText(String.valueOf(auctionHouseBalance)));
 
-        synchronized (this) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public void setPortNumber(int portNumber) {
         this.portNumber = portNumber;
+    }
+
+    public void stopAuctionHouse() throws IOException {
+        System.out.println("closing AH account");
+        bankClient.clientOutput.writeObject(new Object[] {Command.CloseBankAccount, secretKey});
+        bankClient.clientOutput.writeObject(new Object[] {Command.CloseAuctionHouseID, auctionHouseID});
+
+        Iterator it = clients.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.RefreshTimes});
+            //bankClient.clientOutput.writeObject(new Object[] {Command.CheckAgentFunds, agentSecretKey, 1.0});
+        }
+
+        run = false;
     }
 
     public void startAuctionHouseClient(String data) {

@@ -58,9 +58,6 @@ public class Bank_Server_Proxy {
                 serverInput = new ObjectInputStream(clientSocket.getInputStream());
 
                 String temp = (String) serverInput.readObject();
-                if (temp.contains("AuctionHouse")) {
-                    //bank.startBankClient(temp);
-                }
 
 
                 while (run && clientSocket.isConnected()) {
@@ -77,6 +74,20 @@ public class Bank_Server_Proxy {
                             System.out.println("adding to list! " + message[1]);
                             bank.auctionHouseIDList.add((Integer) message[1]);
                             bank.auctionHousePorts.put(message[1], message[2]);
+                            break;
+
+                        case CloseAuctionHouseID:
+
+                            System.out.println("list in bank " + bank.auctionHouseIDList);
+                            for (int i = 0; i < bank.auctionHouseIDList.size(); i++) {
+                                System.out.println("id list " + bank.auctionHouseIDList + " " + message[1]);
+                                if (bank.auctionHouseIDList.get(i).equals(message[1])) {
+                                    System.out.println("removing " + bank.auctionHouseIDList.get(i));
+                                    bank.auctionHouseIDList.remove(i);
+                                }
+                            }
+
+                            bank.auctionHousePorts.remove(message[1]);
                             break;
 
                         case GetListHouses:
@@ -119,14 +130,19 @@ public class Bank_Server_Proxy {
                             break;
 
                         case TransferBlockedFunds:
-
-
                             bank.deposit((Integer) message[1], (Integer) message[2], (Double) message[3]);
+                            break;
+
+                        case CloseBankAccount:
+                            bank.closeAccount((Integer) message[1]);
                             break;
                     }
 
                     serverOutput.reset();
                 }
+
+                clientSocket.close();
+
 
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();

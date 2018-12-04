@@ -96,6 +96,8 @@ public class Auction_House_Client_Proxy extends Thread {
 
             }
 
+            clientSocket.close();
+
 
     } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

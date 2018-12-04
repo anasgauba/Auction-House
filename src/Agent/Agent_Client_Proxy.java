@@ -58,6 +58,8 @@ public class Agent_Client_Proxy extends Thread {
                 Thread.sleep(0);
             }
 
+            clientSocket.close();
+
         } catch (InterruptedException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -111,7 +111,12 @@ public class Bank_Client_Proxy extends Thread {
                         }
                         break;
                     case SetBalance:
-                        agent.changeBalance((Double) message[1]);
+                        if (agent != null) {
+                            agent.changeBalance((Double) message[1]);
+                        }
+                        else if (auctionHouse != null) {
+                            auctionHouse.setBalance((Double) message[1]);
+                        }
                         break;
 
                     case BlockFunds:
@@ -129,6 +134,8 @@ public class Bank_Client_Proxy extends Thread {
                 //System.out.println("message received: " + message);
                 Thread.sleep(0);
             }
+
+            clientSocket.close();
 
 
         } catch (IOException e) {
