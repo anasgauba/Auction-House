@@ -112,7 +112,7 @@ public class Auction_House_Display {
 
 
         TextField portTextField = new TextField("6666");
-        HBox.setMargin(portTextField, new Insets(0,0,0,20));
+        HBox.setMargin(portTextField, new Insets(0,0,0,10));
         portTextField.setAlignment(Pos.CENTER);
         HBox portHBox = new HBox(auctionPortNumberLabel, portTextField);
 
@@ -123,21 +123,23 @@ public class Auction_House_Display {
 
 
         TextField bankPortTextField = new TextField("7277");
-        HBox.setMargin(bankPortTextField, new Insets(0,0,0,20));
         bankPortTextField.setAlignment(Pos.CENTER);
+        HBox.setMargin(bankPortTextField, new Insets(0,0,0,78));
         HBox bankPortHBox = new HBox(bankServerPort, bankPortTextField);
 
 
         Button startButton = new Button("Start Server");
-        startButton.setPrefWidth(357);
+        startButton.setPrefWidth(300);
         startButton.setStyle("-fx-background-color: beige; -fx-font-weight: " +
                 "bold; -fx-font: 14 arial");
+        HBox startButtonHbox = new HBox(startButton);
+        startButtonHbox.setAlignment(Pos.CENTER);
 
 
         VBox dialogVbox = new VBox(15);
         dialogVbox.setPadding(new Insets(20, 20, 20, 20));
-        dialogVbox.getChildren().addAll(bankPortHBox, portHBox, startButton);
-        Scene dialogScene = new Scene(dialogVbox, 450, 150);
+        dialogVbox.getChildren().addAll(bankPortHBox, portHBox, startButtonHbox);
+        Scene dialogScene = new Scene(dialogVbox, 500, 150);
         dialogVbox.setBackground(new Background(new BackgroundFill(Color.rgb(54, 69, 79), CornerRadii.EMPTY, Insets.EMPTY)));
         dialog.setScene(dialogScene);
         dialog.show();

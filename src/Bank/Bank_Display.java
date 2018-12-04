@@ -49,17 +49,20 @@ public class Bank_Display {
         HBox.setMargin(portTextField, new Insets(0,0,0,20));
         portTextField.setAlignment(Pos.CENTER);
         HBox portHBox = new HBox(bankPortNumberLabel, portTextField);
+        portHBox.setAlignment(Pos.CENTER);
 
 
         Button startButton = new Button("Start Server");
-        startButton.setPrefWidth(357);
+        startButton.setPrefWidth(200);
         startButton.setStyle("-fx-background-color: beige; -fx-font-weight: " +
                 "bold; -fx-font: 14 arial");
+        HBox buttonHBox = new HBox(startButton);
+        buttonHBox.setAlignment(Pos.CENTER);
 
 
         VBox dialogVbox = new VBox(15);
         dialogVbox.setPadding(new Insets(20, 20, 20, 20));
-        dialogVbox.getChildren().addAll(portHBox, startButton);
+        dialogVbox.getChildren().addAll(portHBox, buttonHBox);
         Scene dialogScene = new Scene(dialogVbox, 450, 100);
         dialogVbox.setBackground(new Background(new BackgroundFill(Color.rgb(54, 69, 79), CornerRadii.EMPTY, Insets.EMPTY)));
         dialog.setScene(dialogScene);
