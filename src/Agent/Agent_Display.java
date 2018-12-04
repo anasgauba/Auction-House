@@ -277,12 +277,6 @@ public class Agent_Display extends JPanel {
         });
 
 
-
-        comboBox.setOnMouseClicked(e -> {
-            //agent.getHouseList();
-        });
-
-
         //HBox topBar = new HBox(auctionHouseChoice, auctionHouseList);
         HBox topBar = new HBox(auctionHouseChoice, comboBox);
         topBar.setSpacing(5);
@@ -442,59 +436,80 @@ public class Agent_Display extends JPanel {
         comboBox.getSelectionModel().selectFirst(); //no idea why this doesn work
         message[0] = Command.GetListItems;
 
-
         try {
             String tempAuctionID = (String) comboBox.getValue();
 
-            System.out.println("temp id " + tempAuctionID);
+            if (tempAuctionID != null) {
+                System.out.println("temp id " + tempAuctionID);
 
-            System.out.println("temp id2 " + tempAuctionID);
+                System.out.println("temp id2 " + tempAuctionID);
 
 //            synchronized ()
-            agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
-            System.out.println("agents lcients " + agent.clients);
+                agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
+                System.out.println("agents lcients " + agent.clients);
 
-            System.out.println("agents lcients 2" + agent.clients.get(Integer.valueOf(tempAuctionID)));
-            System.out.println("agents lcients 3" + agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput);
+                System.out.println("agents lcients 2" + agent.clients.get(Integer.valueOf(tempAuctionID)));
+                System.out.println("agents lcients 3" + agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput);
 
-            synchronized (this) {
-                while (agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput == null) {
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                synchronized (this) {
+                    while (agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput == null) {
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
+                System.out.println("after wait debug");
+
+
+                System.out.println("i dunno");
+                agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(new Object[]{Command.GetListItems});
+                System.out.println("list of items should've been created"); //breaks here.
+                System.out.println("list of items should've been created");
             }
-            System.out.println("after wait debug");
-
-
-            System.out.println("i dunno");
-            agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(new Object[] {Command.GetListItems});
-            System.out.println("list of items should've been created"); //breaks here.
-            System.out.println("list of items should've been created");
-
         } catch (IOException e1) {
             e1.printStackTrace();
         }
 
 
-        comboBox.setOnAction(e -> {
-            listofTableItems.clear();
-            message[0] = Command.GetListItems;
-            try {
-                //System.out.println("work ree " + comboBox.getSelectionModel().getSelectedItem().getClass());
-                String tempAuctionID = (String) comboBox.getValue();
-                agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
-                agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
-                //agent.getHouseList();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+        comboBox.setOnMouseClicked(e -> {
+            comboBox.hide();
+            synchronized (this) {
+                while (!getHouseListDone) {
+                    try {
+                        options.clear();
+                        agent.getHouseList();
+                        wait();
+                        System.out.println("done getting house list" + options);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
             }
+            comboBox.show();
+            getHouseListDone = false;
         });
 
 
-
+        comboBox.setOnAction(e -> {
+            if (comboBox.getValue() != null) {
+                System.out.println("on action seen!!!");
+                listofTableItems.clear();
+                message[0] = Command.GetListItems;
+                try {
+                    //System.out.println("work ree " + comboBox.getSelectionModel().getSelectedItem().getClass());
+                    String tempAuctionID = (String) comboBox.getValue();
+                    agent.setCurrentAuctionHouse(Integer.valueOf(tempAuctionID));
+                    agent.clients.get(Integer.valueOf(tempAuctionID)).clientOutput.writeObject(message);
+                    //agent.getHouseList();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
     }
 
     public void setNewNotificationMessage() {
@@ -509,11 +524,14 @@ public class Agent_Display extends JPanel {
         this.agentBalanceTextField.setText(Double.toString(agentBalance));
 
     }
+
     public void setAccountID(int accountIDPassed){
         System.out.println("account id paassed " + accountIDPassed);
         this.agentAccountTextField.setText(Integer.toString(accountIDPassed));
 
     }
+
+
     public static class tableItem {
         private final SimpleStringProperty itemID;
         private final SimpleStringProperty itemName;
