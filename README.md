@@ -166,13 +166,13 @@ is how Professor Roman wanted the secret keys to work, while still wanting the a
 ## Versions 
 The jar's for this program can be found in the head of directory "Auction-House": ~/Auction-House/'here'
 
-### Bank.jar   -- fix names later
+### Bank v1.0_nathans13_cgarcia528_mgauba.jar
 Refer to usage section on using the jars
 
-### AuctionHouse.jar
+### AuctionHouse v1.0_nathans13_cgarcia528_mgauba.jar
 Refer to usage section on using the jars
 
-## Agent.jar
+## Agent v1.0_nathans13_cgarcia528_mgauba.jar
 Refer to usage section on using the jars
 
 ## Status
