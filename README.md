@@ -36,8 +36,14 @@ auction houses
 
 #####Clarissa Garcia:
 - Responsible for Agent Component
+- Created the enum Command, which simplifies the switch statements within each client and proxy to only the available 
+and pre-defined commands outlined.
+- Layed the groundwork for the Object array message, with the first object being the command and the subsequent objects
+being the paramaters for method calls or the resulting returned objects from method calls.
+-Created the messaging system in Agent Display, which uses a string builder to add item details, the subsequent accept/reject 
+message from auctio house or bank, and display the results in the Agent's GUI
 - Created the agent display initially, which includes the table view part to it.
-- Commented the code
+- Commented all code
  
 ## Usage
 As this is a very large project I will break the usage down to two sections. One describing
@@ -181,11 +187,24 @@ It's to my knowledge that we fully implemented Professor Roman's design instruct
 in this project. We implemented every feature that was noted in the usage and then some more to ensure the programs
 workability. 
 
+Creation of Agent names: In Agent, the names are created by scanning a list of first names from a text field and passing 
+it into the agent object. The agent then creates its own name by randomly picking indexes from the list and using two of 
+the names picked as the agent's name. 
+
+Creation of Item Names: The Auction House creates a list of randomly-generated items with the items including their own name and 
+randomly-generated prices.Creation of Item Names and Prices: In Auction House, the names of the items are created by scanning a 
+list of adjectives and nouns from a text file and passing it into the auction house object. The auction house then creates its 
+item's name by randomly picking indexes from both lists and using the chosen adjective and noun. 
+
+Creation of Item Prices: The auction house, upon creating the item, also randomly generates prices upon creation, choosing between a 
+minimum bid amount of between 10 and 200. in the display, the minimum bid is automatically set up to increase from the orignal price by 
+ 1.00. 
+
 ### Known Issues
-- When closing the Auction House I've noticed the agent's display doesn't always refresh to an empty table.
-As we're near the project due date, I didn't find the time to track this bug down, it's not consistent enough to be big issue.
-It isn't a program breaker as the agent can't spend money or interact with the auction house. The Agent just has to click on 
-another auction house as they normally would have to do if the auction house ended suddenly or ran out of items.
+- When closing the Auction House I've noticed the agent's display doesn't always refresh to an empty table when you manually close 
+the auction house. As we're near the project due date, I didn't find the time to track this bug down, it's not consistent enough to
+be big issue. It isn't a program breaker as the agent can't spend money or interact with the auction house. The Agent just has to click
+on another auction house as they normally would have to do if the auction house ended suddenly or ran out of items.
 
 - Even though the time difference method was written to fix the machines times not matching, it doesn't appear to work
 if the auction house is behind the agents machines. This is purely a GUI issue, and although the time left remaining might not be
