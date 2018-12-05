@@ -1,6 +1,7 @@
 package Bank;
 
 import Auction_House.Auction_House_Client_Proxy;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,21 +13,23 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Anas Farooq Gauba
  */
 public class Bank {
+    private Bank_Display display;
     private HashMap<Integer, Account> list;
     protected LinkedList<Integer> auctionHouseIDList;
     protected ConcurrentHashMap auctionHousePorts;
     //    private int secretKey;
     private int accountID = 1;
 
-    int bankID;
+//    int bankID;
     Bank_Server_Proxy bank_server_proxy;
     ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
 
-    public Bank(int portNumber) {
+    public Bank(Bank_Display display, int portNumber) {
+        this.display = display;
         this.list = new HashMap<>();
         this.auctionHouseIDList = new LinkedList<>();
         this.auctionHousePorts = new ConcurrentHashMap();
-        this.bankID = 1;
+//        this.bankID = 1;
         clients = new ConcurrentHashMap<>();
         Bank_Server_Proxy bank_server_proxy = new Bank_Server_Proxy(this, portNumber);
     }
@@ -51,6 +54,10 @@ public class Bank {
             account.setAccountId(accountID);
 //            secretKey = account.generateSecretKey();
             list.put(account.getSecretKey(), account);
+
+            Platform.runLater(()-> display.numAccounts.setText(String.valueOf
+                    (list.size())));
+
             accountID++;
             System.out.println("Bank.Account " +account.getAccountId() +" created " +
                     "with secretKey "+account.getSecretKey());
@@ -150,24 +157,26 @@ public class Bank {
         //account.setSecretKey(0);
 //        secretKey = 0;
         //account.balance = 0;
+        Platform.runLater(()-> display.numAccounts.setText(String.valueOf
+                (list.size())));
         System.out.println("Bank.Account closed of " +idOfClient);
         System.out.println("closing acc " + list.get(idOfClient));
     }
 
     //for testing purposes.
-    public static void main(String[] args) throws Exception {
-        Bank b1 = new Bank(7277);
-//        Bank.Bank b2 = new Bank.Bank();
-        Object[] key, key2, key6;
-        for (int i=0; i < 1000; i++) {
-            key6 = b1.createAccount("Agent "+ i, i+10.0);
-        }
-        System.out.println();
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println();
-
-        key = b1.createAccount("xyz", 10.0);
-        key2 = b1.createAccount("BOBB", 20.0);
+//    public static void main(String[] args) throws Exception {
+//        Bank b1 = new Bank(7277);
+////        Bank.Bank b2 = new Bank.Bank();
+//        Object[] key, key2, key6;
+//        for (int i=0; i < 1000; i++) {
+//            key6 = b1.createAccount("Agent "+ i, i+10.0);
+//        }
+//        System.out.println();
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        System.out.println();
+//
+//        key = b1.createAccount("xyz", 10.0);
+//        key2 = b1.createAccount("BOBB", 20.0);
 //        key2 = b2.createAccount ("Bob", 20);
 
 //        b1.getBalance((int)key[2]);
@@ -185,9 +194,9 @@ public class Bank {
 //        b1.getBalance((int)key[2]);
 //        b1.getBalance((int)key2[2]);
 
-        System.out.println();
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println();
+//        System.out.println();
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        System.out.println();
 
 
 //        b1.closeAccount(key[2]);
@@ -207,8 +216,8 @@ public class Bank {
 //        b1.unlockBalance(key2[2]);
 //        b1.getBalance(key2[2]);
 
-        System.out.println("list of accounts "+b1.list.size());
-    }
+//        System.out.println("list of accounts "+b1.list.size());
+//    }
 
     /*
     public void addAuctionHouseID(int auctionHouseID, int portNumber) {

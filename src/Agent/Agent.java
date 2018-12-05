@@ -183,7 +183,7 @@ public class Agent extends Thread{
     }
 
 
-    LinkedList<Agent_Display.tableItem> timeList = new LinkedList();
+    LinkedList<Agent_Display.TableItem> timeList = new LinkedList();
     LinkedList<Item> itemList = new LinkedList<>();
     public void createItemList(LinkedList<Item> itemList) {
         if (timeList != null) {
@@ -196,7 +196,7 @@ public class Agent extends Thread{
         }
         for (int i = 0; i < itemList.size(); i++) {
             Item tempItem = itemList.get(i);
-            Agent_Display.tableItem temp = new Agent_Display.tableItem(tempItem);
+            Agent_Display.TableItem temp = new Agent_Display.TableItem(tempItem);
             agentDisplay.listofTableItems.add(temp);
             timeList.add(temp);
             //System.out.println("adding: " + itemList.get(i).getBidTimeRemaining());

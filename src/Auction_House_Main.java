@@ -9,8 +9,16 @@ import java.util.Scanner;
 
 public class Auction_House_Main extends Application {
 
+    private Auction_House_Display display;
+
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void stop() {
+        display.stop();
+        System.exit(0);
     }
 
     @Override
@@ -27,7 +35,7 @@ public class Auction_House_Main extends Application {
             adjectives.add(inAdjectives.next());
         }
 
-        Auction_House_Display display = new Auction_House_Display(primaryStage, nouns, adjectives);
+        display = new Auction_House_Display(primaryStage, nouns, adjectives);
 
     }
 }

@@ -17,13 +17,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
-public class Agent_Display extends JPanel {
-    public ObservableList<tableItem> listofTableItems = FXCollections.observableArrayList();
+public class Agent_Display {
+    public ObservableList<TableItem> listofTableItems = FXCollections.observableArrayList();
     private ObservableList<String> listOfHouses = FXCollections.observableArrayList();
     public ObservableList<String> options;
     public StringBuilder newNotificationMessage;
@@ -33,7 +32,7 @@ public class Agent_Display extends JPanel {
     public TextField agentAccountTextField;
     public TextField agentBalanceTextField;
 
-    public TableView<tableItem> table = new TableView();
+    public TableView<TableItem> table = new TableView();
 
     private Agent agent;
     boolean getHouseListDone = false;
@@ -314,34 +313,34 @@ public class Agent_Display extends JPanel {
         itemTime.setStyle("-fx-alignment: CENTER;");
 
         itemID.setCellValueFactory(
-                new PropertyValueFactory<tableItem, String>("itemID")
+                new PropertyValueFactory<TableItem, String>("itemID")
         );
 
         itemName.setCellValueFactory(
-                new PropertyValueFactory<tableItem, String>("itemName")
+                new PropertyValueFactory<TableItem, String>("itemName")
         );
 
         itemStartingBid.setCellValueFactory(
-                new PropertyValueFactory<tableItem, String>("itemStartingBid")
+                new PropertyValueFactory<TableItem, String>("itemStartingBid")
         );
         itemCurrentBid.setCellValueFactory(
-                new PropertyValueFactory<tableItem, String>("itemCurrentBid")
+                new PropertyValueFactory<TableItem, String>("itemCurrentBid")
         );
         itemTime.setCellValueFactory(
-                new PropertyValueFactory<tableItem, String>("itemTime")
+                new PropertyValueFactory<TableItem, String>("itemTime")
         );
 
 
         //A list of items will be passed in. In final product, I will loop through the list and pass each item
-        //to the constructor of new tableItem, which sets all the correct info to the right places on table view. Then,
+        //to the constructor of new TableItem, which sets all the correct info to the right places on table view. Then,
         // the table data is set. To change list on board, you clear listofTableItems, add table items to it, then set the
         //info in the table to that.
 //        Auction_House.Item first = new Auction_House.Item(3333,"22222","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",400,330.75);
 //        Auction_House.Item second = new Auction_House.Item(666,"9999","orange mat",200,100.02);
 //        Auction_House.Item third = new Auction_House.Item(4444,"11111","green grass",20,10.20);
-//        listofTableItems.add(new tableItem(first));
-//        listofTableItems.add(new tableItem(second));
-//        listofTableItems.add(new tableItem(third));
+//        listofTableItems.add(new TableItem(first));
+//        listofTableItems.add(new TableItem(second));
+//        listofTableItems.add(new TableItem(third));
 //        table.setItems(listofTableItems);
         table.getColumns().addAll(itemID, itemName, itemStartingBid, itemCurrentBid, itemTime);
 
@@ -351,7 +350,7 @@ public class Agent_Display extends JPanel {
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getClickCount() == 2) {
                     DecimalFormat tempFormat = new DecimalFormat("#.00");
-                    tableItem rowData = (tableItem) row.getItem();
+                    TableItem rowData = (TableItem) row.getItem();
                     itemDescriptionTextField.setText(rowData.getItemName());
                     itemIDTextField.setText(rowData.getItemID());
                     itemStartingBidTextField.setText(rowData.getItemStartingBid());
@@ -553,7 +552,7 @@ public class Agent_Display extends JPanel {
     }
 
 
-    public static class tableItem {
+    public static class TableItem {
         private final SimpleStringProperty itemID;
         private final SimpleStringProperty itemName;
         private final SimpleStringProperty itemStartingBid;
@@ -561,7 +560,7 @@ public class Agent_Display extends JPanel {
         private final SimpleStringProperty itemTime;
         DecimalFormat tempFormat = new DecimalFormat("#.00");
 
-        public tableItem(Item itemPassedIn) {
+        public TableItem(Item itemPassedIn) {
 
             this.itemID = new SimpleStringProperty(itemPassedIn.getItemID());
             this.itemName = new SimpleStringProperty(itemPassedIn.getDescription());

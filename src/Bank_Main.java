@@ -9,6 +9,11 @@ public class Bank_Main extends Application {
     }
 
     @Override
+    public void stop() {
+        System.exit(0);
+    }
+
+    @Override
     public void start(Stage primaryStage) throws Exception {
 
         Bank_Display display = new Bank_Display(primaryStage);

@@ -8,8 +8,15 @@ import java.util.Scanner;
 
 public class Agent_Main extends Application {
 
+    private Agent_Start_Display display;
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void stop() {
+        display.stop();
+        System.exit(0);
     }
 
     @Override
@@ -20,6 +27,6 @@ public class Agent_Main extends Application {
             names.add(inNames.next());
         }
 
-        Agent_Start_Display display = new Agent_Start_Display(primaryStage, names);
+        display = new Agent_Start_Display(primaryStage, names);
     }
 }

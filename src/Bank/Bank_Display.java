@@ -14,6 +14,9 @@ import javafx.stage.Stage;
 
 public class Bank_Display {
 
+    protected Label numAccounts;
+    private Bank bank;
+
     public Bank_Display(Stage stage) {
 
         drawGUI(stage);
@@ -22,17 +25,40 @@ public class Bank_Display {
 
     public void drawGUI(Stage stage) {
 
-        Pane pane = new Pane();
+
+        Label bankAccountsIDLabel = new Label("Number of Accounts:");
+        bankAccountsIDLabel.setFont(new Font("Calibri", 17));
+        bankAccountsIDLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
+
+        numAccounts = new Label("");
+        numAccounts.setFont(new Font("Calibri", 17));
+        numAccounts.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
+        numAccounts.setAlignment(Pos.CENTER);
+
+        HBox bankAccountsHBox = new HBox(bankAccountsIDLabel, numAccounts);
+        HBox.setMargin(bankAccountsHBox, new Insets(10,0,0,10));
+
+        Button stopBank = new Button("Close Bank");
+        stopBank.setPrefWidth(200);
+        stopBank.setStyle("-fx-background-color: beige; -fx-font-weight: " +
+                "bold; -fx-font: 14 arial");
+
+        stopBank.setOnAction(event -> {
+            bank = null;
+            System.exit(0);
+
+        });
+
+        VBox auctionHouseVBox = new VBox(bankAccountsHBox, stopBank);
+
+        Pane pane = new Pane(auctionHouseVBox);
         pane.setBackground(new Background(new BackgroundFill(Color.rgb(54, 69, 79), CornerRadii.EMPTY, Insets.EMPTY)));
-
-
-
-
 
         Scene scene = new Scene(pane, 400, 400);
         stage.setScene(scene);
         stage.setTitle("Bank Server");
         stage.show();
+
 
 
         Stage dialog = new Stage();
@@ -72,11 +98,9 @@ public class Bank_Display {
 
 
         startButton.setOnAction(e -> {
-
-
             int portNumber = Integer.parseInt(portTextField.getText());
             dialog.hide();
-            Bank bank = new Bank(portNumber);
+            bank = new Bank(this, portNumber);
             System.out.println("portn " + portNumber);
 
         });

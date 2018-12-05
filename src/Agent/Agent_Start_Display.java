@@ -12,11 +12,22 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class Agent_Start_Display {
 
     LinkedList<String> names;
+    private Agent agent;
+
+    public void stop() {
+        try {
+            agent.closeAccount();
+            agent = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Agent_Start_Display(Stage stage, LinkedList<String> names) {
         this.names = names;
@@ -80,7 +91,7 @@ public class Agent_Start_Display {
             dialog.hide();
             System.out.println("portn " + portNumber);
             System.out.println("portn " + bankPortNumber);
-            Agent agent = new Agent(portNumber, bankPortNumber, names);
+            agent = new Agent(portNumber, bankPortNumber, names);
 
         });
     }

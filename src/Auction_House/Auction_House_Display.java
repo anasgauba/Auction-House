@@ -26,6 +26,15 @@ public class Auction_House_Display {
     Label itemsRemainingLabel;
     Label auctionHouseBalance;
 
+    public void stop() {
+        try {
+            auctionHouse.stopAuctionHouse();
+            auctionHouse = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Auction_House_Display(Stage stage, LinkedList<String> nouns, LinkedList <String> adjectives) {
 
         this.nouns = nouns;
