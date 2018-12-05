@@ -14,7 +14,6 @@ package Auction_House;
 
 import Agent.Agent_Client_Proxy;
 import Bank.Bank_Client_Proxy;
-import Bank.Bank_Server_Proxy;
 import Misc.Command;
 import javafx.application.Platform;
 
@@ -37,7 +36,6 @@ public class Auction_House extends Thread {
     LinkedList<Item> itemList;
     LinkedList<String> nouns;
     LinkedList<String> adjectives;
-
     public int auctionHouseID;
     public int portNumber;
     public int bankPortNumber;
@@ -46,7 +44,6 @@ public class Auction_House extends Thread {
     boolean run;
     boolean hasFunds;
     Auction_House_Server_Proxy auction_house_server_proxy;
-    Bank_Server_Proxy bank_server_proxy;
     ConcurrentHashMap<Integer, Agent_Client_Proxy> clients;
     Bank_Client_Proxy bankClient;
 
