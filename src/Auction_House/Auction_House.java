@@ -316,7 +316,8 @@ public class Auction_House extends Thread {
     /**The stopAuctionHouse method creates the two bank message arrays
      * with the necessary information to  close the auction house's bank account and remove its ID
      * from the bank's records as a list of active auction houses. It also refreshes the times in agent
-     * to update the display correctly and remove the auction house from the list.
+     * to update the display correctly and remove the auction house from the list. It also stops the thread
+     * from running
      *
      * @throws IOException
      */
