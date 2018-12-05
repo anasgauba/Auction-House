@@ -2,6 +2,9 @@
  * Anas Guaba, Clarissa Garcia, and Nathan Schaefer
  * Auction House Class
  * <p>
+ *
+ * @author Nathan Schaefer
+ *
  * Auction house thread is in charge of hosting a list of items. It constantly monitors items which have been won
  * (timer reaches 0) and to send notifications to the correct clients. It also houses the current local display,
  * the port number that the auction house will be hosted at, the port number that the bank will be hosted at,

@@ -1,5 +1,7 @@
 /**Anas Guaba, Clarissa Garcia, and Nathan Schaefer
  * Agent Class
+ *
+ * @author Clarissa Garcia
  * Agent is the class in charge of manipulating the data displayed in Agent_Display class. It holds
  * the internal logic for creating its own name, setting its bidding key, balance, and list of auction house clients,
  * sending bid messages and information to auction houses, creating the items, keeping track of time shown in the GUI,
