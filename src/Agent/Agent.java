@@ -276,8 +276,8 @@ public class Agent extends Thread{
     }
 
     /**This message is used in order to refresh the times of the GUI. It is called when the refreshTimes method is called
-    * in order to calculate the time remaining on the countdown clock of a bid when comparing the current agent to an
-     * auction house item. */
+     *in order to calculate the time remaining on the countdown clock of a bid when comparing the current agent to an
+     *auction house item. */
     private Long getTimeOffSet() {
         return timeOffSet;
     }

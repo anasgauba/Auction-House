@@ -336,7 +336,7 @@ public class Auction_House extends Thread {
      * current auction house's list of clients.
      * @param agentID - the agent's ID belonging to the agent that will be removed.
      */
-    public void removeAgent(Integer agentID) {
+    public void removeAgent(int agentID) {
         clients.remove(agentID);
     }
 

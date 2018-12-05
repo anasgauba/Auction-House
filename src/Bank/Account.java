@@ -29,7 +29,7 @@ public class Account {
      * @param initialBalance - initial balance of the client who is creating an account
      */
     //upon creation of account return unique ID for the client
-    public Account(String name, Double initialBalance){
+    public Account(String name, double initialBalance){
         this.balance = initialBalance;
         this.lockBalance = 0;
         this.accountName = name;
