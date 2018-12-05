@@ -240,7 +240,8 @@ public class Agent extends Thread{
             String tempID =  Integer.toString(auctionHouseList.get(i));
             agentDisplay.options.add(tempID);
             if (clients.get(auctionHouseList.get(i)) == null) {
-                Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this, secretBiddingKey, "Agent " + portNumber, auctionHousePorts.get(auctionHouseList.get(i))); //key would be auction house id, to do
+                Auction_House_Client_Proxy clientProxy = new Auction_House_Client_Proxy(this, secretBiddingKey,
+                        "Agent " + portNumber, auctionHousePorts.get(auctionHouseList.get(i)));
                 clients.put(auctionHouseList.get(i), clientProxy);
                 synchronized (this) {
                     while (clients.get(auctionHouseList.get(i)).clientOutput == null) {
