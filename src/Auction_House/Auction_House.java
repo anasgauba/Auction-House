@@ -273,6 +273,7 @@ public class Auction_House extends Thread {
                 clients.get(pair.getKey()).clientOutput.writeObject(new Object[]{Command.RefreshTimes});
             }
             run = false;
+            System.exit(0);
         }
     }
 
