@@ -86,7 +86,7 @@ public class Auction_House_Display {
         HBox auctionKeyHBox = new HBox(auctionHouseIDLabel, auctionHouseID);
         HBox.setMargin(auctionKeyHBox, new Insets(10,0,0,10));
         auctionHouseID.setAlignment(Pos.CENTER);
-        Label auctionHouseItemsLabel = new Label("Auction House Items Remaining:");
+        Label auctionHouseItemsLabel = new Label("Auction House Items Remaining: ");
         auctionHouseItemsLabel.setFont(new Font("Calibri", 17));
         auctionHouseItemsLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         itemsRemainingLabel = new Label("");
@@ -95,7 +95,7 @@ public class Auction_House_Display {
         HBox auctionInfoHBox = new HBox(auctionHouseItemsLabel, itemsRemainingLabel);
         HBox.setMargin(auctionInfoHBox, new Insets(10,0,0,10));
         auctionHouseItemsLabel.setAlignment(Pos.CENTER);
-        Label auctionHouseBalanceLabel = new Label("Auction House Balance:");
+        Label auctionHouseBalanceLabel = new Label("Auction House Balance: ");
         auctionHouseBalanceLabel.setFont(new Font("Calibri", 17));
         auctionHouseBalanceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         auctionHouseBalance = new Label("");
@@ -111,7 +111,7 @@ public class Auction_House_Display {
         VBox auctionHouseVBox = new VBox(auctionKeyHBox, auctionInfoHBox, auctionHouseBalanceHBox, stopAuctionHouse);
         Pane pane = new Pane(auctionHouseVBox);
         pane.setBackground(new Background(new BackgroundFill(Color.rgb(54, 69, 79), CornerRadii.EMPTY, Insets.EMPTY)));
-        Scene scene = new Scene(pane, 450, 400);
+        Scene scene = new Scene(pane, 500, 150);
         stage.setScene(scene);
         stage.setTitle("Auction House Server");
         stage.show();
@@ -125,7 +125,7 @@ public class Auction_House_Display {
         HBox.setMargin(portTextField, new Insets(0,0,0,10));
         portTextField.setAlignment(Pos.CENTER);
         HBox portHBox = new HBox(auctionPortNumberLabel, portTextField);
-        Label bankServerPort = new Label("Enter Bank Server Port Number:");
+        Label bankServerPort = new Label("Enter Bank Server Port Number: ");
         bankServerPort.setFont(new Font("Calibri", 17));
         bankServerPort.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         TextField bankPortTextField = new TextField("7277");

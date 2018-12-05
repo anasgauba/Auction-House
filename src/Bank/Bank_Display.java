@@ -69,7 +69,7 @@ public class Bank_Display {
         Pane pane = new Pane(auctionHouseVBox);
         pane.setBackground(new Background(new BackgroundFill(Color.rgb(54, 69, 79),
                 CornerRadii.EMPTY, Insets.EMPTY)));
-        Scene scene = new Scene(pane, 400, 400);
+        Scene scene = new Scene(pane, 400, 100);
         stage.setScene(scene);
         stage.setTitle("Bank Server");
         stage.show();
@@ -93,7 +93,7 @@ public class Bank_Display {
         VBox dialogVbox = new VBox(15);
         dialogVbox.setPadding(new Insets(20, 20, 20, 20));
         dialogVbox.getChildren().addAll(portHBox, buttonHBox);
-        Scene dialogScene = new Scene(dialogVbox, 450, 100);
+        Scene dialogScene = new Scene(dialogVbox, 400, 100);
         dialogVbox.setBackground(new Background(new BackgroundFill(Color.rgb(54, 69, 79),
                 CornerRadii.EMPTY, Insets.EMPTY)));
         dialog.setScene(dialogScene);
