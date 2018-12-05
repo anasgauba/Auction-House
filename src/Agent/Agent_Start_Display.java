@@ -96,8 +96,6 @@ public class Agent_Start_Display {
             int portNumber = Integer.parseInt(portTextField.getText());
             int bankPortNumber = Integer.parseInt(bankPortTextField.getText());
             dialog.hide();
-            System.out.println("portn " + portNumber);
-            System.out.println("portn " + bankPortNumber);
             agent = new Agent(portNumber, bankPortNumber, names);
         });
     }

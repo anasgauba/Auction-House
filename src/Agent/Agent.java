@@ -187,11 +187,9 @@ public class Agent extends Thread{
      */
     public void createItemList(LinkedList<Item> itemList) {
         if (timeList != null) {
-            System.out.println("Clearing time list");
             timeList.clear();
         }
         if (!this.itemList.isEmpty()) {
-            System.out.println("Clearing item list");
             this.itemList.clear();
         }
         for (int i = 0; i < itemList.size(); i++) {

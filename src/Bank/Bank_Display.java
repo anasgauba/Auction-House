@@ -102,7 +102,6 @@ public class Bank_Display {
             int portNumber = Integer.parseInt(portTextField.getText());
             dialog.hide();
             bank = new Bank(this, portNumber);
-            System.out.println("portn " + portNumber);
         });
     }
 }
