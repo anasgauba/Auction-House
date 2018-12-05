@@ -44,7 +44,7 @@ public class Bank_Display {
      * The drawGUI method is used in order to set up the user's ability to create a bank port. Upon entering a port,
      * the GUI will fire a command to create a bank with the same port and set up the client and server of the
      * bank using the requested port.
-     * @param stage
+     * @param stage- the stage in which the GUI will be displayed on.
      */
     public void drawGUI(Stage stage) {
         Label bankAccountsIDLabel = new Label("Number of Accounts:");
