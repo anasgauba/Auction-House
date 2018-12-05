@@ -39,7 +39,6 @@ public class Bank_Display {
         drawGUI(stage);
     }
 
-
     /**
      * The drawGUI method is used in order to set up the user's ability to create a bank port. Upon entering a port,
      * the GUI will fire a command to create a bank with the same port and set up the client and server of the
@@ -47,10 +46,10 @@ public class Bank_Display {
      * @param stage- the stage in which the GUI will be displayed on.
      */
     public void drawGUI(Stage stage) {
-        Label bankAccountsIDLabel = new Label("Number of Accounts:");
+        Label bankAccountsIDLabel = new Label("Number of Accounts: ");
         bankAccountsIDLabel.setFont(new Font("Calibri", 17));
         bankAccountsIDLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
-        numAccounts = new Label("");
+        numAccounts = new Label("0");
         numAccounts.setFont(new Font("Calibri", 17));
         numAccounts.setStyle("-fx-font-weight: bold; -fx-text-fill: white");
         numAccounts.setAlignment(Pos.CENTER);
