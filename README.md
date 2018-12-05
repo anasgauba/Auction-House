@@ -40,7 +40,7 @@ auction houses
 and pre-defined commands outlined.
 - Layed the groundwork for the Object array message, with the first object being the command and the subsequent objects
 being the paramaters for method calls or the resulting returned objects from method calls.
--Created the messaging system in Agent Display, which uses a string builder to add item details, the subsequent accept/reject 
+- Created the messaging system in Agent Display, which uses a string builder to add item details, the subsequent accept/reject 
 message from auctio house or bank, and display the results in the Agent's GUI
 - Created the agent display initially, which includes the table view part to it.
 - Commented all code
