@@ -157,9 +157,11 @@ public class Auction_House_Display {
         });
         stopAuctionHouse.setOnAction(event -> {
             try {
-                auctionHouse.stopAuctionHouse();
-                auctionHouse = null;
-                System.exit(0);
+                boolean tempClose = auctionHouse.stopAuctionHouse();
+                if (!tempClose) {
+                    auctionHouse = null;
+                    System.exit(0);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

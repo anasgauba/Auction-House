@@ -319,15 +319,26 @@ public class Auction_House extends Thread {
      *
      * @throws IOException
      */
-    public void stopAuctionHouse() throws IOException {
-        bankClient.clientOutput.writeObject(new Object[]{Command.CloseBankAccount, secretKey});
-        bankClient.clientOutput.writeObject(new Object[]{Command.CloseAuctionHouseID, auctionHouseID});
-        Iterator it = clients.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            clients.get(pair.getKey()).clientOutput.writeObject(new Object[]{Command.RefreshTimes});
+    public boolean stopAuctionHouse() throws IOException {
+
+        boolean flag = false;
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).getBidTimeRemaining() > 0) {
+                flag = true;
+            }
         }
-        run = false;
+
+        if (!flag) {
+            bankClient.clientOutput.writeObject(new Object[]{Command.CloseBankAccount, secretKey});
+            bankClient.clientOutput.writeObject(new Object[]{Command.CloseAuctionHouseID, auctionHouseID});
+            Iterator it = clients.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                clients.get(pair.getKey()).clientOutput.writeObject(new Object[]{Command.RefreshTimes});
+            }
+            run = false;
+        }
+        return flag;
     }
 
     /**
