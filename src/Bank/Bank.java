@@ -124,6 +124,10 @@ public class Bank {
         Account account = list.get(key);
         account.balance -= amount;
         account.lockBalance += amount;
+
+        System.out.println("Account " +account.getAccountId()+" lock balance " +
+                "is " + account.lockBalance);
+        System.out.println();
     }
 
     /**unlockBalance method, when called, releases the locked funds from the agent's account to its actual
@@ -137,6 +141,10 @@ public class Bank {
         if (account != null) {
             account.lockBalance -= amount;
             account.balance += amount;
+
+            System.out.println("Account " +account.getAccountId()+" current " +
+                    "balance after unlock is " + account.balance);
+            System.out.println();
         }
     }
 
@@ -155,9 +163,31 @@ public class Bank {
         Account agentAcount = list.get(agentSecretKey);
         Account auctionHouseAccount = list.get(auctionHouseSecretKey);
         if (agentAcount != null && auctionHouseAccount != null) {
+
+            System.out.println("-------------------------------------------");
+            System.out.println();
+            System.out.println("Agent "+agentAcount.getAccountId()+" lock " +
+                    "balance before giving to auction house "+
+                    auctionHouseAccount.getAccountId()+" is "+agentAcount.lockBalance);
+            System.out.println("Auction house "+ auctionHouseAccount
+                    .getAccountId()+" balance before getting money from agent is "
+                    + auctionHouseAccount.balance);
+            System.out.println();
+            System.out.println("-------------------------------------------");
+
             agentAcount.lockBalance -= moneyToGive;
             auctionHouseAccount.balance += moneyToGive;
+
+            System.out.println();
+            System.out.println("Amount "+moneyToGive+" from agent account " +
+                    ""+agentAcount.getAccountId() + " is transferred to auction house " +
+                    "account " +auctionHouseAccount.getAccountId() +", now " +
+                    "auction house has balance of "+auctionHouseAccount.balance);
+            System.out.println();
         }
+        //this is for if agent forcefully closes out of client, then bank
+        // will still give auction house funds. (project assumption)
+        //SHOULD never reach this statement. 
         else if (agentAcount == null && auctionHouseAccount != null) {
             auctionHouseAccount.balance += moneyToGive;
         }
