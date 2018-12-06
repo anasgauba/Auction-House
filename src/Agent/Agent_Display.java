@@ -363,9 +363,12 @@ public class Agent_Display {
         });
         closeAccount.setOnAction(event -> {
             try {
-                agent.closeAccount();
-                agent = null;
-                System.exit(0);
+                boolean tryClosing = agent.closeAccount();
+                if (tryClosing){
+                    agent = null;
+                    System.exit(0);
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

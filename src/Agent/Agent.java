@@ -284,14 +284,28 @@ public class Agent extends Thread{
     /**This command, when called by the Agent's GUI, is called when the request to close a bank account is requested.
     * It adds a message array along with the secret bidding key of the agent so that it can close the corresponding
     * agent's account. The message array is then sent to bank clients output so that it can send the message to bank
-    * server, and finally, bank.*/
-    public void closeAccount() throws IOException {
-        bankClient.clientOutput.writeObject(new Object[] {Command.CloseBankAccount, secretBiddingKey});
-        Iterator it = clients.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.CloseAgentAccount, secretBiddingKey});
+    * server, and finally, bank. The boolean that the method returns is to check if there are any currently-running
+     * bids. If there are, the method returns the boolean so that the account does not close.*/
+    public boolean closeAccount() throws IOException {
+        boolean closeAccount = true;
+        for (int i = 0; i<timeList.size(); i++){
+            System.out.println("The time is: "+timeList.get(i).getItemTime());
+            if (Long.parseLong(timeList.get(i).getItemTime())>0){
+                closeAccount = false;
+            }
         }
+        if (!closeAccount){
+            return closeAccount;
+        }
+        else if (closeAccount){
+            bankClient.clientOutput.writeObject(new Object[] {Command.CloseBankAccount, secretBiddingKey});
+            Iterator it = clients.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                clients.get(pair.getKey()).clientOutput.writeObject(new Object[] {Command.CloseAgentAccount, secretBiddingKey});
+            }
+        }
+        return true;
     }
 
     /***/
