@@ -212,11 +212,18 @@ the proper 30 seconds, it's still properly working in the Auction House and the 
 To fix this, I would just compare the time to be greater or less than according to the machine and do the math from there.
 It's not a program-breaking bug.
 
+- In different computers, the Agent display does not fully show the display labels, including agent name, agent account, agent 
+balance, item name, item ID number, starting bid, and current bid. Instead, it shows the first few letters along with an 
+ellipses. We are not sure why this is happening but have theorized that it has to do with either monitor resolution or JavaFX
+features clashing. However, these labels randomly display correctly in some resolutions.
+
 - Lastly, as java uses floating point decimals (Uses fractions for doubles) when interacting with the agents balance, sometimes
 a weird 'fraction' on balance will give us a long decimal of .0000000002 sometimes. This is a simple round up fix that we would need to implement.
 As this isn't program breaking, we've shown that values already properly work, show that fund checking is working
 and the proper funds goes into the Auction Houses account. I don't believe this is too big of a problem in the application.
 It just comes down to running out of time to iron out every single bug.
+
+
 
 
 
