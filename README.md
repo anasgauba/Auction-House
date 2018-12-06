@@ -92,9 +92,13 @@ directory. For example, if you have folder: "AH", inside should be the jar's as 
     + If you started Auction Houses before the agent client, you will automatically grab the first Auction House on
     the list, which will automatically pull the items from that auction house.
     
-  * Please note that ,again, Agent or Auction house can start in any order, so choose what you would like to do.
+  * Please note that again, Agent or Auction house can start in any order, so choose what you would like to do.
   If you do start Agent clients before any auction houses, the initial view you will see will be blank, until an auction house
   is started and selected from the top drop down combo box by the label "Auction House".
+
+  * Last note, if you wish to run multiple Agent's or multiple Auction Houses, on start of the GUI's, you must change the second server port that's
+  respective to the component. Ex: you want to run two agents, you must still enter the Bank's port to whatever it's being hosted off, and then
+  for agent server it must be unique, so if first agent is 8900, agent two must be a different number like 8901. The same goes for auction house servers.
 
 - Using the Agents Main GUI
   * I will begin with describing the left side of the Agent's client.
