@@ -31,8 +31,19 @@ auction houses
 - Created Design Document (method info + design diagrams)
   
 #####Anas Gauba:
-- Responsible for Bank Component
-- Contributed to all display GUI's
+- Responsible for Bank Component.
+- Designed and implemented the Account, Bank class. 
+   * Added the functionality of creating an account with a name and initial 
+   balance.
+   * Upon account creation, generated a unique bidding key, and kept track of
+    all the bank accounts. 
+   * Added the functionality of bank holding/locking specific account's 
+   funds, a way to deposit agent's money to auction house's account. 
+- Helped with Agent component in the collaborative effort of communicating with bank.
+   * Used the proxy communication system to send message to bank.  
+   * making sure to get the current balance of this agent. 
+   * a way to create an account through bank server proxy. 
+- Contributed to all display GUI's.  
 
 #####Clarissa Garcia:
 - Responsible for Agent Component
@@ -232,4 +243,7 @@ It just comes down to running out of time to iron out every single bug.
 
 
 ## Testing and Debugging
-toString() in items that help print out the items properties when requested.
+- toString() in items that help print out the items properties when requested.
+- Bank prints the agent and account's lockBalance, unlockBalance information 
+in the console. It also prints the auction house accoundID getting money 
+transferred from which agent accountID after agent won a bid. 
