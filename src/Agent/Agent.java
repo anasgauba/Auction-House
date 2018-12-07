@@ -289,8 +289,7 @@ public class Agent extends Thread{
     public boolean closeAccount() throws IOException {
         boolean closeAccount = true;
         for (int i = 0; i<timeList.size(); i++){
-            System.out.println("The time is: "+timeList.get(i).getItemTime());
-            if (Long.parseLong(timeList.get(i).getItemTime())>0){
+            if (Long.parseLong(timeList.get(i).getItemTime()) > 0 && itemList.get(i).getSecretBidderKey() == secretBiddingKey){
                 closeAccount = false;
             }
         }
