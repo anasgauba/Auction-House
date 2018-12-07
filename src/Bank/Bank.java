@@ -32,8 +32,7 @@ public class Bank {
     protected LinkedList<Integer> auctionHouseIDList;
     protected ConcurrentHashMap auctionHousePorts;
     private int accountID = 1;
-    Bank_Server_Proxy bank_server_proxy;
-    ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
+    private ConcurrentHashMap<Integer, Auction_House_Client_Proxy> clients;
 
     /**
      * The Bank constructor is used to initialize the local display, a hashmap of new accounts,

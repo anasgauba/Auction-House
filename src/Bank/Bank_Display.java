@@ -2,7 +2,7 @@
  * Bank_Display Class
  * <p>
  *
- * @author Nathan Schaefer
+ * @author Nathan Schaefer, Anas Gauba
  *
  * Bank Display is a small GUI that used to issue the port number that will start the bank server.
  * It will then create the bank server at that port and open another window that will allow the user

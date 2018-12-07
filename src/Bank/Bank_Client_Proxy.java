@@ -23,14 +23,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Bank_Client_Proxy extends Thread {
     private Socket clientSocket = null;
-    public ObjectInputStream clientInput = null;
-    public ObjectOutputStream clientOutput = null;
-    Agent agent;
-    Auction_House auctionHouse;
-    String clientType;
-    int key;
-    int portNumber;
-    boolean run;
+    private ObjectInputStream clientInput = null;
+    private ObjectOutputStream clientOutput = null;
+    private Agent agent;
+    private Auction_House auctionHouse;
+    private String clientType;
+    private int key;
+    private int portNumber;
+    private boolean run;
+
 
     /**
      * This is the constructor used when the connecting client is an auction house client.
@@ -138,6 +139,15 @@ public class Bank_Client_Proxy extends Thread {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Writes the specified object to ObjectOutputStream.
+     * @param arr of objects
+     * @throws IOException exception
+     */
+    public void writeClientOutput(Object[] arr) throws IOException {
+        clientOutput.writeObject(arr);
     }
 
     /**

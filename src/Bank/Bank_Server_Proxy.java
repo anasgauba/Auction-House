@@ -25,9 +25,9 @@ public class Bank_Server_Proxy {
     private ServerSocket serverSocket;
     private Socket acceptSocket;
     private Bank bank;
-    boolean auctionHouseClient;
-    int portNumber;
-    boolean run;
+    private boolean auctionHouseClient;
+    private int portNumber;
+    private boolean run;
 
     /**
      * The bank server constructor is created by being passed in the bank object holding

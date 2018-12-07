@@ -151,14 +151,15 @@ public class Agent extends Thread{
             case WinMessage:
                 agentDisplay.newLine+="You won the item: " + item.getDescription() + " for amount: " + item.getCurrentBidAmount() + "\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
-                bankClient.clientOutput.writeObject(new Object[] {Command.TransferBlockedFunds, secretBiddingKey, item.getAuctionHouseSecretKey(), item.getCurrentBidAmount()});
+                bankClient.writeClientOutput(new Object[] {Command.TransferBlockedFunds,
+                        secretBiddingKey, item.getAuctionHouseSecretKey(), item.getCurrentBidAmount()});
                 sound("BidWon");
                 clients.get(item.getAuctionHouseID()).clientOutput.writeObject(new Object[] {Command.FundsTransferred});
                 break;
             case BidOvertaken:
                 agentDisplay.newLine+="Your bid has been passed on item: " + item.getDescription() + " In Auction House: " + item.getAuctionHouseID() + "\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
-                bankClient.clientOutput.writeObject(new Object[] {Command
+                bankClient.writeClientOutput(new Object[] {Command
                         .GetBalance, secretBiddingKey});
                 sound("BidPassed");
                 break;
@@ -170,7 +171,7 @@ public class Agent extends Thread{
             case AcceptResponse:
                 agentDisplay.newLine+="You are now the current bidder on item: " + item.getDescription() + " for amount: " + item.getCurrentBidAmount() + "\n";
                 Platform.runLater(() -> agentDisplay.setNewNotificationMessage());
-                bankClient.clientOutput.writeObject(new Object[] {Command
+                bankClient.writeClientOutput(new Object[] {Command
                         .GetBalance, secretBiddingKey});
                 break;
         }
@@ -265,7 +266,7 @@ public class Agent extends Thread{
      */
 
     public void getHouseList() throws IOException {
-        bankClient.clientOutput.writeObject(new Object[] {Command.GetListHouses});
+        bankClient.writeClientOutput(new Object[] {Command.GetListHouses});
     }
 
     /**setTimeOffset is a method that, when called, sets the agent's time to be in sync with the current auction
@@ -297,7 +298,8 @@ public class Agent extends Thread{
             return closeAccount;
         }
         else if (closeAccount){
-            bankClient.clientOutput.writeObject(new Object[] {Command.CloseBankAccount, secretBiddingKey});
+            bankClient.writeClientOutput(new Object[] {Command.CloseBankAccount,
+                    secretBiddingKey});
             Iterator it = clients.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();

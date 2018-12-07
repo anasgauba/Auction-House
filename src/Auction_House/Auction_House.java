@@ -146,7 +146,8 @@ public class Auction_House extends Thread {
             if (itemID.equals(itemList.get(i).getItemID())) {
                 Item item = itemList.get(i);
                 //Checking the Funds
-                bankClient.clientOutput.writeObject(new Object[]{Command.CheckAgentFunds, agentSecretKey, bidAmount});
+                bankClient.writeClientOutput(new Object[]{Command.CheckAgentFunds,
+                        agentSecretKey, bidAmount});
                 synchronized (this) {
                     try {
                         wait();
@@ -156,7 +157,8 @@ public class Auction_House extends Thread {
                 }
                 if (hasFunds && item.getSecretBidderKey() != agentSecretKey) {
                     //Lock Balance if legitamate bid has been made
-                    bankClient.clientOutput.writeObject(new Object[]{Command.BlockFunds, agentSecretKey, bidAmount});
+                    bankClient.writeClientOutput(new Object[]{Command
+                            .BlockFunds,agentSecretKey, bidAmount});
                     synchronized (this) {
                         try {
                             wait();
@@ -178,7 +180,8 @@ public class Auction_House extends Thread {
                     }
                     //If the item time is still going
                     else if (item.getBidTimeRemaining() > 0 && bidAmount > item.getCurrentBidAmount()) {
-                        bankClient.clientOutput.writeObject(new Object[]{Command.UnlockFunds, item.getSecretBidderKey(), item.getCurrentBidAmount()});
+                        bankClient.writeClientOutput(new Object[]{Command.UnlockFunds, item
+                                .getSecretBidderKey(), item.getCurrentBidAmount()});
                         synchronized (this) {
                             try {
                                 wait();
@@ -248,13 +251,14 @@ public class Auction_House extends Thread {
                 }
             }
         } else {
-            bankClient.clientOutput.writeObject(new Object[]{Command.TransferBlockedFunds, item.getSecretBidderKey(), secretKey, item.getCurrentBidAmount()});
+            bankClient.writeClientOutput(new Object[]{Command.TransferBlockedFunds, item
+                    .getSecretBidderKey(), secretKey, item.getCurrentBidAmount()});
         }
         for (int i = 0; i < itemList.size(); i++) {
             if (itemList.get(i).getItemID().equals(item.getItemID())) {
                 itemList.remove(i);
                 try {
-                    bankClient.clientOutput.writeObject(new Object[]{Command.GetBalance, secretKey});
+                    bankClient.writeClientOutput(new Object[]{Command.GetBalance, secretKey});
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -262,8 +266,9 @@ public class Auction_House extends Thread {
             }
         }
         if (itemList.isEmpty()) {
-            bankClient.clientOutput.writeObject(new Object[]{Command.CloseBankAccount, secretKey});
-            bankClient.clientOutput.writeObject(new Object[]{Command.CloseAuctionHouseID, auctionHouseID});
+            bankClient.writeClientOutput(new Object[]{Command.CloseBankAccount, secretKey});
+            bankClient.writeClientOutput(new Object[]{Command.CloseAuctionHouseID,
+                    auctionHouseID});
             Iterator it = clients.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
@@ -329,8 +334,9 @@ public class Auction_House extends Thread {
         }
 
         if (!flag) {
-            bankClient.clientOutput.writeObject(new Object[]{Command.CloseBankAccount, secretKey});
-            bankClient.clientOutput.writeObject(new Object[]{Command.CloseAuctionHouseID, auctionHouseID});
+            bankClient.writeClientOutput(new Object[]{Command.CloseBankAccount, secretKey});
+            bankClient.writeClientOutput(new Object[]{Command.CloseAuctionHouseID,
+                    auctionHouseID});
             Iterator it = clients.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
